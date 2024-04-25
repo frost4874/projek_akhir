@@ -23,6 +23,8 @@ class DashboardController extends Controller
         $master_berkas = Berkas::all();
         $card_array = ['bg-info','bg-success','bg-warning','bg-danger'];
 
+        
+
 
         return view('admin.dashboard', compact('master_berkas', 'id_kec', 'id_desa', 'card_array','npage'));
     }
@@ -30,9 +32,19 @@ class DashboardController extends Controller
     public function adminRequest(Request $request, $id_berkas, $judul_berkas)
 {
     $user = auth()->user();
+    $id_kec = $user->kecamatan;
     $id_desa = $user->desa;
     $form_tambahan = Berkas::getFormTambahanById($id_berkas);
     $biodatas = Biodata::where('desa', $id_desa)->where('role', 'pemohon')->get();
+
+    // $sql_agenda = "SELECT no_urut FROM data_requests where id_kec='$id_kec' and id_desa='$id_desa' order by no_urut DESC limit 1";
+    // $no_urut = DB::select($sql_agenda);
+    // $no_agenda = $no_urut ? $no_urut[0]->no_urut + 1 : 1;
+
+    // $pejabats = DB::table('data_pejabat')
+    //                 ->where('id_kec', $id_kec)
+    //                 ->where('id_desa', $id_desa)
+    //                 ->get();
 
     // Ambil data permohonan yang sesuai dengan desa admin dan id_berkas yang diberikan
     $requests = DataRequest::where('id_desa', $id_desa)
@@ -47,7 +59,7 @@ class DashboardController extends Controller
         'form_tambahan' => $form_tambahan,
         'biodatas' => $biodatas,
         'requests' => $requests, // Mengirimkan data permohonan ke view
-    ]);
+    ], compact('no_agenda','pejabats'));
 
 }
 public function edit($nik, $id_request, $id_berkas, $judul_berkas)
@@ -163,6 +175,31 @@ $masukan = rtrim($masukan, ', ');
 
     // Redirect atau kembalikan respons sesuai kebutuhan
     return redirect()->back()->with('success', 'Request baru telah ditambahkan!');
+}
+public function viewCetak(Request $request, $id_request)
+{
+    // Validate the form data
+    $request->validate([
+        'no_urut' => 'required',
+        'pejabat' => 'required',
+        'tgl_acc' => 'required|date',
+    ]);
+
+    // Handle database operations or any other logic
+    // For example:
+    DB::table('data_requests')->insert([
+        'id_request' => $id_request,
+        'no_urut' => $request->no_urut,
+        'pejabat' => $request->pejabat,
+        'tgl_acc' => $request->tgl_acc,
+    ]);
+
+    // Optionally, you can redirect the user after successful submission
+    return redirect()->route('cetak.review')->with('success', 'Surat akan dicetak.');
+}
+public function reviewCetak()
+{
+    return view('admin.cetak');
 }
  
 }

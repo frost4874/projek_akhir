@@ -66,7 +66,7 @@
                                             </td>
                                             <td>
                                                 @if($request->status == 1)
-                                                <a href="#" class="btn btn-sm btn-success">
+                                                <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Edit Pejabat">
                                                     <i class="fas fa-print"> Print</i>
                                                 </a>
                                                 @else
@@ -134,6 +134,47 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+@foreach($requests as $request)
+<div class="modal fade" id="myModal{{ $request->id_request }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="{{ route('print.cetak', ['id_request' => $request->id_request]) }}" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pilih Pejabat</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="no_urut">No Urut</label>
+                        <input type="text" value="{{ $no_agenda }}" name="no_urut" id="no_urut" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="pejabat">Pejabat</label>
+                        <select name="pejabat" id="pejabat" class="form-control">
+                            <option value="">-PILIH PEJABAT-</option>
+                            @foreach($pejabats as $pejabat)
+                            <option value="{{ $pejabat->nip }}">{{ $pejabat->nm_pejabat }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tgl_acc">Tanggal Cetak</label>
+                        <input type="date" name="tgl_acc" id="tgl_acc" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Cetak Surat</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
 
 
 @endsection

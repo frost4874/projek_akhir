@@ -55,6 +55,8 @@ Route::middleware(['auth:biodata', 'adminDesa'])->group(function(){
     Route::post('/dashboard/request', [DashboardController::class, 'tambahRequest'])->name('tambah.request');
     
     Route::put('/request/{id_request}/acc', [DashboardController::class, 'accRequest'])->name('request.acc');
+    Route::post('request/{id_request}/cetak', [DashboardController::class, 'viewCetak'])->name('print.cetak');
+    Route::get('request/{id_request}/review', [DashboardController::class, 'reviewCetak'])->name('cetak.review');
     Route::get('/request/{nik}/{id_request}/{id_berkas}/{judul_berkas}/edit', [DashboardController::class, 'edit'])->name('detail.request');
     Route::get('/request/{id_request}/edit', [DashboardController::class, 'edit'])->name('request.edit');
     Route::put('/admin/request/update', [DashboardController::class, 'update'])->name('request.update');
