@@ -8,7 +8,7 @@
                with font-awesome or any other icon font library -->
           @if($role === 'Admin Master')
           <li class="nav-item">
-            <a href="{{route('admin.dashboard_master')}}" class="nav-link {{ Request::is('http://127.0.0.1:8000/dashboard_master') ? 'active' : '' }}">
+            <a href="{{route('admin.dashboard_master')}}" class="nav-link {{ ('http://127.0.0.1:8000/dashboard_master') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                     Dashboard
@@ -48,8 +48,8 @@
               </li>
 
           @elseif($role === 'Admin Desa')
-          <li class="nav-item menu-open">
-            <a href="{{route('admin.dashboard')}}" class="nav-link active">
+          <li class="nav-item">
+            <a href="{{route('admin.dashboard')}}" class="nav-link{{ ($npage == 0) ? ' active' : '' }}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -58,7 +58,7 @@
           </li>
           <li class="nav-header">MENU</li>
           <li class="nav-item">
-            <a href="{{route('admin.data_masyarakat')}}" class="nav-link">
+            <a href="{{route('admin.data_masyarakat')}}" class="nav-link{{ ($npage == 1) ? ' active' : '' }}">
                 <i class="nav-icon fas fa-users"></i>
                 <p>
                     Data Masyarakat
@@ -66,7 +66,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{route('admin.berkas_permohonan')}}" class="nav-link">
+            <a href="{{route('admin.berkas_permohonan')}}" class="nav-link{{ ($npage == 2) ? ' active' : '' }}">
                 <i class="nav-icon fas fa-file"></i>
                 <p>
                     Berkas Permohonan
@@ -74,7 +74,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{route('admin.laporan')}}" class="nav-link">
+            <a href="{{route('admin.laporan')}}" class="nav-link{{ ($npage == 3) ? ' active' : '' }}">
                 <i class="nav-icon fas fa-file-alt"></i>
                 <p>
                     Laporan
@@ -92,13 +92,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{route('admin.pejabat_desa')}}" class="nav-link">
+                <a href="{{route('admin.pejabat_desa')}}" class="nav-link{{ ($npage == 4) ? ' active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Data Pejabat</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{route('admin.biodata_desa')}}" class="nav-link">
+                <a href="{{route('admin.biodata_desa')}}" class="nav-link{{ ($npage == 5) ? ' active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Biodata Admin Desa</p>
                 </a>

@@ -10,6 +10,7 @@ class BerkasPermohonanController extends Controller
 {
     public function index()
     {
-        return view('admin.berkas');
+        $npage = 2;
+        return view('admin.berkas', compact('npage'));
     }
 }

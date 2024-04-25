@@ -15,6 +15,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $npage = 0;
         $user = auth()->user();
         $id_kec = $user->kecamatan;
         $id_desa = $user->desa;
@@ -23,7 +24,7 @@ class DashboardController extends Controller
         $card_array = ['bg-info','bg-success','bg-warning','bg-danger'];
 
 
-        return view('admin.dashboard', compact('master_berkas', 'id_kec', 'id_desa', 'card_array'));
+        return view('admin.dashboard', compact('master_berkas', 'id_kec', 'id_desa', 'card_array','npage'));
     }
 
     public function adminRequest(Request $request, $id_berkas, $judul_berkas)

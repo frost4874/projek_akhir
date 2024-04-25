@@ -13,12 +13,13 @@ class DataMasyarakatController extends Controller
 public function index()
 {
     // Ambil desa pengguna
+    $npage = 1;
     $userDesa = auth()->user()->desa;
 
     // Ambil data masyarakat berdasarkan desa pengguna
     $biodatas = Biodata::where('desa', $userDesa)->where('role', 'Pemohon')->get();
 
-    return view('admin.datamasyarakat', compact('biodatas'));
+    return view('admin.datamasyarakat', compact('biodatas','npage'));
 }
 
     public function update(Request $request, $nik)

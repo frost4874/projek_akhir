@@ -11,11 +11,12 @@ class PejabatDesaController extends Controller
 {
     public function index()
     {
+        $npage = 4;
         
         $pejabats = DataPejabat::where('id_kec', auth()->user()->kecamatan)
                             ->where('id_desa', auth()->user()->desa)
                             ->get();
-        return view('admin.pejabatdesa', compact('pejabats'));
+        return view('admin.pejabatdesa', compact('pejabats, npage'));
     }
     public function store(Request $request)
     {
