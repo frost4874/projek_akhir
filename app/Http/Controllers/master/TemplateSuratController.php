@@ -43,6 +43,19 @@ class TemplateSuratController extends Controller
         // Redirect ke halaman atau tampilkan pesan sukses
         return redirect()->route('admin.templatesurat')->with('success', 'Data berkas berhasil disimpan.');
     }
+    public function update(Request $request, $id)
+    {
+        $master_berkas = Berkas::findOrFail($id);
+        $master_berkas->update([
+            'judul_berkas' => $request->input('judul_berkas'),
+            'kode_berkas' => $request->input('kode_berkas'),
+            'kode_belakang' => $request->input('kode_belakang'),
+            'content' => $request->input('content'),
+            'form_tambahan' => $request->input('form_tambahan'),
+        ]);
+
+        return redirect()->back()->with('success', 'Berkas berhasil diperbarui.');
+    }
     public function destroy($id_berkas)
     {
         $berkas = Berkas::where('id_berkas', $id_berkas)->first();

@@ -9,6 +9,7 @@ use App\Models\Biodata;
 use App\Models\DataRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -143,7 +144,7 @@ $masukan = rtrim($masukan, ', ');
     // Buat objek DataRequest baru
     $newRequest = new DataRequest();
     $newRequest->nik = $validatedData['nik'];
-    $newRequest->tanggal_request = $request->tanggal_request;
+    $newRequest->tanggal_request = Carbon::now()->setTimeZone('Asia/Jakarta');
     $newRequest->status = 0;
     $newRequest->id_berkas = $validatedData['id_berkas'];
     $newRequest->keterangan = $validatedData['keterangan'];

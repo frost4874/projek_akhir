@@ -54,9 +54,11 @@
                             <td>
 
                                 <div class="form-button-action">
-                                    <a href="#" type="button" data-toggle="tooltip" title="" class="btn btn-primary btn-sm" data-original-title="Edit Berkas">
-                                        <i class="fa fa-edit">Edit</i>
-                                    </a>
+                                    
+                                    <button class="btn btn-sm btn-primary" type="button"  data-toggle="modal" data-target="#ubahTemplateModal{{ $berkas->id_berkas }}">
+                                        <i class="fas fa-edit"></i>
+                                        Edit
+                                    </button>
                                     <form action="{{ route('berkas.delete', $berkas->id_berkas) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
@@ -127,7 +129,56 @@
         </div>
     </div>
 </div>
-
-    
+@foreach($master_berkas as $berkas)
+<div class="modal fade" id="ubahTemplateModal{{ $berkas->id_berkas }}" tabindex="-1" role="dialog" aria-labelledby="ubahTemplateModalLabel{{ $berkas->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ubahTemplateModalLabel{{ $berkas->id_berkas }}">FORM EDIT TEMPLATE SURAT</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{ route('templatesurat.update', ['id_berkas' => $berkas->id_berkas]) }}">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                <div class="form-group">
+                        <label>Judul</label>
+                        <input type="text" name="judul_berkas" class="form-control" placeholder="Jenis Surat.." value="{{ $berkas->judul_berkas }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Kode Berkas</label>
+                        <input type="text" name="kode_berkas" class="form-control" placeholder="Kode Berkas.." value="{{ $berkas->kode_berkas }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Kode Belakang</label>
+                        <input type="text" name="kode_belakang" class="form-control" placeholder="Kode Belakang.." value="{{ $berkas->kode_belakang }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Template Surat</label>
+                        <div class="form-group">
+                            <textarea name="content" id="contentEdit" class="form-control" cols="30" rows="10">{{ $berkas->template }}</textarea>
+                        </div>
+                        <script>
+                            CKEDITOR.replace('contentEdit');
+                        </script>
+                        <label>*Jika menambahkan data supaya menggunakan $</label>
+                    </div>
+                    <div class="form-group">
+                        <label>Form Tambahan</label>
+                        <input type="text" name="form_tambahan" class="form-control" placeholder="Form Tambahan.." value="{{ $berkas->form_tambahan }}"></input>
+                        <label>*Jika menambahkan Form tambahan supaya menggunakan Spasi</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                    <button type="submit" name="simpan" class="btn btn-success">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
     
 @endsection
