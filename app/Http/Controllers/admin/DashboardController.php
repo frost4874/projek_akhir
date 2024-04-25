@@ -31,7 +31,8 @@ class DashboardController extends Controller
     $user = auth()->user();
     $id_desa = $user->desa;
     $form_tambahan = Berkas::getFormTambahanById($id_berkas);
-    $biodatas = Biodata::where('desa', auth()->user()->desa)->get();
+    $biodatas = Biodata::where('desa', $id_desa)->where('role', 'pemohon')->get();
+
     // Ambil data permohonan yang sesuai dengan desa admin dan id_berkas yang diberikan
     $requests = DataRequest::where('id_desa', $id_desa)
                            ->where('id_berkas', $id_berkas) // Filter berdasarkan id_berkas
@@ -52,6 +53,7 @@ public function edit($nik, $id_request, $id_berkas, $judul_berkas)
     {
         // Fetch data for the form based on NIK
         $data = DataRequest::where('nik', $nik)->where('id_request', $id_request)->first();
+        $biodata = Biodata::where('nik', $nik)->first();
 
         // Check if data request exists
         if (!$data) {
@@ -60,6 +62,7 @@ public function edit($nik, $id_request, $id_berkas, $judul_berkas)
 
         return view('admin.review', [
             'data' => $data,
+            'biodata' => $biodata,
             'id_berkas' => $id_berkas,
             'judul_berkas' => $judul_berkas,
         ]);
@@ -144,7 +147,7 @@ $masukan = rtrim($masukan, ', ');
     // Buat objek DataRequest baru
     $newRequest = new DataRequest();
     $newRequest->nik = $validatedData['nik'];
-    $newRequest->tanggal_request = Carbon::now()->setTimeZone('Asia/Jakarta');
+    $newRequest->tanggal_request = $request->tanggal_request;
     $newRequest->status = 0;
     $newRequest->id_berkas = $validatedData['id_berkas'];
     $newRequest->keterangan = $validatedData['keterangan'];

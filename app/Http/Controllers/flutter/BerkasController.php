@@ -56,7 +56,7 @@ class BerkasController extends Controller
     public function show($nik)
     {
         $dataRequests = DataRequest::where('nik', $nik)
-            ->with('berkas:id_berkas,judul_berkas') // Memuat relasi 'berkas' dengan memilih kolom 'id' dan 'judul_berkas'
+            ->with('berkas:id_berkas,judul_berkas')
             ->get();
 
         if ($dataRequests->isEmpty()) {
@@ -89,6 +89,15 @@ class BerkasController extends Controller
     return response()->json(['message' => 'Data berhasil diperbarui'], 200);
 }
 
+public function riwayat(Request $request)
+    {
+        $nik = $request->nik;
+        $riwayats = DataRequest::where('nik', $nik)
+        ->with('berkas:id_berkas,judul_berkas')
+        ->get();
+
+        return response()->json($riwayats);
+    }
 
 
 }
