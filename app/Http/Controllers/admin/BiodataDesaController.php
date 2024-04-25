@@ -13,11 +13,11 @@ class BiodataDesaController extends Controller
 {
     public function index()
     {
-        $npage = 3;
+        $npage = 5;
         $user = auth()->user()->nik;
         
         $biodatas = Biodata::where('nik', $user)->get();
-        return view('admin.biodatadesa', compact('biodatas, npage'));
+        return view('admin.biodatadesa', compact('biodatas', 'npage'));
     }
     public function ubah($nik)
     {

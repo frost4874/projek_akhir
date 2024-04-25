@@ -16,7 +16,7 @@ class PejabatDesaController extends Controller
         $pejabats = DataPejabat::where('id_kec', auth()->user()->kecamatan)
                             ->where('id_desa', auth()->user()->desa)
                             ->get();
-        return view('admin.pejabatdesa', compact('pejabats, npage'));
+        return view('admin.pejabatdesa', compact('pejabats', 'npage'));
     }
     public function store(Request $request)
     {

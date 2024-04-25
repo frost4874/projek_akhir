@@ -142,6 +142,7 @@
             <form action="{{ route('print.cetak', ['id_request' => $request->id_request]) }}" method="POST">
                 @csrf
                 <div class="modal-header">
+                <input type="hidden" name="id_berkas" value="{{ $id_berkas }}">
                     <h5 class="modal-title" id="exampleModalLabel">Pilih Pejabat</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -154,7 +155,7 @@
                     </div>
                     <div class="form-group">
                         <label for="pejabat">Pejabat</label>
-                        <select name="pejabat" id="pejabat" class="form-control">
+                        <select name="nip" id="nip" class="form-control">
                             <option value="">-PILIH PEJABAT-</option>
                             @foreach($pejabats as $pejabat)
                             <option value="{{ $pejabat->nip }}">{{ $pejabat->nm_pejabat }}</option>
@@ -163,7 +164,7 @@
                     </div>
                     <div class="form-group">
                         <label for="tgl_acc">Tanggal Cetak</label>
-                        <input type="date" name="tgl_acc" id="tgl_acc" class="form-control">
+                        <input type="date" name="acc" id="acc" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">

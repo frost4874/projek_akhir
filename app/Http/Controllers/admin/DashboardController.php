@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Berkas;
 use App\Models\Biodata;
+use App\Models\DataPejabat;
 use App\Models\DataRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -22,20 +23,23 @@ class DashboardController extends Controller
 
         $master_berkas = Berkas::all();
         $card_array = ['bg-info','bg-success','bg-warning','bg-danger'];
-
-        
-
-
         return view('admin.dashboard', compact('master_berkas', 'id_kec', 'id_desa', 'card_array','npage'));
     }
 
     public function adminRequest(Request $request, $id_berkas, $judul_berkas)
 {
+    $npage = 0;
+    $no_agenda = null;
     $user = auth()->user();
     $id_kec = $user->kecamatan;
     $id_desa = $user->desa;
     $form_tambahan = Berkas::getFormTambahanById($id_berkas);
     $biodatas = Biodata::where('desa', $id_desa)->where('role', 'pemohon')->get();
+    $pejabats = DataPejabat::where('id_desa', $id_desa)->get();
+
+    $today = Carbon::today(); // Ambil tanggal hari ini
+    $no_agenda = DataRequest::whereDate('created_at', $today)->max('no_urut');
+    $no_agenda = $no_agenda ? $no_agenda + 1 : 1;
 
     // $sql_agenda = "SELECT no_urut FROM data_requests where id_kec='$id_kec' and id_desa='$id_desa' order by no_urut DESC limit 1";
     // $no_urut = DB::select($sql_agenda);
@@ -53,17 +57,24 @@ class DashboardController extends Controller
                            ->select('data_requests.*', 'biodata.nama as nama')
                            ->get();
 
+    if (Carbon::now()->diffInDays($today) >= 1) {
+        $no_agenda = 1;
+        }
+
     return view('admin.request', [
         'id_berkas' => $id_berkas,
         'judul_berkas' => $judul_berkas,
         'form_tambahan' => $form_tambahan,
         'biodatas' => $biodatas,
-        'requests' => $requests, // Mengirimkan data permohonan ke view
-    ], compact('no_agenda','pejabats'));
+        'pejabats' => $pejabats,
+        'no_agenda' => $no_agenda,
+        'requests' => $requests,
+    ],compact('npage'));
 
 }
 public function edit($nik, $id_request, $id_berkas, $judul_berkas)
     {
+        $npage = 0;
         // Fetch data for the form based on NIK
         $data = DataRequest::where('nik', $nik)->where('id_request', $id_request)->first();
         $biodata = Biodata::where('nik', $nik)->first();
@@ -78,7 +89,7 @@ public function edit($nik, $id_request, $id_berkas, $judul_berkas)
             'biodata' => $biodata,
             'id_berkas' => $id_berkas,
             'judul_berkas' => $judul_berkas,
-        ]);
+        ],compact('npage'));
     }
 
 public function update(Request $request)
@@ -178,25 +189,25 @@ $masukan = rtrim($masukan, ', ');
 }
 public function viewCetak(Request $request, $id_request)
 {
-    // Validate the form data
+    $dataRequest = DataRequest::where('id_request', $request->id_request)->first();
     $request->validate([
         'no_urut' => 'required',
-        'pejabat' => 'required',
-        'tgl_acc' => 'required|date',
+        'nip' => 'required',
+        'acc' => 'required',
     ]);
+    if ($dataRequest) {
+        $dataRequest->no_urut = $request->no_urut;
+        $dataRequest->nip = $request->nip;
+        $dataRequest->acc = $request->acc;
+        $dataRequest->save();
 
-    // Handle database operations or any other logic
-    // For example:
-    DB::table('data_requests')->insert([
-        'id_request' => $id_request,
-        'no_urut' => $request->no_urut,
-        'pejabat' => $request->pejabat,
-        'tgl_acc' => $request->tgl_acc,
-    ]);
+        // Redirect back with success message
+        return redirect()->route('cetak.review', ['id_request' => $id_request])->with('success', 'Surat akan dicetak.');
+    }
 
-    // Optionally, you can redirect the user after successful submission
-    return redirect()->route('cetak.review')->with('success', 'Surat akan dicetak.');
+    return back()->with('failed', 'Gagal');
 }
+
 public function reviewCetak()
 {
     return view('admin.cetak');

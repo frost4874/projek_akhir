@@ -10,7 +10,7 @@ class LaporanController extends Controller
 {
     public function index()
     {
-        $npage = 5;
+        $npage = 3;
         return view('admin.laporan', compact('npage'));
     }
 }
