@@ -82,29 +82,29 @@
             </a>
         </li>
 
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-cog"></i>
-              <p>
-                Pengaturan
-                <i class="right fas fa-angle-left"></i>
-              </p>
+        <li class="nav-item">
+    <a class="nav-link">
+        <i class="nav-icon fas fa-cog"></i>
+        <p>
+            Pengaturan
+            <i class="right fas fa-angle-left"></i>
+        </p>
+    </a>
+    <ul class="nav nav-treeview {{ ($npage == 4 || $npage == 5) ? 'show' : '' }}" id="pengaturanDropdown">
+        <li class="nav-item">
+            <a href="{{ route('admin.pejabat_desa') }}" class="nav-link{{ ($npage == 4) ? ' active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Data Pejabat</p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{route('admin.pejabat_desa')}}" class="nav-link{{ ($npage == 4) ? ' active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Data Pejabat</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{route('admin.biodata_desa')}}" class="nav-link{{ ($npage == 5) ? ' active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Biodata Admin Desa</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.biodata_desa') }}" class="nav-link{{ ($npage == 5) ? ' active' : '' }}">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Biodata Admin Desa</p>
+            </a>
+        </li>
+    </ul>
+</li>
           @elseif($role === 'Pemohon')
           <li class="nav-item menu-open">
             <a href="{{route('admin.dashboard')}}" class="nav-link active">

@@ -13,7 +13,7 @@ class BiodataDesaController extends Controller
 {
     public function index()
     {
-        $npage = 3;
+        $npage = 5;
         $user = auth()->user()->nik;
         
         $biodatas = Biodata::where('nik', $user)->get();

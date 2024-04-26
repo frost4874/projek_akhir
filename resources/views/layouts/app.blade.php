@@ -95,6 +95,18 @@
 <script src="/asset/dist/js/pages/dashboard.js"></script>
 <script src="adminlte/plugins/demo/demo.js" disabled></script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Periksa apakah salah satu submenu aktif
+        var activeSubmenu = document.querySelector("#pengaturanDropdown .nav-link.active");
+
+        // Jika ada submenu yang aktif, tambahkan kelas 'show' ke dropdown
+        if (activeSubmenu) {
+            activeSubmenu.closest(".nav-treeview").classList.add("show");
+        }
+    });
+</script>
+
+<script>
         $(document).ready(function(){
             $('#nik').on('input', function(){
                 var nikLength = $(this).val().length;
