@@ -17,12 +17,13 @@ class BiodataDesaController extends Controller
         $user = auth()->user()->nik;
         
         $biodatas = Biodata::where('nik', $user)->get();
-        return view('admin.biodatadesa', compact('biodatas, npage'));
+        return view('admin.biodatadesa', compact('biodatas', 'npage'));
     }
     public function ubah($nik)
     {
+        $npage = 3;
         $data = Biodata::where('nik', $nik)->first();
-        return view('admin.ubahdesa', compact('data'));
+        return view('admin.ubahdesa', compact('data', 'npage'));
     }
 
     public function update(Request $request, $nik)
