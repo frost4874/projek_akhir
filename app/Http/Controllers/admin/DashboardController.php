@@ -10,6 +10,7 @@ use App\Models\DataPejabat;
 use App\Models\DataRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -208,9 +209,33 @@ public function viewCetak(Request $request, $id_request)
     return back()->with('failed', 'Gagal');
 }
 
-public function reviewCetak()
+public function reviewCetak($id_request)
 {
-    return view('admin.cetak');
+    $user = auth()->user();
+    // Mengambil data request berdasarkan ID
+    $request = DataRequest::where('id_request', $id_request)->first();
+    Log::info($request);
+    $npage= 0;
+    // Mengambil data kecamatan dan desa dari tabel Biodata
+    $berkas = Berkas::where('id_berkas', $request->id_berkas)->first();
+    $pejabat = DataPejabat::where('nip', $request->nip)->first();
+    
+    // Lakukan manipulasi data yang diperlukan sebelum dikirim ke view
+    $data = [
+        'nm_kec' => $user->kecamatan,
+        'nm_desa' => $user->desa,
+        'alamat' => $user->alamat,
+        'tgl_acc' => $request->acc,
+        'id_berkas' => $request->id_berkas,
+        'no_urut' => $request->no_urut,
+        'kode_belakang' => $berkas->kode_belakang,
+        'nm_pejabat' => $pejabat->nm_pejabat,
+        'jabatan' => $pejabat->jabatan
+        // Tambahkan manipulasi data lainnya sesuai kebutuhan
+    ];
+
+    // Panggil view dan kirimkan data
+    return view('admin.cetak', compact('data', 'npage'));
 }
  
 }
