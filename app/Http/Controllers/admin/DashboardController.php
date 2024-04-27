@@ -232,15 +232,39 @@ public function reviewCetak($id_request)
         'kode_belakang' => $berkas->kode_belakang,
         'nm_pejabat' => $pejabat->nm_pejabat,
         'jabatan' => $pejabat->jabatan,
-        'judul_berkas'=>$berkas->judul_berkas,
-        'template'=>$berkas->template,
-        'nama' =>$bio->nama,
-        'alamat' => $bio->alamat,
+        'judul_berkas' => $berkas->judul_berkas,
+        'template' => $this->replaceVariables($berkas->template, [
+            'nama' => $bio->nama,
+            'nik' => $bio->nik,
+            'jekel' => $bio->jekel,
+            'tempat_lahir' => $bio->tempat_lahir,
+            'tanggal_lahir' => $bio->tgl_lahir,
+            'warganegara' => $bio->warganegara,
+            'agama' => $bio->agama,
+            'pekerjaan' => $bio->status_warga,
+            'status_nikah' => $bio->status_nikah,
+            'alamat' => $bio->alamat,
+            'rt' => $bio->rt,
+            'rw' => $bio->rw,
+            'desa' => ucwords(strtolower($bio->desa)),
+            'kecamatan' => ucwords(strtolower($bio->kecamatan)),
+            'nama_pejabat' => $pejabat->nm_pejabat,
+            'jabatan' => $pejabat->jabatan,
+        ]),
         // Tambahkan manipulasi data lainnya sesuai kebutuhan
     ];
 
     // Panggil view dan kirimkan data
     return view('admin.cetak', compact('data', 'npage'));
+}
+private function replaceVariables($template, $data)
+{
+    // Lakukan penggantian variabel dalam template dengan nilai yang sesuai dari data
+    foreach ($data as $key => $value) {
+        $template = str_replace('$' . $key, $value, $template);
+    }
+
+    return $template;
 }
  
 }
