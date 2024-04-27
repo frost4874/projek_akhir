@@ -223,10 +223,12 @@ public function reviewCetak($id_request)
     
     // Parsing nilai form_tambahan menjadi array asosiatif
     $form_tambahan_array = [];
-    $form_tambahan_pairs = explode(', ', $request->form_tambahan);
-    foreach ($form_tambahan_pairs as $pair) {
-        list($key, $value) = explode(':', $pair);
-        $form_tambahan_array[$key] = $value;
+    if ($request->form_tambahan) {
+        $form_tambahan_pairs = explode(', ', $request->form_tambahan);
+        foreach ($form_tambahan_pairs as $pair) {
+            list($key, $value) = explode(':', $pair);
+            $form_tambahan_array[$key] = $value;
+        }
     }
     
     // Lakukan manipulasi data yang diperlukan sebelum dikirim ke view
@@ -258,10 +260,10 @@ public function reviewCetak($id_request)
             'kecamatan' => ucwords(strtolower($bio->kecamatan)),
             'nama_pejabat' => $pejabat->nm_pejabat,
             'jabatan' => $pejabat->jabatan,
-            'alamat_domisili' => $form_tambahan_array['Alamat_Domisili'],
-            'domisili_sejak' => $form_tambahan_array['Domisili_Sejak'],
-            'tujuan_permohonan' => $form_tambahan_array['Tujuan_Permohonan'],
-            'keterangan_tambahan' => $form_tambahan_array['Keterangan_Tambahan'],
+            'alamat_domisili' => isset($form_tambahan_array['Alamat_Domisili']) ? $form_tambahan_array['Alamat_Domisili'] : '',
+            'domisili_sejak' => isset($form_tambahan_array['Domisili_Sejak']) ? $form_tambahan_array['Domisili_Sejak'] : '',
+            'tujuan_permohonan' => isset($form_tambahan_array['Tujuan_Permohonan']) ? $form_tambahan_array['Tujuan_Permohonan'] : '',
+            'keterangan_tambahan' => isset($form_tambahan_array['Keterangan_Tambahan']) ? $form_tambahan_array['Keterangan_Tambahan'] : '',
         ]),
         // Tambahkan manipulasi data lainnya sesuai kebutuhan
     ];
@@ -269,6 +271,7 @@ public function reviewCetak($id_request)
     // Panggil view dan kirimkan data
     return view('admin.cetak', compact('data', 'npage'));
 }
+
 
 private function replaceVariables($template, $data)
 {
