@@ -218,19 +218,24 @@ public function reviewCetak($id_request)
     $npage= 0;
     // Mengambil data kecamatan dan desa dari tabel Biodata
     $berkas = Berkas::where('id_berkas', $request->id_berkas)->first();
+    $bio = Biodata::where('nik', $request->nik)->first();
     $pejabat = DataPejabat::where('nip', $request->nip)->first();
     
     // Lakukan manipulasi data yang diperlukan sebelum dikirim ke view
     $data = [
         'nm_kec' => $user->kecamatan,
         'nm_desa' => $user->desa,
-        'alamat' => $user->alamat,
+        'alamatdesa' => $user->alamat,
         'tgl_acc' => $request->acc,
         'id_berkas' => $request->id_berkas,
         'no_urut' => $request->no_urut,
         'kode_belakang' => $berkas->kode_belakang,
         'nm_pejabat' => $pejabat->nm_pejabat,
-        'jabatan' => $pejabat->jabatan
+        'jabatan' => $pejabat->jabatan,
+        'judul_berkas'=>$berkas->judul_berkas,
+        'template'=>$berkas->template,
+        'nama' =>$bio->nama,
+        'alamat' => $bio->alamat,
         // Tambahkan manipulasi data lainnya sesuai kebutuhan
     ];
 
