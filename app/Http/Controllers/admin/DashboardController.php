@@ -261,10 +261,14 @@ private function replaceVariables($template, $data)
 {
     // Lakukan penggantian variabel dalam template dengan nilai yang sesuai dari data
     foreach ($data as $key => $value) {
-        $template = str_replace('$' . $key, $value, $template);
+        // Mencocokkan variabel yang diapit oleh tanda dollar ($) dengan regular expression
+        $pattern = '/(?<!\w)\$' . preg_quote($key, '/') . '(?!\w)/i';
+        // Melakukan penggantian hanya pada variabel yang sesuai dengan pola yang cocok
+        $template = preg_replace($pattern, $value, $template);
     }
 
     return $template;
 }
+
  
 }
