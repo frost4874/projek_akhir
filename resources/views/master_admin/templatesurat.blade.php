@@ -107,11 +107,11 @@
                     <div class="form-group">
                         <label>Template Surat</label>
                         <div class="form-group">
-                            <textarea name="content" id="template" class="form-control" cols="30" rows="10"></textarea>
+                            <textarea name="template" id="templateQ" class="form-control" cols="30" rows="10"></textarea>
                         </div>
                         <script src="/asset/ckeditor/ckeditor.js"></script>
                         <script>
-                            CKEDITOR.replace('content');
+                            CKEDITOR.replace('templateQ');
                         </script>
                         <label>*Jika menambahkan data supaya menggunakan $</label>
                     </div>
@@ -158,11 +158,8 @@
                     <div class="form-group">
                         <label>Template Surat</label>
                         <div class="form-group">
-                            <textarea name="content" id="contentEdit" class="form-control" cols="30" rows="10">{{ $berkas->template }}</textarea>
+                            <textarea name="template" id="template{{ $berkas->id_berkas }}" class="form-control" cols="30" rows="10">{{ $berkas->template }}</textarea>
                         </div>
-                        <script>
-                            CKEDITOR.replace('contentEdit');
-                        </script>
                         <label>*Jika menambahkan data supaya menggunakan $</label>
                     </div>
                     <div class="form-group">
@@ -179,6 +176,11 @@
         </div>
     </div>
 </div>
+@endforeach
+@foreach($master_berkas as $berkas)
+    <script>
+        CKEDITOR.replace('template{{ $berkas->id_berkas }}');
+    </script>
 @endforeach
     
 @endsection

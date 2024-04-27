@@ -21,7 +21,7 @@ class TemplateSuratController extends Controller
             'judul_berkas' => 'required|string|max:255',
             'kode_berkas' => 'required|string|max:10',
             'kode_belakang' => 'required|string|max:10',
-            'content' => 'required|string',
+            'template' => 'required|string',
             'form_tambahan' => 'nullable|string|max:255',
         ]);
         $formTambahan = explode(',', $request->form_tambahan);
@@ -34,7 +34,7 @@ class TemplateSuratController extends Controller
         $berkas->judul_berkas = $validatedData['judul_berkas'];
         $berkas->kode_berkas = $validatedData['kode_berkas'];
         $berkas->kode_belakang = $validatedData['kode_belakang'];
-        $berkas->template = $validatedData['content'];
+        $berkas->template = $validatedData['template'];
         $berkas->form_tambahan = implode(',', $formTambahan); 
         // $berkas->form_tambahan = str_replace(" ", "_", $validatedData->form_tambahan);
         // $berkas->form_tambahan = $validatedData['form_tambahan'];
@@ -43,14 +43,14 @@ class TemplateSuratController extends Controller
         // Redirect ke halaman atau tampilkan pesan sukses
         return redirect()->route('admin.templatesurat')->with('success', 'Data berkas berhasil disimpan.');
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, $id_berkas)
     {
-        $master_berkas = Berkas::findOrFail($id);
+        $master_berkas = Berkas::findOrFail($id_berkas);
         $master_berkas->update([
             'judul_berkas' => $request->input('judul_berkas'),
             'kode_berkas' => $request->input('kode_berkas'),
             'kode_belakang' => $request->input('kode_belakang'),
-            'content' => $request->input('content'),
+            'template' => $request->input('template'),
             'form_tambahan' => $request->input('form_tambahan'),
         ]);
 
