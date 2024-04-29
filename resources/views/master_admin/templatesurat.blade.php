@@ -159,6 +159,9 @@
                         <label>Template Surat</label>
                         <div class="form-group">
                             <textarea name="template" id="template{{ $berkas->id_berkas }}" class="form-control" cols="30" rows="10">{{ $berkas->template }}</textarea>
+                            <script>
+                            CKEDITOR.replace('template{{ $berkas->id_berkas }}');
+                            </script>
                         </div>
                         <label>*Jika menambahkan data supaya menggunakan $</label>
                     </div>
@@ -177,10 +180,6 @@
     </div>
 </div>
 @endforeach
-@foreach($master_berkas as $berkas)
-    <script>
-        CKEDITOR.replace('template{{ $berkas->id_berkas }}');
-    </script>
-@endforeach
+
     
 @endsection

@@ -224,12 +224,20 @@ public function reviewCetak($id_request)
     // Parsing nilai form_tambahan menjadi array asosiatif
     $form_tambahan_array = [];
     if ($request->form_tambahan) {
-        $form_tambahan_pairs = explode(', ', $request->form_tambahan);
-        foreach ($form_tambahan_pairs as $pair) {
-            list($key, $value) = explode(':', $pair);
+    $form_tambahan_pairs = explode(', ', $request->form_tambahan);
+    foreach ($form_tambahan_pairs as $pair) {
+        // Pisahkan $pair menjadi dua bagian berdasarkan tanda titik dua (:)
+        $pair_parts = explode(':', $pair);
+        
+        // Pastikan ada dua bagian setelah pemisahan
+        if (count($pair_parts) === 2) {
+            // Ambil bagian pertama sebagai kunci (key) dan bagian kedua sebagai nilai (value)
+            $key = trim($pair_parts[0]); // Hapus spasi di awal dan akhir kunci
+            $value = trim($pair_parts[1]); // Hapus spasi di awal dan akhir nilai
+            // Simpan dalam array asosiatif $form_tambahan_array
             $form_tambahan_array[$key] = $value;
         }
-    }
+    }}
     
     // Lakukan manipulasi data yang diperlukan sebelum dikirim ke view
     $data = [
