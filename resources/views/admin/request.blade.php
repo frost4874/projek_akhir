@@ -66,13 +66,11 @@
                                             </td>
                                             <td>
                                                 @if($request->status == 1)
-                                                <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Edit Pejabat">
+                                                <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Cetak Surat">
                                                     <i class="fas fa-print"> Print</i>
                                                 </a>
                                                 @else
-                                                <a href="#" class="btn btn-sm btn-primary">
-                                                    <i class="fas fa-check"></i>
-                                                </a>
+                                                
                                                 <a href="{{ route('detail.request', ['id_berkas' => $id_berkas, 'judul_berkas' => $judul_berkas, 'nik' => $request->nik, 'id_request' => $request->id_request]) }}" class="btn btn-sm btn-warning">
                                                     <i class="fas fa-pencil-alt">Edit</i>
                                                 </a>

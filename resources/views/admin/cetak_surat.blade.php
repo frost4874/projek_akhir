@@ -36,16 +36,16 @@
 	<title>Cetak Surat</title>
 </head>
 <body>
-<style type="text/css">
-		table tr td,
-		table tr th{
-			font-size: 9pt;
-		}
-	</style>
+
+    <style>
+    .no-border {
+        border: none;
+    }
+</style>
  
 	<div class="container">
  
-				<table class="table table-bordered">
+				<table class="">
                 <tr>
                                         <th colspan="2"></th>
                                         <br>
@@ -64,20 +64,21 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" style="padding: 0 10px; width: 100%;">
+                                        <th colspan="2" style="padding: 0 10px; width: 100%;">
                                             <hr color="black" style="border: 0; height: 2px; background-color: black; margin: 0;">
-                                        </td>
+                                        </th>
                                     </tr>
                                     <tr>
-                                        <th colspan="2" style="text-align: center; font-family: 'Times New Roman', Times, serif; ">
+                                        <th colspan="2" style="text-align: center; font-family: 'Times New Roman', Times, serif; line-height: 1.15;">
                                             <br>
-                                            <h4 style="text-decoration: underline; line-height: 1.15;"><b>{{ strtoupper($data['judul_berkas']) }}</b></h4>
-                                            <span style=" line-height: 1.15;">Nomor : {{ $data['id_berkas'] }} / {{ $data['no_urut'] }} / {{ $data['kode_belakang'] }}</span>
+                                            <font style="text-decoration: underline;  font-size: 20px;"><b>{{ strtoupper($data['judul_berkas']) }}</b></font><br>
+                                            <font style="font-size: 12px; ">Nomor : {{ $data['id_berkas'] }} / {{ $data['no_urut'] }} / {{ $data['kode_belakang'] }}</font>
                                         </th>
                                     </tr>
 
                                     <tr>
-                                        <th colspan="2" style="font-family: 'Times New Roman', Times, serif; padding: 20px;">
+                                        <th colspan="2" style="font-family: 'Times New Roman', Times, serif; padding: 20px; text-align: justify; font-weight: normal; 
+                                        ">
                                         {!! $data['template'] !!}
                                     
                                         
@@ -85,7 +86,7 @@
                                     </tr>
                                     <tr >
                                         <th></th>
-                                        <th style="font-family: 'Times New Roman', Times, serif; float:right; padding-right: 40px;">
+                                        <th style="font-family: 'Times New Roman', Times, serif; float:right; padding-right: 40px; text-align: justify; font-weight: normal;">
                                         <div style="margin-left: auto;">
                                             Jember, {{ tgl_indo($data['tgl_acc']) }}
                                             @if($data['jabatan'] == 'Kepala')

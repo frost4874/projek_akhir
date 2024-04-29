@@ -93,7 +93,7 @@
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Simpan</button>
-                                <a href="#" class="btn btn-default">Batal</a>
+                                <a type="button" class="btn btn-danger" onclick="history.back()">Batal</a>
                             </form>
                         </div>
                     </div>

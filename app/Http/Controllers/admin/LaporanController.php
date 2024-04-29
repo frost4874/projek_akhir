@@ -13,7 +13,10 @@ class LaporanController extends Controller
     public function index()
     {
         $npage = 3;
-        $requests = DataRequest::All();
+        $userDesa = auth()->user()->desa;
+        $status =4;
+        $requests = DataRequest::where('id_desa', $userDesa)->where('status', $status)->get();
+        
         return view('admin.laporan',['requests'=>$requests], compact('npage'));
     }
     public function cetak_pdf()

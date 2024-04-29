@@ -65,7 +65,7 @@
         </button>
         <!-- Contoh tombol hapus -->
         <a href="{{ route('masyarakat.delete', $biodata->nik) }}" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus Pejabat">
-          <i class="fa fa-trash">hapus</i>
+          <i class="fa fa-trash">Hapus</i>
         </a>
     </td>
 </tr>
@@ -152,7 +152,7 @@
                     </div>
                     <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-    <button type="submit" class="btn btn-primary float-right">Daftar</button>
+    <button type="submit" class="btn btn-primary float-right">Simpan</button>
 </div>
                 </form>
             </div>

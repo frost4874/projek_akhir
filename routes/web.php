@@ -40,6 +40,8 @@ Route::middleware(['auth:biodata', 'check.role'])->group(function () {
     Route::delete('/data_admindesa/{nik}', [DataDesaController::class, 'destroy'])->name('master.delete.desa');
 
     Route::get('/templatesurat', [TemplateSuratController::class, 'index'])->name('admin.templatesurat');
+    Route::get('/templatesurat/tambah', [TemplateSuratController::class, 'tambahSurat'])->name('admin.tambahsurat');
+    Route::get('/templatesurat/edit/{id_berkas}', [TemplateSuratController::class, 'editSurat'])->name('admin.editsurat');
     Route::put('/templatesurat/{id_berkas}', [TemplateSuratController::class, 'update'])->name('templatesurat.update');
     Route::post('/templatesurat/store', [TemplateSuratController::class, 'store'])->name('berkas.store');
     Route::delete('/templatesurat/{judul_berkas}/delete', [TemplateSuratController::class, 'destroy'])->name('berkas.delete');
