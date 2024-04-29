@@ -56,6 +56,8 @@ Route::middleware(['auth:biodata', 'adminDesa'])->group(function(){
     Route::put('/request/{id_request}/acc', [DashboardController::class, 'accRequest'])->name('request.acc');
     Route::post('/request/{id_request}/cetak', [DashboardController::class, 'viewCetak'])->name('print.cetak');
     Route::get('/request/{id_request}/review', [DashboardController::class, 'reviewCetak'])->name('cetak.review');
+    Route::get('/request/{id_request}/print', [DashboardController::class, 'printCetak'])->name('cetak.print');
+
     Route::get('/request/{nik}/{id_request}/{id_berkas}/{judul_berkas}/edit', [DashboardController::class, 'edit'])->name('detail.request');
     Route::get('/request/{id_request}/edit', [DashboardController::class, 'edit'])->name('request.edit');
     Route::put('/admin/request/update', [DashboardController::class, 'update'])->name('request.update');
@@ -66,6 +68,9 @@ Route::middleware(['auth:biodata', 'adminDesa'])->group(function(){
 
     Route::get('/berkas_permohonan', [BerkasPermohonanController::class, 'index'])->name('admin.berkas_permohonan');
     Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
+    Route::get('/laporan/cetakpdf', [LaporanController::class, 'cetak_pdf']);
+    Route::get('/laporan/print', [LaporanController::class, 'print']);
+
     Route::get('/biodata_desa', [BiodataDesaController::class, 'index'])->name('admin.biodata_desa');
     Route::get('/biodata_desa/{nik}', [BiodataDesaController::class, 'ubah'])->name('ubah.desa');
     Route::put('/biodata_desa/{nik}', [BiodataDesaController::class, 'update'])->name('biodata.update');

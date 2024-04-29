@@ -1,7 +1,4 @@
-@extends('layouts.app')
 @php
-    $title = 'Berkas Permohonan';
-
     if (!function_exists('tgl_indo')) {
         // Jika belum, definisikan fungsi tgl_indo()
         function tgl_indo($tanggal){
@@ -32,39 +29,24 @@
 
     }
 @endphp
-@section('title', 'Berkas Permohonan')
-@section('content')
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">Cetak Surat</h1>
-            </div>
-            <!-- /.col -->
-            <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="">
-                        <a href="{{ route('cetak.print', ['id_request' => $request->id_request]) }}" class="btn btn-info"><i class="fas fa-print"></i> Cetak Surat</a>
-                        <!-- <a href="#" class="btn btn-info"><i class="fas fa-print"></i> Cetak Surat</a> -->
-                    </li>
-            </ol>
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
-    </div>
-    <!-- /.container-fluid -->
-</div>
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="col-md-9">
-                    <div class="card">
-                        <div class="card-body">
-                            <table>
-                                <thead>
-                                    <tr>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cetak Surat</title>
+</head>
+<body>
+<style type="text/css">
+		table tr td,
+		table tr th{
+			font-size: 9pt;
+		}
+	</style>
+ 
+	<div class="container">
+ 
+				<table class="table table-bordered">
+                <tr>
                                         <th colspan="2"></th>
                                         <br>
                                     </tr>
@@ -120,13 +102,12 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-@endsection
+				</table>
+			</div>
+		</div>
+	</div>
+    <script>
+		window.print();
+	</script>
+</body>
+</html>

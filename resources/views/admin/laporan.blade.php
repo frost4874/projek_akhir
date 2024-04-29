@@ -25,15 +25,16 @@
               Laporan
 
               <div class="float-right">
-                <button class="btn btn-sm btn-danger" id="btn-save-pdf">
+              <a href="/laporan/cetakpdf" class="btn btn-sm btn-danger" target="_blank"><i class="fas fa-save"></i>SIMPAN PDF</a>
+				      <a href="/laporan/print" class="btn btn-sm btn-warning" target="_BLANK"><i class="fas fa-print"></i>CETAK</a>
+                <!-- <button class="btn btn-sm btn-danger" id="btn-save-pdf">
                       <i class="fas fa-save"></i>
                       Simpan ke PDF
                   </button>
-                  <!-- Tombol untuk mencetak -->
                   <button class="btn btn-sm btn-warning" id="btn-print">
                       <i class="fas fa-print"></i>
                       Cetak
-                  </button>
+                  </button> -->
               </div>
           </div>
           <div class="card-body">
@@ -48,7 +49,38 @@
 												<th style="width: 10%">Action</th>
                       </thead>
                       <tbody>
-
+                      @foreach($requests as $index => $request)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $request->tanggal_request }}</td>
+                                            <td>{{ $request->nik }}</td>
+                                            <td>{{ $request->id_berkas }}</td>
+                                            <td>
+                                                @if($request->status == 0)
+                                                Pending
+                                                @elseif($request->status == 1)
+                                                Telah di ACC
+                                                @elseif($request->status == 2)
+                                                Sudah di print
+                                                @elseif($request->status == 3)
+                                                Selesai
+                                                @else
+                                                Status tidak valid
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($request->status == 1)
+                                                <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Edit Pejabat">
+                                                    <i class="fas fa-print"> Print</i>
+                                                </a>
+                                                @else
+                                                <a href="#" class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-pencil-alt">Edit</i>
+                                                </a>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
                       </tbody>
                   </table>
               </div>

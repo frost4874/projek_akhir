@@ -269,7 +269,7 @@ public function reviewCetak($id_request)
     ];
 
     // Panggil view dan kirimkan data
-    return view('admin.cetak', compact('data', 'npage'));
+    return view('admin.cetak', compact('data', 'npage', 'request'));
 }
 
 
@@ -284,6 +284,68 @@ private function replaceVariables($template, $data)
     }
 
     return $template;
+}
+public function printCetak($id_request)
+{
+    $user = auth()->user();
+    // Mengambil data request berdasarkan ID
+    $request = DataRequest::where('id_request', $id_request)->first();
+    Log::info($request);
+    $npage= 0;
+    // Mengambil data kecamatan dan desa dari tabel Biodata
+    $berkas = Berkas::where('id_berkas', $request->id_berkas)->first();
+    $bio = Biodata::where('nik', $request->nik)->first();
+    $pejabat = DataPejabat::where('nip', $request->nip)->first();
+    
+    // Parsing nilai form_tambahan menjadi array asosiatif
+    $form_tambahan_array = [];
+    if ($request->form_tambahan) {
+        $form_tambahan_pairs = explode(', ', $request->form_tambahan);
+        foreach ($form_tambahan_pairs as $pair) {
+            list($key, $value) = explode(':', $pair);
+            $form_tambahan_array[$key] = $value;
+        }
+    }
+    
+    // Lakukan manipulasi data yang diperlukan sebelum dikirim ke view
+    $data = [
+        'nm_kec' => $user->kecamatan,
+        'nm_desa' => $user->desa,
+        'alamatdesa' => $user->alamat,
+        'tgl_acc' => $request->acc,
+        'id_berkas' => $request->id_berkas,
+        'no_urut' => $request->no_urut,
+        'kode_belakang' => $berkas->kode_belakang,
+        'nm_pejabat' => $pejabat->nm_pejabat,
+        'jabatan' => $pejabat->jabatan,
+        'judul_berkas' => $berkas->judul_berkas,
+        'template' => $this->replaceVariables($berkas->template, [
+            'nama' => $bio->nama,
+            'nik' => $bio->nik,
+            'jekel' => $bio->jekel,
+            'tempat_lahir' => $bio->tempat_lahir,
+            'tanggal_lahir' => $bio->tgl_lahir,
+            'warganegara' => $bio->warganegara,
+            'agama' => $bio->agama,
+            'pekerjaan' => $bio->status_warga,
+            'status_nikah' => $bio->status_nikah,
+            'alamat' => $bio->alamat,
+            'rt' => $bio->rt,
+            'rw' => $bio->rw,
+            'desa' => ucwords(strtolower($bio->desa)),
+            'kecamatan' => ucwords(strtolower($bio->kecamatan)),
+            'nama_pejabat' => $pejabat->nm_pejabat,
+            'jabatan' => $pejabat->jabatan,
+            'alamat_domisili' => isset($form_tambahan_array['Alamat_Domisili']) ? $form_tambahan_array['Alamat_Domisili'] : '',
+            'domisili_sejak' => isset($form_tambahan_array['Domisili_Sejak']) ? $form_tambahan_array['Domisili_Sejak'] : '',
+            'tujuan_permohonan' => isset($form_tambahan_array['Tujuan_Permohonan']) ? $form_tambahan_array['Tujuan_Permohonan'] : '',
+            'keterangan_tambahan' => isset($form_tambahan_array['Keterangan_Tambahan']) ? $form_tambahan_array['Keterangan_Tambahan'] : '',
+        ]),
+        // Tambahkan manipulasi data lainnya sesuai kebutuhan
+    ];
+
+    // Panggil view dan kirimkan data
+    return view('admin.cetak_surat', compact('data', 'npage'));
 }
 
  
