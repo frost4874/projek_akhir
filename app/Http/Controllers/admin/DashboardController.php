@@ -30,26 +30,30 @@ class DashboardController extends Controller
     public function adminRequest(Request $request, $id_berkas, $judul_berkas)
 {
     $npage = 0;
-    $no_agenda = null;
     $user = auth()->user();
-    $id_kec = $user->kecamatan;
     $id_desa = $user->desa;
+
+    // Ambil tanggal hari ini
+    $today = Carbon::today(); 
+
+    // Ambil nomor urut untuk berkas saat ini
+    $no_agenda = DataRequest::where('id_berkas', $id_berkas)
+                             ->where('id_desa', $id_desa)
+                             ->whereDate('created_at', $today)
+                             ->max('no_urut');
+
+    // Jika nomor urut tidak ada, atur ke 1
+    $no_agenda = $no_agenda ? $no_agenda + 1 : 1;
+
+    // Reset nomor urut jika tanggal berbeda
+    if (Carbon::now()->diffInDays($today) >= 1) {
+        $no_agenda = 1;
+    }
+
+    // Ambil data lainnya seperti form tambahan, biodata, dan pejabat
     $form_tambahan = Berkas::getFormTambahanById($id_berkas);
     $biodatas = Biodata::where('desa', $id_desa)->where('role', 'pemohon')->get();
     $pejabats = DataPejabat::where('id_desa', $id_desa)->get();
-
-    $today = Carbon::today(); // Ambil tanggal hari ini
-    $no_agenda = DataRequest::whereDate('created_at', $today)->max('no_urut');
-    $no_agenda = $no_agenda ? $no_agenda + 1 : 1;
-
-    // $sql_agenda = "SELECT no_urut FROM data_requests where id_kec='$id_kec' and id_desa='$id_desa' order by no_urut DESC limit 1";
-    // $no_urut = DB::select($sql_agenda);
-    // $no_agenda = $no_urut ? $no_urut[0]->no_urut + 1 : 1;
-
-    // $pejabats = DB::table('data_pejabat')
-    //                 ->where('id_kec', $id_kec)
-    //                 ->where('id_desa', $id_desa)
-    //                 ->get();
 
     // Ambil data permohonan yang sesuai dengan desa admin dan id_berkas yang diberikan
     $requests = DataRequest::where('id_desa', $id_desa)
@@ -57,10 +61,6 @@ class DashboardController extends Controller
                            ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                            ->select('data_requests.*', 'biodata.nama as nama')
                            ->get();
-
-    if (Carbon::now()->diffInDays($today) >= 1) {
-        $no_agenda = 1;
-        }
 
     return view('admin.request', [
         'id_berkas' => $id_berkas,
@@ -70,8 +70,7 @@ class DashboardController extends Controller
         'pejabats' => $pejabats,
         'no_agenda' => $no_agenda,
         'requests' => $requests,
-    ],compact('npage'));
-
+    ], compact('npage'));
 }
 public function edit($nik, $id_request, $id_berkas, $judul_berkas)
     {

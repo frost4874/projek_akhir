@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\KecamatanDesa;
+use App\Models\Desa;
 use App\Models\Biodata;
 
 class DataMasyarakatController extends Controller
@@ -60,5 +63,43 @@ public function index()
         $biodata->delete();
         return redirect()->route('admin.data_masyarakat')->with('success', 'Pejabat berhasil dihapus');
     }
+
+    public function register(Request $request)
+{
+    $validatedData = $request->validate([
+        'nik' => 'required|numeric|unique:biodata',
+        'nama' => 'required|string|max:100',
+        'email' => 'required|string|max:50',
+        'jekel' => 'required|in:Laki-Laki,Perempuan',
+        'kecamatan' => 'required|string|max:100',
+        'desa' => 'required|string|max:100',
+        'kota' => 'required|string|max:6',
+        'tgl_lahir' => 'required|date',
+        'password' => 'required|string|min:8',
+    ]);
+
+    // Since you're already passing kecamatan and desa names from the form, 
+    // you don't need to fetch them from the database
+    $user = auth()->user();
+
+    // You can directly use the validated kecamatan and desa from the form
+    $biodata = Biodata::create([
+        'nik' => $validatedData['nik'],
+        'nama' => $validatedData['nama'],
+        'email' => $validatedData['email'],
+        'jekel' => $validatedData['jekel'],
+        'kecamatan' => $validatedData['kecamatan'],
+        'desa' => $validatedData['desa'],
+        'kota' => $validatedData['kota'],
+        'tgl_lahir' => $validatedData['tgl_lahir'],
+        'password' => Hash::make($validatedData['password']),
+        'role' => 'Pemohon',
+    ]);
+
+    Auth::login($user);
+
+    return back()->with('success', 'Registrasi berhasil');
+}
+
 
 }

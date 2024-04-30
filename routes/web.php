@@ -67,7 +67,7 @@ Route::middleware(['auth:biodata', 'adminDesa'])->group(function(){
     Route::get('/data_masyarakat/{nik}/edit', [DataMasyarakatController::class, 'edit'])->name('masyarakat.edit');
     Route::put('/data_masyarakat/{nik}', [DataMasyarakatController::class, 'update'])->name('masyarakat.update');
     Route::delete('/data_masyarakat/{nik}', [DataMasyarakatController::class, 'destroy'])->name('masyarakat.delete');
-
+    Route::post('/register_masyarakat', [DataMasyarakatController::class, 'register'])->name('register.masyarakat');
     Route::get('/berkas_permohonan', [BerkasPermohonanController::class, 'index'])->name('admin.berkas_permohonan');
     Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
     Route::get('/laporan/cetakpdf', [LaporanController::class, 'cetak_pdf']);

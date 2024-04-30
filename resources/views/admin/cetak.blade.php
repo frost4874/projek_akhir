@@ -43,11 +43,11 @@
             <!-- /.col -->
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="">
-                        <a href="{{ route('cetak.print', ['id_request' => $request->id_request]) }}" class="btn btn-info"><i class="fas fa-print"></i> Cetak Surat</a>
-                        <!-- <a href="#" class="btn btn-info"><i class="fas fa-print"></i> Cetak Surat</a> -->
-                    </li>
-            </ol>
+    <li class="">
+        <a href="{{ route('cetak.print', ['id_request' => $request->id_request]) }}" class="btn btn-info"><i class="fas fa-print"></i> Cetak Surat</a>
+    </li>
+</ol>
+<input type="hidden" name="no_urut" value="{{ session('no_urut') }}">
             </div>
             <!-- /.col -->
         </div>

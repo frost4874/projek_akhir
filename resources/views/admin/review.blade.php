@@ -61,12 +61,17 @@
                                                     <label>Form Tambahan</label>
                                                     <textarea class="form-control" name="form_tambahan" rows="5" placeholder="Form Tambahan">{{ $data->form_tambahan ?? '' }}</textarea>
                                                 </div>
-                                                @foreach($form_tambahan as $field)
+                                                <div class="form-group">
+                                                @foreach(explode(', ', $data->form_tambahan) as $field)
+                                                    @php
+                                                        [$key, $value] = explode(':', $field);
+                                                    @endphp
                                                     <div class="form-group">
-                                                        <label>{{ str_replace("_", " ", $field) }}</label>
-                                                        <input type="text" name="{{ $field}}" value="{{ $data->form_tambahan ?? '' }}" class="form-control" placeholder="{{ str_replace("_", " ", $field) }}" autofocus>
+                                                        <label>{{ str_replace("_", " ", $key) }}</label>
+                                                        <input type="text" name="{{ $key }}" value="{{ $value }}" class="form-control" placeholder="{{ str_replace("_", " ", $key) }}" autofocus>
                                                     </div>
                                                 @endforeach
+                                            </div>
                                             </div>
                                         </div>
                                     </div>

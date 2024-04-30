@@ -44,41 +44,50 @@
                                         <th style="width: 15%">Action</th>
                                     </thead>
                                     <tbody>
-                                        @foreach($requests as $index => $request)
-                                        <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $request->tanggal_request }}</td>
-                                            <td>{{ $request->nik }}</td>
-                                            <td>{{ $request->nama }}</td>
-                                            <td>{{ $request->keperluan }}</td>
-                                            <td>
-                                                @if($request->status == 0)
-                                                Pending
-                                                @elseif($request->status == 1)
-                                                Telah di ACC
-                                                @elseif($request->status == 2)
-                                                Sudah di print
-                                                @elseif($request->status == 3)
-                                                Selesai
-                                                @else
-                                                Status tidak valid
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if($request->status == 1)
-                                                <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Cetak Surat">
-                                                    <i class="fas fa-print"> Print</i>
-                                                </a>
-                                                @else
-                                                
-                                                <a href="{{ route('detail.request', ['id_berkas' => $id_berkas, 'judul_berkas' => $judul_berkas, 'nik' => $request->nik, 'id_request' => $request->id_request]) }}" class="btn btn-sm btn-warning">
-                                                    <i class="fas fa-pencil-alt">Edit</i>
-                                                </a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
+                                    @foreach($requests as $index => $request)
+                                        @if($request->status != 4)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $request->tanggal_request }}</td>
+                                                <td>{{ $request->nik }}</td>
+                                                <td>{{ $request->nama }}</td>
+                                                <td>{{ $request->keperluan }}</td>
+                                                <td>
+                                                    @if($request->status == 0)
+                                                        Pending
+                                                    @elseif($request->status == 1)
+                                                        Telah di ACC
+                                                    @elseif($request->status == 2)
+                                                        Sudah di print
+                                                    @elseif($request->status == 3)
+                                                        Selesai / Bisa di ambil
+                                                    @else
+                                                        Status tidak valid
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if($request->status == 0)
+                                                        <a href="{{ route('detail.request', ['id_berkas' => $id_berkas, 'judul_berkas' => $judul_berkas, 'nik' => $request->nik, 'id_request' => $request->id_request]) }}" class="btn btn-sm btn-warning">
+                                                            <i class="fas fa-pencil-alt">Edit</i>
+                                                        </a>
+                                                    @elseif($request->status == 1)
+                                                        <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Cetak Surat">
+                                                            <i class="fas fa-print">Print</i>
+                                                        </a>
+                                                    @elseif($request->status == 2)
+                                                        <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Cetak Surat">
+                                                            <i class="fas fa-print">Cetak Surat</i>
+                                                        </a>
+                                                    @elseif($request->status == 3)
+                                                        <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Cetak Surat">
+                                                            <i class="fas fa-check"> Telah di ambil</i>
+                                                        </a>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
                                 </table>
                             </div>
                         </div>
@@ -161,9 +170,10 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="tgl_acc">Tanggal Cetak</label>
-                        <input type="date" name="acc" id="acc" class="form-control">
+                    <label for="tgl_acc">Tanggal Cetak</label>
+                    <input type="date" name="acc" id="acc" class="form-control" value="{{ now()->format('Y-m-d') }}">
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

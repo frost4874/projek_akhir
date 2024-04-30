@@ -58,15 +58,19 @@
     <td>{{ $biodata->desa }}</td>
     <td>
         <!-- Tambahkan tombol untuk opsi, misalnya: edit, hapus, dll -->
-        <!-- Contoh tombol edit -->
-        <button class="btn btn-sm btn-primary" type="button"  data-toggle="modal" data-target="#ubahBiodataModal{{ $biodata->nik }}">
-            <i class="fas fa-edit"></i>
-            Edit
-        </button>
-        <!-- Contoh tombol hapus -->
-        <a href="{{ route('masyarakat.delete', $biodata->nik) }}" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus Pejabat">
-          <i class="fa fa-trash">Hapus</i>
-        </a>
+        <!-- Tombol Edit -->
+      <button class="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#ubahBiodataModal{{ $biodata->nik }}">
+          <i class="fas fa-edit"></i> Edit
+      </button>
+
+      <!-- Tombol Hapus -->
+      <form action="{{ route('masyarakat.delete', $biodata->nik) }}" method="POST" class="d-inline">
+          @csrf
+          @method('DELETE')
+          <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus Pejabat">
+              <i class="fa fa-trash"></i> Hapus
+          </button>
+      </form>
     </td>
 </tr>
 @endforeach
@@ -91,7 +95,7 @@
             </div>
             <div class="modal-body">
                 <!-- Formulir pendaftaran admin desa -->
-                <form id="registrationForm" action="{{ route('register') }}" method="POST">
+                <form id="registrationForm" action="{{ route('register.masyarakat') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
@@ -125,17 +129,18 @@
                                 <label for="kota">Kota</label>
                                 <input type="text" class="form-control" id="kota" name="kota" value="Jember" readonly>
                             </div>
+                            @php
+                            $user = Auth::user();
+                            $kecamatan = $user->kecamatan; // Assuming the kecamatan field is stored in the user model
+                            $desa = $user->desa;
+                            @endphp
                             <div class="form-group">
                                 <label for="kecamatan">Kecamatan</label>
-                                <select class="form-control" id="kecamatan" name="kecamatan" required>
-                                    <option value="">Pilih Kecamatan</option>
-                                </select>
+                                <input type="text" class="form-control" id="kecamatan" name="kecamatan" value="{{ $kecamatan }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="desa">Desa</label>
-                                <select class="form-control" id="desa" name="desa" required>
-                                    <option value="">Pilih Desa</option>
-                                </select>
+                                <input type="text" class="form-control" id="desa" name="desa" value="{{ $desa }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
