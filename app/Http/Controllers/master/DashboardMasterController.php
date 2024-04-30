@@ -20,6 +20,25 @@ class DashboardMasterController extends Controller
 
         return view('master_admin.dashboard', compact('master_berkas', 'card_array'));
     }
+    public function masterRequest(Request $request, $id_berkas, $judul_berkas)
+    {
+        $npage = 0;
+        $no_agenda = null;
+        $user = auth()->user();
+        $id_kec = $user->kecamatan;
+        $id_desa = $user->desa;
+        $form_tambahan = Berkas::getFormTambahanById($id_berkas);
+        $biodatas = Biodata::where('desa', $id_desa)->where('role', 'pemohon')->get();
+
+
+        return view('master_admin.request', [
+            'id_berkas' => $id_berkas,
+            'judul_berkas' => $judul_berkas,
+            'biodatas' => $biodatas,
+            'requests' => $requests,
+        ],compact('npage'));
+
+    }
 
     public function master()
     {

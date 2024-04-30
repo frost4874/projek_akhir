@@ -42,11 +42,7 @@ $total_colors = count($card_array);
                 @php
                 $jumlah_req = App\Models\DataRequest::where('id_berkas', $berkas->id_berkas)
                     ->where(function ($query) {
-                        $query->whereIn('status', [0, 1, 2])
-                            ->whereHas('biodata', function ($query) {
-                                $query->where('id_kec', auth()->user()->kecamatan)
-                                      ->where('id_desa', auth()->user()->desa);
-                            });
+                        $query->whereIn('status', [4]);
                     })
                     ->count();
                 @endphp

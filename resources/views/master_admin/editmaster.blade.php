@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Simpan</button>
-                                <a href="#" class="btn btn-default">Batal</a>
+                                <a class="btn btn-danger" onclick="history.back()" type="button">Batal</a>
                             </form>
                         </div>
                     </div>

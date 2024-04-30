@@ -14,6 +14,22 @@ class TemplateSuratController extends Controller
         $master_berkas = Berkas::all();
         return view('master_admin.templatesurat', compact('master_berkas'));
     }
+    public function tambahSurat()
+    {
+        return view('master_admin.tambah_surat');
+    }
+    public function editSurat($id_berkas)
+    {
+        // Ambil data master berkas berdasarkan ID
+        $berkas = Berkas::findOrFail($id_berkas);
+
+        // Kembalikan view 'edit_template_surat' dengan data master_berkas
+        return view('master_admin.edit_surat', compact('berkas'));
+    }
+    public function showCKEditor()
+    {
+        return view('ckeditor');
+    }
     public function store(Request $request)
     {
         // Validasi data yang diterima dari formulir
@@ -54,7 +70,7 @@ class TemplateSuratController extends Controller
             'form_tambahan' => $request->input('form_tambahan'),
         ]);
 
-        return redirect()->back()->with('success', 'Berkas berhasil diperbarui.');
+        return redirect()->route('admin.templatesurat')->with('success', 'Berkas berhasil diperbarui.');
     }
     public function destroy($id_berkas)
     {

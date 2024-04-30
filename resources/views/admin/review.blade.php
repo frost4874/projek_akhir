@@ -38,9 +38,7 @@
                                         <button type="submit" name="ubah" class="btn btn-info">
                                             <i class="fas fa-edit"></i> Kirim
                                         </button>
-                                        <a href="#" class="btn btn-secondary">
-                                            Batal
-                                        </a>
+                                        
                                     </div>
                                 </div>
                                 <div class="row">
@@ -63,6 +61,12 @@
                                                     <label>Form Tambahan</label>
                                                     <textarea class="form-control" name="form_tambahan" rows="5" placeholder="Form Tambahan">{{ $data->form_tambahan ?? '' }}</textarea>
                                                 </div>
+                                                @foreach($form_tambahan as $field)
+                                                    <div class="form-group">
+                                                        <label>{{ str_replace("_", " ", $field) }}</label>
+                                                        <input type="text" name="{{ $field}}" value="{{ $data->form_tambahan ?? '' }}" class="form-control" placeholder="{{ str_replace("_", " ", $field) }}" autofocus>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -123,6 +127,7 @@
                                 </div>
                             </div>
                         </form>
+                        <div class="card-footer">
                         <!-- Button Acc -->
                         <form action="{{ route('request.acc', ['id_request' => $data->id_request]) }}" method="POST">
                             @csrf
@@ -130,7 +135,13 @@
                             <button type="submit" class="btn btn-success">
                                 <i class="fas fa-check"></i> Acc
                             </button>
+                            <a type="button" class="btn btn-danger" onclick="history.back()">
+                            Batal
+                        </a>
                         </form>
+                        
+                        </div>
+                                        
                     </div>
                 </div>
             </div>

@@ -28,10 +28,9 @@
              
 
               <div class="float-right">
-                  <button class="btn btn-sm btn-success" id="btn-add-new " type="button" data-toggle="modal" data-target="#modalTambahTemplate">
-                      <i class="fas fa-plus"></i>
-                      Tambah {{$title}}
-                  </button>
+            
+                  <a href="{{ route('admin.tambahsurat') }}" class="btn btn-sm btn-success"><i class="fas fa-plus"></i>
+                      Tambah {{$title}}</a>
               </div>
           </div>
           <div class="card-body">
@@ -54,17 +53,14 @@
                             <td>
 
                                 <div class="form-button-action">
-                                    
-                                    <button class="btn btn-sm btn-primary" type="button"  data-toggle="modal" data-target="#ubahTemplateModal{{ $berkas->id_berkas }}">
-                                        <i class="fas fa-edit"></i>
-                                        Edit
-                                    </button>
+                                    <a href="{{ route('admin.editsurat', $berkas->id_berkas) }}" class="btn btn-sm btn-primary" type="button"><i class="fas fa-edit"></i>
+                                        Edit</a>
                                     <form action="{{ route('berkas.delete', $berkas->id_berkas) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" data-original-title="Hapus Berkas">
+                                            <a type="submit" class="btn btn-sm btn-danger" data-original-title="Hapus Berkas">
                                                 <i class="fa fa-trash">Hapus</i>
-                                            </button>
+                                            </a>
                                         </form>
                                 </div>
                             </td>
@@ -159,9 +155,6 @@
                         <label>Template Surat</label>
                         <div class="form-group">
                             <textarea name="template" id="template{{ $berkas->id_berkas }}" class="form-control" cols="30" rows="10">{{ $berkas->template }}</textarea>
-                            <script>
-                            CKEDITOR.replace('template{{ $berkas->id_berkas }}');
-                            </script>
                         </div>
                         <label>*Jika menambahkan data supaya menggunakan $</label>
                     </div>
@@ -180,6 +173,10 @@
     </div>
 </div>
 @endforeach
-
+@foreach($master_berkas as $berkas)
+    <script>
+        CKEDITOR.replace('template{{ $berkas->id_berkas }}');
+    </script>
+@endforeach
     
 @endsection
