@@ -168,13 +168,14 @@ foreach ($request->all() as $key => $value) {
         $masukan .= $variabel . ':' . $value . ', ';
     }
 }
-
+$now = Carbon::now();
+$now->setTimezone('Asia/Jakarta');
 $masukan = rtrim($masukan, ', ');
 
     // Buat objek DataRequest baru
     $newRequest = new DataRequest();
     $newRequest->nik = $validatedData['nik'];
-    $newRequest->tanggal_request = $request->tanggal_request;
+    $newRequest->tanggal_request = $now;
     $newRequest->status = 0;
     $newRequest->id_berkas = $validatedData['id_berkas'];
     $newRequest->keterangan = $validatedData['keterangan'];

@@ -27,29 +27,39 @@ class BiodataDesaController extends Controller
     }
 
     public function update(Request $request, $nik)
-    {
-        $validatedData = $request->validate([
-            'nama' => 'required|string|max:50',
-            'jekel' => 'required|in:Laki-Laki,Perempuan',
-            'tgl_lahir' => 'required|date',
-            'tempat_lahir' => 'nullable|string|max:30',
-            'alamat' => 'nullable|string',
-            'telepon' => 'nullable|string|max:13',
-            'email' => 'nullable|email|max:50',
-            'kecamatan' => 'required|string',
-            'desa' => 'required|string',
-            'website' => 'nullable|string|max:20',
-            'kodepos' => 'nullable|string|max:50',
+{
+    $validatedData = $request->validate([
+        'nama' => 'required|string|max:50',
+        'jekel' => 'required|in:Laki-Laki,Perempuan',
+        'tgl_lahir' => 'required|date',
+        'tempat_lahir' => 'nullable|string|max:30',
+        'alamat' => 'nullable|string',
+        'telepon' => 'nullable|string|max:13',
+        'email' => 'nullable|email|max:50',
+        'website' => 'nullable|string|max:20',
+        'kodepos' => 'nullable|string|max:50',
+    ]);
+
+    // Ambil data biodata berdasarkan NIK
+    $biodata = Biodata::where('nik', $nik)->first();
+
+    // Update data biodata
+    $biodata->update($validatedData);
+
+    // Periksa apakah bidang password diisi dalam permintaan
+    if ($request->filled('password')) {
+        // Validasi bidang password
+        $request->validate([
+            'password' => 'required|string|min:8', // Atur aturan validasi sesuai kebutuhan Anda
         ]);
 
-        // Ambil data biodata berdasarkan NIK
-        $biodata = Biodata::where('nik', $nik)->firstOrFail();
-
-        // Update data biodata
-        $biodata->update($validatedData);
-
-
-        // Redirect ke halaman lain atau tampilkan pesan sukses
-        return redirect()->route('admin.biodata_desa')->with('success', 'Biodata berhasil diperbarui.');
+        // Update password
+        $biodata->password = bcrypt($request->password);
+        $biodata->save();
     }
+
+    // Redirect ke halaman lain atau tampilkan pesan sukses
+    return redirect()->route('admin.biodata_desa')->with('success', 'Biodata berhasil diperbarui.');
+}
+
 }

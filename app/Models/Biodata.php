@@ -36,5 +36,7 @@ class Biodata extends Authenticatable
         'website',
         'password',
         'role',
+        'foto_ktp',
+        'foto_kk',
     ];
 }
