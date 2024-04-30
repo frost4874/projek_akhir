@@ -25,7 +25,18 @@ class FlutterRegisterController extends Controller
             'tgl_lahir' => 'required|date',
             'alamat' => 'nullable|string',
             'password' => 'required|string|min:8',
+            'foto_ktp' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Batasi tipe file dan ukuran
+            'foto_kk' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Batasi tipe file dan ukuran
         ]);
+
+        if ($request->hasFile('foto_ktp')) {
+            $fotoKtpPath = $request->file('foto_ktp')->store('public/foto_ktp');
+        }
+
+        // Simpan foto KK jika diberikan
+        if ($request->hasFile('foto_kk')) {
+            $fotoKkPath = $request->file('foto_kk')->store('public/foto_kk');
+        }
 
         // Ambil nama kecamatan dan desa dari formulir
         $kecamatanNama = $validatedData['kecamatan'];

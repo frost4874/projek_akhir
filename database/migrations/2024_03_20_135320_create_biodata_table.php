@@ -35,6 +35,8 @@ return new class extends Migration
             $table->string('rw', 10)->nullable();
             $table->string('kodepos', 20)->nullable();
             $table->string('website', 50)->nullable();
+            $table->string('foto_ktp')->nullable();
+            $table->string('foto_kk')->nullable();
             $table->timestamps();
         });
     }
