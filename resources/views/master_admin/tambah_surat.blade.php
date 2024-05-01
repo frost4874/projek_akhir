@@ -69,6 +69,7 @@
                                     <!-- Teks yang dapat diklik untuk menambahkan form -->
                                     <div class="text-right mb-2">
                                         <a href="#" id="tambahForm" class="btn btn-link">Tambah Form</a>
+                                        <a href="#" id="hapusForm" class="btn btn-link text-danger">Hapus Form</a>
                                     </div>
                                 </div>
                                 <!-- Dropdown pertama di luar col-sm-10 agar mengambil lebar penuh -->
@@ -166,6 +167,15 @@ function insertText(text) {
     }
 }
 
+document.getElementById('hapusForm').addEventListener('click', function() {
+    var container = document.getElementById('formTambahanContainer');
+    var selects = container.querySelectorAll('select[name="form_tambahan[]"]');
+    if (selects.length > 1) {
+        container.removeChild(selects[selects.length - 1]);
+    } else {
+        alert('Tidak dapat menghapus dropdown terakhir.');
+    }
+});
 
 </script>
     

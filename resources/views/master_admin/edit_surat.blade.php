@@ -52,8 +52,15 @@
                         </script>
                         <label>*Jika menambahkan data supaya menggunakan $</label>
                     </div>
-                    <div class="form-group">
-                        <label>Form Tambahan</label>
+                    <div class="form-group row" id="formTambahanContainer">
+                                <label class="col-sm-2 col-form-label">Form Tambahan</label>
+                                <div class="col-sm-10">
+                                    <!-- Teks yang dapat diklik untuk menambahkan form -->
+                                    <div class="text-right mb-2">
+                                        <a href="#" id="tambahForm" class="btn btn-link">Tambah Form</a>
+                                        <a href="#" id="hapusForm" class="btn btn-link text-danger">Hapus Form</a>
+                                    </div>
+                                </div>
                         @php
                             $formTambahanValues = explode(',', $berkas->form_tambahan);
                         @endphp
@@ -78,9 +85,7 @@
                           <option value="Tahun_Usaha" {{ $formTambahanValues[$i-1] == 'Tahun_Usaha' ? 'selected' : '' }}>Tahun Usaha</option>
                           <option value="Alamat_Usaha" {{ $formTambahanValues[$i-1] == 'Alamat_Usaha' ? 'selected' : '' }}>Alamat Usaha</option>
                         </select>
-                            <br>
                         @endfor
-                        <label>*Jika menambahkan Form tambahan supaya menggunakan Spasi</label>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -97,6 +102,47 @@
       </div>
     </div>
   </section>
+<script>
+document.getElementById('tambahForm').addEventListener('click', function() {
+    var container = document.getElementById('formTambahanContainer');
+    var newSelect = document.createElement('select');
+    newSelect.setAttribute('name', 'form_tambahan[]');
+    newSelect.setAttribute('class', 'form-control mb-2');
+    newSelect.style.width = '100%';
+    newSelect.innerHTML = `
+    <option value="">Pilih Form Tambahan...</option>
+    <option value="Alamat_Domisili">Alamat Domisili</option>
+    <option value="Domisili_Sejak">Domisili Sejak</option>
+    <option value="Tujuan_Permohonan">Tujuan Permohonan</option>
+    <option value="Nama_Anak">Nama Anak</option>
+    <option value="Jekel_Anak">Jenis Kelamin Anak</option>
+    <option value="Tempat_Lahir_Anak">Tempat Lahir Anak</option>
+    <option value="Sekolah">Sekolah</option>
+    <option value="Jurusan">Jurusan</option>
+    <option value="Semester">Semester</option>
+    <option value="Nama_Organisasi">Nama Organisasi</option>
+    <option value="Alamat_Organisasi">Alamat Organisasi</option>
+    <option value="Nama_Ketua_Organisasi">Nama Ketua Organisasi</option>
+    <option value="Nik_Ayah">NIK Ayah</option>
+    <option value="Nik_Ibu">NIK Ibu</option>
+    <option value="Nama_Usaha">Nama Usaha</option>
+    <option value="Tahun_Usaha">Tahun Usaha</option>
+    <option value="Alamat_Usaha">Alamat Usaha</option>
+    `;
+    container.appendChild(newSelect);
+});
+
+
+  document.getElementById('hapusForm').addEventListener('click', function() {
+    var container = document.getElementById('formTambahanContainer');
+    var selects = container.querySelectorAll('select[name="form_tambahan[]"]');
+    if (selects.length > 1) {
+        container.removeChild(selects[selects.length - 1]);
+    } else {
+        alert('Tidak dapat menghapus dropdown terakhir.');
+    }
+});
+</script>
 
     
 @endsection
