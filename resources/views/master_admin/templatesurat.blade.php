@@ -44,24 +44,22 @@
                           <th style="width: 15%">Action</th>
                       </thead>
                       <tbody>
-                        @foreach($master_berkas as $index => $berkas)
+                      @foreach($master_berkas as $index => $berkas)
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $berkas->judul_berkas }}</td>
                             <td>{{ $berkas->kode_berkas }}</td>
                             <td>{{ $berkas->kode_belakang }}</td>
                             <td>
-
-                                <div class="form-button-action">
-                                    <a href="{{ route('admin.editsurat', $berkas->id_berkas) }}" class="btn btn-sm btn-primary" type="button"><i class="fas fa-edit"></i>
-                                        Edit</a>
-                                    <form action="{{ route('berkas.delete', $berkas->id_berkas) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <a type="submit" class="btn btn-sm btn-danger" data-original-title="Hapus Berkas">
-                                                <i class="fa fa-trash">Hapus</i>
-                                            </a>
-                                        </form>
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a href="{{ route('admin.editsurat', $berkas->id_berkas) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <form action="{{ route('berkas.delete', $berkas->id_berkas) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger ml-1">Hapus</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

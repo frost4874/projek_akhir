@@ -1,22 +1,19 @@
 @extends('layouts.app')
-@php
-    $title = 'Tambah Template Surat';
-@endphp
+
 @section('title', 'Tambah Template Surat')
+
 @section('content')
-    <div class="content-header">
-      <div class="container-fluid">
+<div class="content-header">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Tambah Template Surat</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            
-          </div><!-- /.col -->
+            <div class="col-sm-6">
+                <h1 class="m-0">Tambah Template Surat</h1>
+            </div><!-- /.col -->
         </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <section class="content">
+    </div><!-- /.container-fluid -->
+</div>
+
+<section class="content">
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
@@ -56,7 +53,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="history.back()">Batal</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
                     <button type="submit" name="simpan" class="btn btn-success">Simpan</button>
                 </div>
               
@@ -66,6 +63,70 @@
         </div>
       </div>
     </div>
-  </section>
+</section>
+
+<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+<script>
+CKEDITOR.replace('templateQ');
+
+document.getElementById('tambahForm').addEventListener('click', function() {
+    var container = document.getElementById('formTambahanContainer');
+    var newSelect = document.createElement('select');
+    newSelect.setAttribute('name', 'form_tambahan[]');
+    newSelect.setAttribute('class', 'form-control mb-2');
+    newSelect.style.width = '100%';
+    newSelect.innerHTML = `
+    <option value="">Pilih Form Tambahan...</option>
+    <option value="Alamat_Domisili">Alamat Domisili</option>
+    <option value="Domisili_Sejak">Domisili Sejak</option>
+    <option value="Tujuan_Permohonan">Tujuan Permohonan</option>
+    <option value="Nama_Anak">Nama Anak</option>
+    <option value="Jekel_Anak">Jenis Kelamin Anak</option>
+    <option value="Tempat_Lahir_Anak">Tempat Lahir Anak</option>
+    <option value="Sekolah">Sekolah</option>
+    <option value="Jurusan">Jurusan</option>
+    <option value="Semester">Semester</option>
+    <option value="Nama_Organisasi">Nama Organisasi</option>
+    <option value="Alamat_Organisasi">Alamat Organisasi</option>
+    <option value="Nama_Ketua_Organisasi">Nama Ketua Organisasi</option>
+    <option value="Nik_Ayah">NIK Ayah</option>
+    <option value="Nik_Ibu">NIK Ibu</option>
+    <option value="Nama_Usaha">Nama Usaha</option>
+    <option value="Tahun_Usaha">Tahun Usaha</option>
+    <option value="Alamat_Usaha">Alamat Usaha</option>
+    `;
+    container.appendChild(newSelect);
+});
+
+document.addEventListener('submit', function() {
+    var selects = document.querySelectorAll('select[name="form_tambahan[]"]');
+    var values = [];
+    selects.forEach(function(select) {
+        if (select.value) {
+            values.push(select.value);
+        }
+    });
+    document.querySelector('input[name="form_tambahan"]').value = values.join(',');
+});
+
+document.getElementById('insertVariableBtn').addEventListener('click', function() {
+    var variable = document.getElementById('variableDropdown').value;
+    insertText(variable);
+});
+
+// Fungsi untuk menyisipkan teks di posisi kursor saat ini
+function insertText(text) {
+    var editor = CKEDITOR.instances['templateQ'];
+    if (editor) {
+        if (editor.mode === 'wysiwyg') {
+            editor.insertHtml(text);
+        } else {
+            alert('Anda harus berada dalam mode WYSIWYG!');
+        }
+    }
+}
+
+
+</script>
     
 @endsection

@@ -29,26 +29,20 @@ class DashboardController extends Controller
 
     public function adminRequest(Request $request, $id_berkas, $judul_berkas)
 {
-    $npage = 0;
     $user = auth()->user();
     $id_desa = $user->desa;
-
+    $npage = 0;
+    
     // Ambil tanggal hari ini
-    $today = Carbon::today(); 
+    $today = Carbon::today();
 
-    // Ambil nomor urut untuk berkas saat ini
-    $no_agenda = DataRequest::where('id_berkas', $id_berkas)
-                             ->where('id_desa', $id_desa)
-                             ->whereDate('created_at', $today)
-                             ->max('no_urut');
-
-    // Jika nomor urut tidak ada, atur ke 1
+    // Periksa nomor urut terakhir pada hari ini dan desa ini, tanpa memperhatikan jenis berkas
+    $no_agenda = DataRequest::where('id_desa', $id_desa)
+                            ->whereDate('acc', $today)
+                            ->max('no_urut');
+    
+    // Jika tidak ditemukan, atur ke 1, jika ditemukan, lanjutkan dari yang terakhir
     $no_agenda = $no_agenda ? $no_agenda + 1 : 1;
-
-    // Reset nomor urut jika tanggal berbeda
-    if (Carbon::now()->diffInDays($today) >= 1) {
-        $no_agenda = 1;
-    }
 
     // Ambil data lainnya seperti form tambahan, biodata, dan pejabat
     $form_tambahan = Berkas::getFormTambahanById($id_berkas);
@@ -57,7 +51,7 @@ class DashboardController extends Controller
 
     // Ambil data permohonan yang sesuai dengan desa admin dan id_berkas yang diberikan
     $requests = DataRequest::where('id_desa', $id_desa)
-                           ->where('id_berkas', $id_berkas) // Filter berdasarkan id_berkas
+                           ->where('id_berkas', $id_berkas)
                            ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                            ->select('data_requests.*', 'biodata.nama as nama')
                            ->get();
@@ -70,8 +64,9 @@ class DashboardController extends Controller
         'pejabats' => $pejabats,
         'no_agenda' => $no_agenda,
         'requests' => $requests,
-    ], compact('npage'));
+    ],compact('npage'));
 }
+
 public function edit($nik, $id_request, $id_berkas, $judul_berkas)
     {
         $npage = 0;
@@ -272,6 +267,20 @@ public function reviewCetak($id_request)
             'domisili_sejak' => isset($form_tambahan_array['Domisili_Sejak']) ? $form_tambahan_array['Domisili_Sejak'] : '',
             'tujuan_permohonan' => isset($form_tambahan_array['Tujuan_Permohonan']) ? $form_tambahan_array['Tujuan_Permohonan'] : '',
             'keterangan_tambahan' => isset($form_tambahan_array['Keterangan_Tambahan']) ? $form_tambahan_array['Keterangan_Tambahan'] : '',
+            'nama_anak' => isset($form_tambahan_array['Nama_Anak']) ? $form_tambahan_array['Nama_Anak'] : '',
+            'jekel_anak' => isset($form_tambahan_array['Jekel_Anak']) ? $form_tambahan_array['Jekel_Anak'] : '',
+            'tempat_lahir_anak' => isset($form_tambahan_array['Tempat_Lahir_Anak']) ? $form_tambahan_array['Tempat_Lahir_Anak'] : '',
+            'sekolah' => isset($form_tambahan_array['Sekolah']) ? $form_tambahan_array['Sekolah'] : '',
+            'jurusan' => isset($form_tambahan_array['Jurusan']) ? $form_tambahan_array['Jurusan'] : '',
+            'semester' => isset($form_tambahan_array['Semester']) ? $form_tambahan_array['Semester'] : '',
+            'nama_organisasi' => isset($form_tambahan_array['Nama_Organisasi']) ? $form_tambahan_array['Nama_Organisasi'] : '',
+            'alamat_organisasi' => isset($form_tambahan_array['Alamat_Organisasi']) ? $form_tambahan_array['Alamat_Organisasi'] : '',
+            'nama_ketua_organisasi' => isset($form_tambahan_array['Nama_Ketua_Organisasi']) ? $form_tambahan_array['Nama_Ketua_Organisasi'] : '',
+            'nik_ayah' => isset($form_tambahan_array['Nik_Ayah']) ? $form_tambahan_array['Nik_Ayah'] : '',
+            'nik_ibu' => isset($form_tambahan_array['Nik_Ibu']) ? $form_tambahan_array['Nik_Ibu'] : '',
+            'nama_usaha' => isset($form_tambahan_array['Nama_Usaha']) ? $form_tambahan_array['Nama_Usaha'] : '',
+            'tahun_usaha' => isset($form_tambahan_array['Tahun_Usaha']) ? $form_tambahan_array['Tahun_Usaha'] : '',
+            'alamat_usaha' => isset($form_tambahan_array['Alamat_Usaha']) ? $form_tambahan_array['Alamat_Usaha'] : '',
         ]),
         // Tambahkan manipulasi data lainnya sesuai kebutuhan
     ];

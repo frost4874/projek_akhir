@@ -54,7 +54,32 @@
                     </div>
                     <div class="form-group">
                         <label>Form Tambahan</label>
-                        <input type="text" name="form_tambahan" class="form-control" placeholder="Form Tambahan.." value="{{ $berkas->form_tambahan }}"></input>
+                        @php
+                            $formTambahanValues = explode(',', $berkas->form_tambahan);
+                        @endphp
+                        @for ($i = 1; $i <= count($formTambahanValues); $i++)
+                        <select name="form_tambahan[]" class="form-control">
+                          <option value="">Pilih Form Tambahan...</option>
+                          <option value="Alamat_Domisili" {{ $formTambahanValues[$i-1] == 'Alamat_Domisili' ? 'selected' : '' }}>Alamat Domisili</option>
+                          <option value="Domisili_Sejak" {{ $formTambahanValues[$i-1] == 'Domisili_Sejak' ? 'selected' : '' }}>Domisili Sejak</option>
+                          <option value="Tujuan_Permohonan" {{ $formTambahanValues[$i-1] == 'Tujuan_Permohonan' ? 'selected' : '' }}>Tujuan Permohonan</option>
+                          <option value="Nama_Anak" {{ $formTambahanValues[$i-1] == 'Nama_Anak' ? 'selected' : '' }}>Nama Anak</option>
+                          <option value="Jekel_Anak" {{ $formTambahanValues[$i-1] == 'Jekel_Anak' ? 'selected' : '' }}>Jenis Kelamin Anak</option>
+                          <option value="Tempat_Lahir_Anak" {{ $formTambahanValues[$i-1] == 'Tempat_Lahir_Anak' ? 'selected' : '' }}>Tempat Lahir Anak</option>
+                          <option value="Sekolah" {{ $formTambahanValues[$i-1] == 'Sekolah' ? 'selected' : '' }}>Sekolah</option>
+                          <option value="Jurusan" {{ $formTambahanValues[$i-1] == 'Jurusan' ? 'selected' : '' }}>Jurusan</option>
+                          <option value="Semester" {{ $formTambahanValues[$i-1] == 'Semester' ? 'selected' : '' }}>Semester</option>
+                          <option value="Nama_Organisasi" {{ $formTambahanValues[$i-1] == 'Nama_Organisasi' ? 'selected' : '' }}>Nama Organisasi</option>
+                          <option value="Alamat_Organisasi" {{ $formTambahanValues[$i-1] == 'Alamat_Organisasi' ? 'selected' : '' }}>Alamat Organisasi</option>
+                          <option value="Nama_Ketua_Organisasi" {{ $formTambahanValues[$i-1] == 'Nama_Ketua_Organisasi' ? 'selected' : '' }}>Nama Ketua Organisasi</option>
+                          <option value="Nik_Ayah" {{ $formTambahanValues[$i-1] == 'Nik_Ayah' ? 'selected' : '' }}>NIK Ayah</option>
+                          <option value="Nik_Ibu" {{ $formTambahanValues[$i-1] == 'Nik_Ibu' ? 'selected' : '' }}>NIK Ibu</option>
+                          <option value="Nama_Usaha" {{ $formTambahanValues[$i-1] == 'Nama_Usaha' ? 'selected' : '' }}>Nama Usaha</option>
+                          <option value="Tahun_Usaha" {{ $formTambahanValues[$i-1] == 'Tahun_Usaha' ? 'selected' : '' }}>Tahun Usaha</option>
+                          <option value="Alamat_Usaha" {{ $formTambahanValues[$i-1] == 'Alamat_Usaha' ? 'selected' : '' }}>Alamat Usaha</option>
+                        </select>
+                            <br>
+                        @endfor
                         <label>*Jika menambahkan Form tambahan supaya menggunakan Spasi</label>
                     </div>
                 </div>
