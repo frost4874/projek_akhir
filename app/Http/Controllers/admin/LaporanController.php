@@ -15,7 +15,12 @@ class LaporanController extends Controller
         $npage = 3;
         $userDesa = auth()->user()->desa;
         $status =4;
-        $requests = DataRequest::where('id_desa', $userDesa)->where('status', $status)->get();
+        $requests = DataRequest::where('id_desa', $userDesa)
+                                ->where('status', $status)
+                                ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
+                                ->join('berkas', 'data_requests.id_berkas', '=', 'berkas.id_berkas')
+                                ->select('data_requests.*', 'biodata.nama as nama', 'berkas.judul_berkas as judul_berkas')
+                                ->get();
         
         return view('admin.laporan',['requests'=>$requests], compact('npage'));
     }

@@ -176,8 +176,6 @@ $masukan = rtrim($masukan, ', ');
     $newRequest->form_tambahan = $masukan;
     $newRequest->id_kec = auth()->user()->kecamatan;
     $newRequest->id_desa = auth()->user()->desa;
-    
-    // tambahkan pengisian atribut lainnya sesuai kebutuhan
 
     // Simpan request baru
     $newRequest->save();

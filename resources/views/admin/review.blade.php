@@ -57,10 +57,7 @@
                                                     <label>Tanggal Request</label>
                                                     <input type="text" name="tanggal_request" value="{{ $data->tanggal_request ?? '' }}" class="form-control" placeholder="Tanggal Request" readonly>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label>Form Tambahan</label>
-                                                    <textarea class="form-control" name="form_tambahan" rows="5" placeholder="Form Tambahan">{{ $data->form_tambahan ?? '' }}</textarea>
-                                                </div>
+                                        
                                                 <div class="form-group">
                                                 @foreach(explode(', ', $data->form_tambahan) as $field)
                                                     @php
