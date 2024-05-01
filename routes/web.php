@@ -44,7 +44,7 @@ Route::middleware(['auth:biodata', 'check.role'])->group(function () {
     Route::get('/templatesurat/edit/{id_berkas}', [TemplateSuratController::class, 'editSurat'])->name('admin.editsurat');
     Route::put('/templatesurat/{id_berkas}', [TemplateSuratController::class, 'update'])->name('templatesurat.update');
     Route::post('/templatesurat/store', [TemplateSuratController::class, 'store'])->name('berkas.store');
-    Route::delete('/templatesurat/{judul_berkas}/delete', [TemplateSuratController::class, 'destroy'])->name('berkas.delete');
+    Route::delete('/templatesurat/{id_berkas}/delete', [TemplateSuratController::class, 'destroy'])->name('berkas.delete');
     Route::get('/laporan_master', [LaporanMasterController::class, 'index'])->name('admin.laporan_master');
     Route::get('/biodata_master', [DashboardMasterController::class, 'master'])->name('admin.biodata_master');
     Route::get('/biodata_master/{nik}', [DashboardMasterController::class, 'ubah'])->name('ubah.master');
