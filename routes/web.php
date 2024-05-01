@@ -70,6 +70,7 @@ Route::middleware(['auth:biodata', 'adminDesa'])->group(function(){
     Route::post('/register_masyarakat', [DataMasyarakatController::class, 'register'])->name('register.masyarakat');
     Route::get('/berkas_permohonan', [BerkasPermohonanController::class, 'index'])->name('admin.berkas_permohonan');
     Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
+    Route::get('/laporan/filter', [LaporanController::class, 'filter'])->name('laporan.filter');
     Route::get('/laporan/cetakpdf', [LaporanController::class, 'cetak_pdf']);
     Route::get('/laporan/print', [LaporanController::class, 'print']);
 
