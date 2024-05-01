@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="history.back()">Batal</button>
                     <button type="submit" name="simpan" class="btn btn-success">Simpan</button>
                 </div>
               
