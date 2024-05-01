@@ -21,11 +21,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <div class="float-right">
-                                
-                            </div>
-                        </div>
+                        
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover" id="table-list">
@@ -34,7 +30,6 @@
                                         <th>Tanggal Request</th>
                                         <th>NIK</th>
                                         <th>Nama Lengkap</th>
-                                        <th>Catatan</th>
                                         <th>Status</th>
                                         <th style="width: 15%">Action</th>
                                     </thead>
@@ -45,7 +40,6 @@
                                             <td>{{ $request->tanggal_request }}</td>
                                             <td>{{ $request->nik }}</td>
                                             <td>{{ $request->nama }}</td>
-                                            <td>{{ $request->keperluan }}</td>
                                             <td>
                                                 @if($request->status == 0)
                                                 Pending
@@ -60,8 +54,8 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="#" type="button" class="btn btn-sm btn-success" >
-                                                    <i class="fas fa-review"> Review</i>
+                                                <a href="{{ route('master.review', ['id_request' => $request->id_request]) }}" type="button" class="btn btn-sm btn-success" >
+                                                    <i class="fas fa-pencil-alt"> Review</i>
                                                 </a>
                                             </td>
                                         </tr>

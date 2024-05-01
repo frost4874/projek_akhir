@@ -29,7 +29,7 @@ $total_colors = count($card_array);
     <div class="row">
     @foreach($master_berkas as $berkas)
 <div class="col-md-3 col-sm-6 col-12">
-    <a href="{{ route('admin.request', ['id_berkas' => $berkas->id_berkas, 'judul_berkas' => $berkas->judul_berkas]) }}">
+    <a href="{{ route('master.request', ['id_berkas' => $berkas->id_berkas, 'judul_berkas' => $berkas->judul_berkas]) }}">
         <div class="info-box">
             @if($total_colors > 0)
             <span class="info-box-icon {{ $card_array[$loop->index % $total_colors] }}"><i class="far fa-envelope"></i></span>

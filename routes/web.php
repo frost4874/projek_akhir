@@ -33,7 +33,8 @@ Route::get('/desa/{id_kec}', [KecamatanDesaController::class, 'getDesaByKecamata
 // Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware('auth:biodata');
 Route::middleware(['auth:biodata', 'check.role'])->group(function () {
     Route::get('/dashboard_master', [DashboardMasterController::class, 'index'])->name('admin.dashboard_master');
-    Route::get('/dashboard_master/{id_berkas}/{judul_berkas}', [DashboardMasterController::class, ''])->name('master.request');
+    Route::get('/dashboard_master/{id_berkas}/{judul_berkas}', [DashboardMasterController::class, 'masterRequest'])->name('master.request');
+    Route::get('/dashboard_master/{id_request}/review', [DashboardMasterController::class, 'reviewSurat'])->name('master.review');
     Route::get('/data_admindesa', [DataDesaController::class, 'index'])->name('admin.data_admindesa');
     Route::post('/data_admindesa', [DataDesaController::class, 'tambah'])->name('register.desa');
     Route::put('/data_admindesa/{nik}', [DataDesaController::class, 'update'])->name('master.update.desa');
