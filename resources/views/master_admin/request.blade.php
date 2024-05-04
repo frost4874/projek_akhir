@@ -1,11 +1,8 @@
 @extends('layouts.app')
-
 @php
     $title = 'Permohonan Surat';
 @endphp
-
 @section('title', 'Permohonan Surat')
-
 @section('content')
     <div class="content-header">
         <div class="container-fluid">
@@ -54,9 +51,9 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{ route('master.review', ['id_request' => $request->id_request]) }}" type="button" class="btn btn-sm btn-success" >
-                                                    <i class="fas fa-pencil-alt"> Review</i>
-                                                </a>
+                                            <a href="{{ route('master.review', ['id_request' => $request->id_request]) }}" type="button" class="btn btn-sm btn-success">
+                                                <i class="fas fa-pencil-alt"> Review</i>
+                                            </a>
                                             </td>
                                         </tr>
                                         @endforeach
