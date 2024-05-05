@@ -43,7 +43,7 @@ class DashboardMasterController extends Controller
 }
 
 
-    public function reviewSurat($id_request)
+public function reviewSurat($id_request)
 {
 
     // Mengambil data request berdasarkan ID
@@ -139,6 +139,7 @@ private function replaceVariables($template, $data)
 
     return $template;
 }
+
 
     public function master()
     {
