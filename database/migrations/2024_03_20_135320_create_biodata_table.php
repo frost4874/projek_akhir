@@ -37,6 +37,7 @@ return new class extends Migration
             $table->string('website', 50)->nullable();
             $table->string('foto_ktp')->nullable();
             $table->string('foto_kk')->nullable();
+            $table->enum('status', ['Aktif', 'Tidak Aktif'])->default('Tidak Aktif');
             $table->timestamps();
         });
     }

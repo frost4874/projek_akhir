@@ -10,24 +10,37 @@ use App\Models\Biodata;
 class FlutterLoginController extends Controller
 {
     public function login(Request $request)
-    {
-        $credentials = $request->only('nik', 'password');
+{
+    $credentials = $request->only('nik', 'password');
 
-        if (Auth::guard('biodata')->attempt($credentials)) {
-            $user = Auth::guard('biodata')->user();
+    if (Auth::guard('biodata')->attempt($credentials)) {
+        $user = Auth::guard('biodata')->user();
+
+        // Check if user status is active
+        if ($user->status === 'Aktif') {
             $token = $user->createToken('MyApp')->plainTextToken;
-
+            
             return response()->json([
                 'success' => true,
+                'status' => $user->status,
                 'token' => $token,
             ]);
+        } else {
+            // If user status is not active, return unauthorized
+            return response()->json([
+                'success' => false,
+                'message' => 'User is not active.',
+            ]);
         }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Invalid credentials',
-        ], 401);
     }
+
+    return response()->json([
+        'success' => false,
+        'message' => 'Invalid credentials',
+    ], 401);
+}
+
+
 
 public function profile($nik)
     {

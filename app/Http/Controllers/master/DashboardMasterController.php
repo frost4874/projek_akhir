@@ -26,82 +26,66 @@ class DashboardMasterController extends Controller
         return view('master_admin.dashboard', compact('master_berkas', 'card_array'));
     }
     public function masterRequest(Request $request, $id_berkas, $judul_berkas)
-    {
-        $npage = 0;
-        $status = 4;
-        $requests = DataRequest::where('id_berkas', $id_berkas)
-                           ->where('status', $status)
-                           ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
-                           ->select('data_requests.*', 'biodata.nama as nama')
-                           ->get();
-        return view('master_admin.request', [
-            'id_berkas' => $id_berkas,
-            'judul_berkas' => $judul_berkas,
-            'requests' => $requests,
-        ],compact('npage'));
-
-    }
-
-    public function reviewSurat($id_request)
 {
-    try {
-        // Mengambil data request berdasarkan ID
-        $request = DataRequest::where('id_request', $id_request)->first();
-        if (!$request) {
-            throw new \Exception("Data request tidak ditemukan.");
-        }
+    $npage = 0;
+    $status = 4;
+    $requests = DataRequest::where('id_berkas', $id_berkas)
+                       ->where('status', $status)
+                       ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
+                       ->select('data_requests.*', 'biodata.nama as nama')
+                       ->get();
+    return view('master_admin.request', [
+        'id_berkas' => $id_berkas,
+        'judul_berkas' => $judul_berkas,
+        'requests' => $requests, // Memasukkan $requests ke dalam array
+        'npage' => $npage, // Juga, pastikan untuk menyertakan npage dalam array
+    ]);
+}
 
-        Log::info($request);
-        $npage= 0;
+
+public function reviewSurat($id_request)
+{
+
+    // Mengambil data request berdasarkan ID
+    $request = DataRequest::where('id_request', $id_request)->first();
+    $npage= 0;
+    // Mengambil data kecamatan dan desa dari tabel Biodata
+    $berkas = Berkas::where('id_berkas', $request->id_berkas)->first();
+    $bio = Biodata::where('nik', $request->nik)->first();
+    $pejabat = DataPejabat::where('nip', $request->nip)->first();
+    $alamat_desa = Biodata::where('desa', $bio->desa)->where('role', 'Admin Desa')->first();
+    // Parsing nilai form_tambahan menjadi array asosiatif
+    $form_tambahan_array = [];
+    if ($request->form_tambahan) {
+    $form_tambahan_pairs = explode(', ', $request->form_tambahan);
+    foreach ($form_tambahan_pairs as $pair) {
+        // Pisahkan $pair menjadi dua bagian berdasarkan tanda titik dua (:)
+        $pair_parts = explode(':', $pair);
         
-        // Mengambil data kecamatan dan desa dari tabel Biodata
-        $berkas = Berkas::where('id_berkas', $request->id_berkas)->first();
-        $bio = Biodata::where('nik', $request->nik)->first();
-        $alamatdesa = Biodata::where('desa', $bio->desa)->where('role', 'Admin Desa')->first();
-        if (!$alamatdesa) {
-            throw new \Exception("Data alamat desa tidak ditemukan.");
+        // Pastikan ada dua bagian setelah pemisahan
+        if (count($pair_parts) === 2) {
+            // Ambil bagian pertama sebagai kunci (key) dan bagian kedua sebagai nilai (value)
+            $key = trim($pair_parts[0]); // Hapus spasi di awal dan akhir kunci
+            $value = trim($pair_parts[1]); // Hapus spasi di awal dan akhir nilai
+            // Simpan dalam array asosiatif $form_tambahan_array
+            $form_tambahan_array[$key] = $value;
         }
-
-        $pejabat = DataPejabat::where('nip', $request->nip)->first();
-        if (!$pejabat) {
-            throw new \Exception("Data pejabat tidak ditemukan.");
-        }
-
-        Log::info($alamatdesa->desa);
-        
-        // Parsing nilai form_tambahan menjadi array asosiatif
-        $form_tambahan_array = [];
-        if ($request->form_tambahan) {
-            $form_tambahan_pairs = explode(', ', $request->form_tambahan);
-            foreach ($form_tambahan_pairs as $pair) {
-                // Pisahkan $pair menjadi dua bagian berdasarkan tanda titik dua (:)
-                $pair_parts = explode(':', $pair);
-                
-                // Pastikan ada dua bagian setelah pemisahan
-                if (count($pair_parts) === 2) {
-                    // Ambil bagian pertama sebagai kunci (key) dan bagian kedua sebagai nilai (value)
-                    $key = trim($pair_parts[0]); // Hapus spasi di awal dan akhir kunci
-                    $value = trim($pair_parts[1]); // Hapus spasi di awal dan akhir nilai
-                    // Simpan dalam array asosiatif $form_tambahan_array
-                    $form_tambahan_array[$key] = $value;
-                }
-            }
-        }
-
-        // Lakukan manipulasi data yang diperlukan sebelum dikirim ke view
-        $data = [
-            'nm_kec' => $request->id_kec,
-            'nm_desa' => $request->id_desa,
-            'alamatdesa' => $alamatdesa->alamat,
-            'tgl_acc' => $request->acc,
-            'id_berkas' => $request->id_berkas,
-            'no_urut' => $request->no_urut,
-            'kode_belakang' => $berkas->kode_belakang,
-            'nm_pejabat' => $pejabat->nm_pejabat,
-            'jabatan' => $pejabat->jabatan,
-            'judul_berkas' => $berkas->judul_berkas,
-            'template' => $this->replaceVariables($berkas->template, [
-                'nama' => $bio->nama,
+    }}
+    
+    // Lakukan manipulasi data yang diperlukan sebelum dikirim ke view
+    $data = [
+        'nm_kec' => $bio->kecamatan,
+        'nm_desa' => $bio->desa,
+        'alamatdesa' => $alamat_desa->alamat,
+        'tgl_acc' => $request->acc,
+        'id_berkas' => $request->id_berkas,
+        'no_urut' => $request->no_urut,
+        'kode_belakang' => $berkas->kode_belakang,
+        'nm_pejabat' => $pejabat->nm_pejabat,
+        'jabatan' => $pejabat->jabatan,
+        'judul_berkas' => $berkas->judul_berkas,
+        'template' => $this->replaceVariables($berkas->template, [
+            'nama' => $bio->nama,
             'nik' => $bio->nik,
             'jekel' => $bio->jekel,
             'tempat_lahir' => $bio->tempat_lahir,
@@ -135,18 +119,12 @@ class DashboardMasterController extends Controller
             'nama_usaha' => isset($form_tambahan_array['Nama_Usaha']) ? $form_tambahan_array['Nama_Usaha'] : '',
             'tahun_usaha' => isset($form_tambahan_array['Tahun_Usaha']) ? $form_tambahan_array['Tahun_Usaha'] : '',
             'alamat_usaha' => isset($form_tambahan_array['Alamat_Usaha']) ? $form_tambahan_array['Alamat_Usaha'] : '',
-                // Data template...
-            ]),
-            // Tambahkan manipulasi data lainnya sesuai kebutuhan
-        ];
+        ]),
+        // Tambahkan manipulasi data lainnya sesuai kebutuhan
+    ];
 
-        // Panggil view dan kirimkan data
-        return view('master_admin.review', compact('data', 'npage', 'request'));
-    } catch (\Exception $e) {
-        // Tangani kesalahan di sini
-        // Contoh:
-        return response()->view('errors.500', ['error' => $e->getMessage()], 500);
-    }
+    // Panggil view dan kirimkan data
+    return view('master_admin.review', compact('data', 'npage', 'request'));
 }
 
 private function replaceVariables($template, $data)
@@ -161,6 +139,7 @@ private function replaceVariables($template, $data)
 
     return $template;
 }
+
 
     public function master()
     {

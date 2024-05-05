@@ -38,5 +38,6 @@ class Biodata extends Authenticatable
         'role',
         'foto_ktp',
         'foto_kk',
+        'status',
     ];
 }

@@ -33,8 +33,8 @@ Route::get('/desa/{id_kec}', [KecamatanDesaController::class, 'getDesaByKecamata
 // Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware('auth:biodata');
 Route::middleware(['auth:biodata', 'check.role'])->group(function () {
     Route::get('/dashboard_master', [DashboardMasterController::class, 'index'])->name('admin.dashboard_master');
-    Route::get('/dashboard_master/{id_berkas}/{judul_berkas}', [DashboardMasterController::class, 'masterRequest'])->name('master.request');
-    Route::get('/dashboard_master/{id_request}/review', [DashboardMasterController::class, 'reviewSurat'])->name('master.review');
+    Route::get('/request_master/review/{id_request}', [DashboardMasterController::class, 'reviewSurat'])->name('master.review');
+    Route::get('/request_master/{id_berkas}/{judul_berkas}', [DashboardMasterController::class, 'masterRequest'])->name('master.request');
     Route::get('/data_admindesa', [DataDesaController::class, 'index'])->name('admin.data_admindesa');
     Route::post('/data_admindesa', [DataDesaController::class, 'tambah'])->name('register.desa');
     Route::put('/data_admindesa/{nik}', [DataDesaController::class, 'update'])->name('master.update.desa');
@@ -56,20 +56,24 @@ Route::middleware(['auth:biodata', 'adminDesa'])->group(function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/dashboard/{id_berkas}/{judul_berkas}', [DashboardController::class, 'adminRequest'])->name('admin.request');
     Route::post('/dashboard/request', [DashboardController::class, 'tambahRequest'])->name('tambah.request');
+    
     Route::put('/request/{id_request}/acc', [DashboardController::class, 'accRequest'])->name('request.acc');
     Route::post('/request/{id_request}/cetak', [DashboardController::class, 'viewCetak'])->name('print.cetak');
     Route::get('/request/{id_request}/review', [DashboardController::class, 'reviewCetak'])->name('cetak.review');
     Route::get('/request/{id_request}/print', [DashboardController::class, 'printCetak'])->name('cetak.print');
+    
 
     Route::get('/request/{nik}/{id_request}/{id_berkas}/{judul_berkas}/edit', [DashboardController::class, 'edit'])->name('detail.request');
     Route::get('/request/{id_request}/edit', [DashboardController::class, 'edit'])->name('request.edit');
     Route::put('/admin/request/update', [DashboardController::class, 'update'])->name('request.update');
     Route::get('/data_masyarakat', [DataMasyarakatController::class, 'index'])->name('admin.data_masyarakat');
+    Route::put('/data_masyarakat/{nik}/acc', [DataMasyarakatController::class, 'verifRegist'])->name('verif.regist');
     Route::get('/data_masyarakat/{nik}/edit', [DataMasyarakatController::class, 'edit'])->name('masyarakat.edit');
     Route::put('/data_masyarakat/{nik}', [DataMasyarakatController::class, 'update'])->name('masyarakat.update');
     Route::delete('/data_masyarakat/{nik}', [DataMasyarakatController::class, 'destroy'])->name('masyarakat.delete');
     Route::post('/register_masyarakat', [DataMasyarakatController::class, 'register'])->name('register.masyarakat');
     Route::get('/berkas_permohonan', [BerkasPermohonanController::class, 'index'])->name('admin.berkas_permohonan');
+    Route::put('/telah_diambil/{id_request}', [BerkasPermohonanController::class, 'telahDiambil'])->name('telah.diambil');
     Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
     Route::get('/laporan/filter', [LaporanController::class, 'filter'])->name('laporan.filter');
     Route::get('/laporan/cetakpdf', [LaporanController::class, 'cetak_pdf']);

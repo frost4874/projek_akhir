@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use App\Models\KecamatanDesa;
 use App\Models\Desa;
 use App\Models\Biodata;
@@ -94,6 +95,7 @@ public function index()
         'tgl_lahir' => $validatedData['tgl_lahir'],
         'password' => Hash::make($validatedData['password']),
         'role' => 'Pemohon',
+        'status' => 'Aktif',
     ]);
 
     Auth::login($user);
@@ -101,5 +103,19 @@ public function index()
     return back()->with('success', 'Registrasi berhasil');
 }
 
+public function verifRegist($nik)
+{
+    // Temukan permintaan data yang sesuai
+    $dataRequest = Biodata::where('nik', $nik)->first();
+    // Periksa apakah data request ditemukan
+    if ($dataRequest) {
+        // Ubah status menjadi 'Aktif'
+        $dataRequest->status = 'Aktif';
+        $dataRequest->save();
+        
+        return back()->with('success', 'Verifikasi berhasil');
+        }
 
+
+}
 }
