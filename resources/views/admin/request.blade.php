@@ -57,10 +57,6 @@
                                                         Pending
                                                     @elseif($request->status == 1)
                                                         Telah di ACC
-                                                    @elseif($request->status == 2)
-                                                        Sudah di print
-                                                    @elseif($request->status == 3)
-                                                        Selesai / Bisa di ambil
                                                     @else
                                                         Status tidak valid
                                                     @endif
@@ -73,14 +69,6 @@
                                                     @elseif($request->status == 1)
                                                         <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Cetak Surat">
                                                             <i class="fas fa-print">Print</i>
-                                                        </a>
-                                                    @elseif($request->status == 2)
-                                                        <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Cetak Surat">
-                                                            <i class="fas fa-print">Cetak Surat</i>
-                                                        </a>
-                                                    @elseif($request->status == 3)
-                                                        <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Cetak Surat">
-                                                            <i class="fas fa-check"> Telah di ambil</i>
                                                         </a>
                                                     @endif
                                                 </td>

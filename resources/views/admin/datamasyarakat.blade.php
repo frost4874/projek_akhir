@@ -59,6 +59,7 @@
     <td>
         <!-- Tambahkan tombol untuk opsi, misalnya: edit, hapus, dll -->
         <!-- Tombol Edit -->
+        @if($biodata->status == 'Aktif')
       <button class="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#ubahBiodataModal{{ $biodata->nik }}">
           <i class="fas fa-edit"></i> Edit
       </button>
@@ -71,7 +72,12 @@
               <i class="fa fa-trash"></i> Hapus
           </button>
       </form>
+      @elseif($biodata->status == 'Tidak Aktif')
+      <button class="btn btn-sm btn-success" type="button" data-toggle="modal" data-target="#verifBiodataModal{{ $biodata->nik }}">
+          <i class="fas fa-check"></i> Verifikasi
+      </button>
     </td>
+    @endif
 </tr>
 @endforeach
                       </tbody>
@@ -289,6 +295,117 @@
 </div>
 </div>
 @endforeach
+
+<!-- Modal -->
+@foreach($biodatas as $biodata)
+<div class="modal fade" id="verifBiodataModal{{ $biodata->nik }}" tabindex="-1" role="dialog" aria-labelledby="verifBiodataModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="verifBiodataModalLabel">Verifikasi Biodata</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Formulir untuk mengubah biodata -->
+          <div class="row">
+            <div class="col-md-6 col-lg-6">
+              <div class="form-group">
+                <label>NIK</label>
+                <input type="number" name="nik" value="{{ $biodata->nik }}" class="form-control" placeholder="NIK Anda.." readonly>
+              </div>
+
+              <div class="form-group">
+                <label for="nama">Nama Lengkap</label>
+                <input type="text" class="form-control" id="nama" name="nama" value="{{ $biodata->nama }}" readonly>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ $biodata->email }}" readonly>
+              </div>
+              <div class="form-group">
+                <label for="jekel">Jenis Kelamin</label>
+                <input type="text" class="form-control" id="jekel" name="jekel" value="{{ $biodata->jekel }}" readonly>
+              </div>
+              <div class="form-group">
+                <label for="tempat_lahir">Tempat Lahir</label>
+                <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" value="{{ $biodata->tempat_lahir }}" readonly>
+              </div>
+              <div class="form-group">
+                <label for="tgl_lahir">Tanggal Lahir</label>
+                <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir" value="{{ $biodata->tgl_lahir }}" readonly>
+              </div>
+              <div class="form-group">
+                <label for="telepon">Telepon</label>
+                <input type="text" class="form-control" id="telepon" name="telepon" value="{{ $biodata->telepon }}" readonly>
+              </div>
+              <div class="form-group">
+                <label for="pekerjaan">Pekerjaan</label>
+                <input type="text" class="form-control" id="pekerjaan" name="pekerjaan" value="{{ $biodata->pekerjaan }}" readonly>
+              </div>
+              <div class="form-group">
+                <label>Agama</label>
+                <input type="text" name="agama" value="{{ $biodata->agama ?? '' }}" class="form-control" placeholder="agama Anda.." readonly>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+            <div class="form-group">
+                <label>Warganegara</label>
+                <input type="text" name="warganegara" value="{{ $biodata->warganegara ?? '' }}" class="form-control" placeholder="warganegara Anda.." readonly>
+              </div>
+              <div class="form-group">
+                <label>Status Nikah</label>
+                <input type="text" name="status_nikah" value="{{ $biodata->status_nikah ?? '' }}" class="form-control" placeholder="status_nikah Anda.." readonly>
+              </div>
+              <div class="form-group">
+                <label>Status Warga</label>
+                <input type="text" name="status_warga" value="{{ $biodata->status_warga ?? '' }}" class="form-control" placeholder="status_warga Anda.." readonly>
+              </div>
+              <div class="form-group">
+                <label>Kecamatan</label>
+                <input type="text" name="kecamatan" value="{{ $biodata->kecamatan ?? '' }}" class="form-control" placeholder="Kecamatan Anda.." readonly>
+              </div>
+              <div class="form-group">
+                <label>Desa</label>
+                <input type="text" name="desa" value="{{ $biodata->desa ?? '' }}" class="form-control" placeholder="Desa Anda.." readonly>
+              </div>
+              <div class="form-group">
+                <label>RT</label>
+                <input type="text" name="rt" value="{{ $biodata->rt ?? '' }}" class="form-control" placeholder="RT Anda.." readonly>
+              </div>
+              <div class="form-group">
+                <label>RW</label>
+                <input type="text" name="rw" value="{{ $biodata->rw ?? '' }}" class="form-control" placeholder="RW Anda.." readonly>
+              </div>
+              <div class="form-group">
+                <label for="alamat">Alamat</label>
+                <textarea class="form-control" id="alamat" name="alamat" rows="3" readonly>{{ $biodata->alamat }}</textarea>
+              </div>
+              <div class="form-group">
+                <label for="foto_ktp">Foto KTP</label>
+                <img src="{{ asset($biodata->foto_ktp) }}" alt="Foto KTP" class="img-thumbnail">
+              </div>
+              <div class="form-group">
+                <label for="foto_kk">Foto KK</label>
+                <img src="{{ asset($biodata->foto_kk) }}" alt="Foto KK" class="img-thumbnail">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+          <form action="{{ route('verif.regist', ['nik' => $biodata->nik]) }}" method="POST">
+          @csrf
+          @method('PUT')
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Verifikasi</button>
+          </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+@endforeach
+
 
     
 @endsection

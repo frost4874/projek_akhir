@@ -52,6 +52,7 @@ class DashboardController extends Controller
     // Ambil data permohonan yang sesuai dengan desa admin dan id_berkas yang diberikan
     $requests = DataRequest::where('id_desa', $id_desa)
                            ->where('id_berkas', $id_berkas)
+                           ->whereIn('data_requests.status', [0, 1])
                            ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                            ->select('data_requests.*', 'biodata.nama as nama')
                            ->get();
@@ -195,6 +196,7 @@ public function viewCetak(Request $request, $id_request)
         $dataRequest->no_urut = $request->no_urut;
         $dataRequest->nip = $request->nip;
         $dataRequest->acc = $request->acc;
+        $dataRequest->status = 2;
         $dataRequest->save();
 
         // Redirect back with success message

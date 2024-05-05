@@ -55,6 +55,7 @@ class DataDesaController extends Controller
         'kodepos' => $validatedData['kodepos'],
         'email' => $validatedData['email'],
         'role' => 'Admin Desa',
+        'status' => 'Aktif',
     ]);
 
     return redirect()->back()->with('success', 'Registrasi berhasil');

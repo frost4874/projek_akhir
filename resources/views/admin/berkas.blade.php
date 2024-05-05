@@ -38,13 +38,34 @@
                         <th>Tanggal Request</th>
                         <th>NIK</th>
                         <th>Nama Lengkap</th>
-                        <th>Keterangan</th>
                         <th>Status</th>
                         <th style="width: 10%">Action</th>
                       </thead>
                       <tbody>
-
-                      </tbody>
+                                    @foreach($requests as $index => $request)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $request->tanggal_request }}</td>
+                                                <td>{{ $request->nik }}</td>
+                                                <td>{{ $request->nama }}</td>
+                                                <td>
+                                                        Telah di Cetak
+                                                </td>
+                                                <td>
+                                                <form action="{{ route('telah.diambil', ['id_request' => $request->id_request]) }}" method="POST">
+                                                  @csrf
+                                                  @method('PUT')
+                                                  <button type="submit" class="btn btn-sm btn-success">
+                                                      <i class="fas fa-check"> Telah di ambil</i>
+                                                  </button>
+                                                </form>
+                                                        <a href="{{ route('cetak.print', ['id_request' => $request->id_request]) }}" class="btn btn-sm btn-warning" target="_BLANK">
+                                                          <i class="fas fa-print"></i> Print
+                                                        </a>
+                                                </td>
+                                            </tr>
+                                    @endforeach
+                                </tbody>
                   </table>
               </div>
           </div>
