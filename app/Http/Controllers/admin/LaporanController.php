@@ -36,10 +36,12 @@ class LaporanController extends Controller
 
     public function cetak_pdf()
     {
-        $requests = DataRequest::all();
- 
+        $userdesa = auth()->user()->desa;
+        $requests = DataRequest::where('id_desa', $userdesa)->where('data_requests.status', 3)
+        ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
+        ->get(['data_requests.*', 'biodata.nama']);
         $pdf = PDF::loadview('admin.laporan_pdf', ['requests' => $requests]);
-        return $pdf->download('laporan-pdf');
+        return $pdf->download('laporan-pdf.pdf');
     }
 
     public function print()
@@ -48,27 +50,31 @@ class LaporanController extends Controller
     $userdesa = auth()->user()->desa;
 
     // Ambil data permohonan yang sesuai dengan desa pengguna yang sedang login dan memiliki status 4
-    $requests = DataRequest::where('id_desa', $userdesa)->where('status', 4)->get();
+    $requests = DataRequest::where('id_desa', $userdesa)->where('data_requests.status', 3)
+        ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
+        ->get(['data_requests.*', 'biodata.nama']);
 
     // Kirim data yang telah difilter ke tampilan untuk dicetak
     return view('admin.laporan_cetak', ['requests' => $requests]);
 }
 
 
-public function filter(Request $request)
+public function rangeprint(Request $request)
 {
     // Ambil data dari form filter
     $tanggalDari = $request->input('tanggal_dari');
     $tanggalSampai = $request->input('tanggal_sampai');
-    
-    // Konversi format tanggal
-    $tanggalDari = date('Y-m-d', strtotime($tanggalDari));
-    $tanggalSampai = date('Y-m-d', strtotime($tanggalSampai));
+    $userdesa = auth()->user()->desa;
+    // Lakukan query berdasarkan filter tanggal
+    $requests = DataRequest::whereBetween('acc', [$tanggalDari, $tanggalSampai])->where('id_desa', $userdesa)
+                           ->where('data_requests.status', 3)
+                           ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
+                           ->get(['data_requests.*', 'biodata.nama']);
 
-    // Lakukan query berdasarkan filter tanggal dan paginasi
-    $requests = DataRequest::whereBetween('acc', [$tanggalDari, $tanggalSampai])->paginate(5);
+    // Kirim data ke view PDF dan buat objek PDF
+    $pdf = PDF::loadView('admin.laporan_pdf', compact('requests'));
 
-    // Kirim data ke view dengan objek LengthAwarePaginator
-    return view('admin.laporan', compact('requests'));
+    // Download PDF
+    return $pdf->download('laporan.pdf');
 }
 }

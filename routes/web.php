@@ -75,7 +75,7 @@ Route::middleware(['auth:biodata', 'adminDesa'])->group(function(){
     Route::get('/berkas_permohonan', [BerkasPermohonanController::class, 'index'])->name('admin.berkas_permohonan');
     Route::put('/telah_diambil/{id_request}', [BerkasPermohonanController::class, 'telahDiambil'])->name('telah.diambil');
     Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
-    Route::get('/laporan/filter', [LaporanController::class, 'filter'])->name('laporan.filter');
+    Route::post('/laporan/rangeprint', [LaporanController::class, 'rangeprint'])->name('laporan.rangeprint');
     Route::get('/laporan/cetakpdf', [LaporanController::class, 'cetak_pdf']);
     Route::get('/laporan/print', [LaporanController::class, 'print']);
 

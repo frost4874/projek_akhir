@@ -35,7 +35,7 @@
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $request->tanggal_request }}</td>
                                             <td>{{ $request->nik }}</td>
-                                            <td>{{ $request->keterangan }}</td>
+                                            <td>{{ $request->nama }}</td>
                                             <td>
                                                 @if($request->status == 0)
                                                 Pending
