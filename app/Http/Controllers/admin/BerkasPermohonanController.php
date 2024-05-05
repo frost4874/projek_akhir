@@ -20,12 +20,18 @@ class BerkasPermohonanController extends Controller
         $npage = 2;
         $user = auth()->user();
         $id_desa = $user->desa;
+        $jumlah_requ = DataRequest::where('status', 0)
+        ->whereHas('biodata', function ($query) {
+            $query->where('id_kec', auth()->user()->kecamatan)
+                  ->where('id_desa', auth()->user()->desa);
+        })
+        ->count();
         $requests = DataRequest::where('id_desa', $id_desa)
                            ->whereIn('data_requests.status', [2])
                            ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                            ->select('data_requests.*', 'biodata.nama as nama')
                            ->get();
-        return view('admin.berkas', compact('npage', 'requests'));
+        return view('admin.berkas', compact('npage', 'requests','jumlah_requ'));
     }
 
     public function telahDiambil($id_berkas)
@@ -34,7 +40,7 @@ class BerkasPermohonanController extends Controller
         $data = DataRequest::find($id_berkas);
         $data->status = 3;
         $data->save();
-
+        
         // Atau Anda dapat melakukan apa pun yang sesuai dengan kebutuhan aplikasi Anda
 
         // Setelah operasi selesai, Anda dapat mengembalikan respons yang sesuai

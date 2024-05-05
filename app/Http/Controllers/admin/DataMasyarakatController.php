@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\KecamatanDesa;
 use App\Models\Desa;
 use App\Models\Biodata;
+use App\Models\DataRequest;
 
 class DataMasyarakatController extends Controller
 {
@@ -22,8 +23,13 @@ public function index()
 
     // Ambil data masyarakat berdasarkan desa pengguna
     $biodatas = Biodata::where('desa', $userDesa)->where('role', 'Pemohon')->get();
-
-    return view('admin.datamasyarakat', compact('biodatas','npage'));
+    $jumlah_requ = DataRequest::where('status', 0)
+        ->whereHas('biodata', function ($query) {
+            $query->where('id_kec', auth()->user()->kecamatan)
+                  ->where('id_desa', auth()->user()->desa);
+        })
+        ->count();
+    return view('admin.datamasyarakat', compact('biodatas','npage','jumlah_requ'));
 }
 
     public function update(Request $request, $nik)

@@ -6,17 +6,23 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DataPejabat;
+use App\Models\DataRequest;
 
 class PejabatDesaController extends Controller
 {
     public function index()
     {
         $npage = 4;
-        
+        $jumlah_requ = DataRequest::where('status', 0)
+        ->whereHas('biodata', function ($query) {
+            $query->where('id_kec', auth()->user()->kecamatan)
+                  ->where('id_desa', auth()->user()->desa);
+        })
+        ->count();
         $pejabats = DataPejabat::where('id_kec', auth()->user()->kecamatan)
                             ->where('id_desa', auth()->user()->desa)
                             ->get();
-        return view('admin.pejabatdesa', compact('pejabats', 'npage'));
+        return view('admin.pejabatdesa', compact('pejabats', 'npage','jumlah_requ'));
     }
     public function store(Request $request)
     {

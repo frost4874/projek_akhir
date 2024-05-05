@@ -21,10 +21,15 @@ class DashboardController extends Controller
         $user = auth()->user();
         $id_kec = $user->kecamatan;
         $id_desa = $user->desa;
-
+        $jumlah_requ = DataRequest::where('status', 0)
+        ->whereHas('biodata', function ($query) {
+            $query->where('id_kec', auth()->user()->kecamatan)
+                  ->where('id_desa', auth()->user()->desa);
+        })
+        ->count();
         $master_berkas = Berkas::all();
         $card_array = ['bg-info','bg-success','bg-warning','bg-danger'];
-        return view('admin.dashboard', compact('master_berkas', 'id_kec', 'id_desa', 'card_array','npage'));
+        return view('admin.dashboard', compact('master_berkas', 'id_kec', 'id_desa', 'card_array','npage', 'jumlah_requ'));
     }
 
     public function adminRequest(Request $request, $id_berkas, $judul_berkas)
@@ -32,7 +37,12 @@ class DashboardController extends Controller
     $user = auth()->user();
     $id_desa = $user->desa;
     $npage = 0;
-    
+    $jumlah_requ = DataRequest::where('status', 0)
+        ->whereHas('biodata', function ($query) {
+            $query->where('id_kec', auth()->user()->kecamatan)
+                  ->where('id_desa', auth()->user()->desa);
+        })
+        ->count();
     // Ambil tanggal hari ini
     $today = Carbon::today();
 
@@ -65,7 +75,7 @@ class DashboardController extends Controller
         'pejabats' => $pejabats,
         'no_agenda' => $no_agenda,
         'requests' => $requests,
-    ],compact('npage'));
+    ],compact('npage','jumlah_requ'));
 }
 
 public function edit($nik, $id_request, $id_berkas, $judul_berkas)
@@ -75,6 +85,12 @@ public function edit($nik, $id_request, $id_berkas, $judul_berkas)
         $data = DataRequest::where('nik', $nik)->where('id_request', $id_request)->first();
         $biodata = Biodata::where('nik', $nik)->first();
         $form_tambahan = Berkas::getFormTambahanById($id_berkas);
+        $jumlah_requ = DataRequest::where('status', 0)
+        ->whereHas('biodata', function ($query) {
+            $query->where('id_kec', auth()->user()->kecamatan)
+                  ->where('id_desa', auth()->user()->desa);
+        })
+        ->count();
 
         // Check if data request exists
         if (!$data) {
@@ -87,7 +103,7 @@ public function edit($nik, $id_request, $id_berkas, $judul_berkas)
             'id_berkas' => $id_berkas,
             'judul_berkas' => $judul_berkas,
             'form_tambahan' => $form_tambahan,
-        ],compact('npage'));
+        ],compact('npage','jumlah_requ'));
     }
 
 public function update(Request $request)
@@ -217,7 +233,12 @@ public function reviewCetak($id_request)
     $berkas = Berkas::where('id_berkas', $request->id_berkas)->first();
     $bio = Biodata::where('nik', $request->nik)->first();
     $pejabat = DataPejabat::where('nip', $request->nip)->first();
-    
+    $jumlah_requ = DataRequest::where('status', 0)
+        ->whereHas('biodata', function ($query) {
+            $query->where('id_kec', auth()->user()->kecamatan)
+                  ->where('id_desa', auth()->user()->desa);
+        })
+        ->count();
     // Parsing nilai form_tambahan menjadi array asosiatif
     $form_tambahan_array = [];
     if ($request->form_tambahan) {
@@ -288,7 +309,7 @@ public function reviewCetak($id_request)
     ];
 
     // Panggil view dan kirimkan data
-    return view('admin.cetak', compact('data', 'npage', 'request'));
+    return view('admin.cetak', compact('data', 'npage', 'request','jumlah_requ'));
 }
 
 

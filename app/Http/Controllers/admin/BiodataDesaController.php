@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Biodata;
 use App\Models\KecamatanDesa;
+use App\Models\DataRequest;
 use App\Models\Desa;
 
 class BiodataDesaController extends Controller
@@ -15,15 +16,26 @@ class BiodataDesaController extends Controller
     {
         $npage = 5;
         $user = auth()->user()->nik;
-        
+        $jumlah_requ = DataRequest::where('status', 0)
+        ->whereHas('biodata', function ($query) {
+            $query->where('id_kec', auth()->user()->kecamatan)
+                  ->where('id_desa', auth()->user()->desa);
+        })
+        ->count();
         $biodatas = Biodata::where('nik', $user)->get();
-        return view('admin.biodatadesa', compact('biodatas', 'npage'));
+        return view('admin.biodatadesa', compact('biodatas', 'npage','jumlah_requ'));
     }
     public function ubah($nik)
     {
         $npage = 3;
         $data = Biodata::where('nik', $nik)->first();
-        return view('admin.ubahdesa', compact('data', 'npage'));
+        $jumlah_requ = DataRequest::where('status', 0)
+        ->whereHas('biodata', function ($query) {
+            $query->where('id_kec', auth()->user()->kecamatan)
+                  ->where('id_desa', auth()->user()->desa);
+        })
+        ->count();
+        return view('admin.ubahdesa', compact('data', 'npage','jumlah_requ'));
     }
 
     public function update(Request $request, $nik)

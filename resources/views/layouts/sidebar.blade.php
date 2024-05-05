@@ -49,13 +49,17 @@
 
           @elseif($role === 'Admin Desa')
           <li class="nav-item">
-            <a href="{{route('admin.dashboard')}}" class="nav-link{{ ($npage == 0) ? ' active' : '' }}">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-              </p>
-            </a>
-          </li>
+    <a href="{{route('admin.dashboard')}}" class="nav-link{{ ($npage == 0) ? ' active' : '' }}">
+        <i class="nav-icon fas fa-tachometer-alt"></i>
+        <p>
+            Dashboard
+            @if($role === 'Admin Desa' && $jumlah_requ > 0)
+                <span class="badge badge-danger right">{{ $jumlah_requ }}</span>
+            @endif
+        </p>
+    </a>
+</li>
+
           <li class="nav-header">MENU</li>
           <li class="nav-item">
             <a href="{{route('admin.data_masyarakat')}}" class="nav-link{{ ($npage == 1) ? ' active' : '' }}">
