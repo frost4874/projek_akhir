@@ -17,12 +17,13 @@ class LaporanController extends Controller
         $npage = 3;
         $userDesa = auth()->user()->desa;
         $status = 4;
+        $paginate = 2;
         $requests = DataRequest::where('id_desa', $userDesa)
                         ->where('status', $status)
                         ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                         ->join('berkas', 'data_requests.id_berkas', '=', 'berkas.id_berkas')
                         ->select('data_requests.*', 'biodata.nama as nama', 'berkas.judul_berkas as judul_berkas')
-                        ->paginate(5); // Tampilkan 3 data per halaman
+                        ->paginate($paginate); // Tampilkan 3 data per halaman
 
         
         return view('admin.laporan', ['requests' => $requests], compact('npage'));
@@ -52,17 +53,27 @@ class LaporanController extends Controller
 public function filter(Request $request)
 {
     // Ambil data dari form filter
+    $npage = 3;
     $tanggalDari = $request->input('tanggal_dari');
     $tanggalSampai = $request->input('tanggal_sampai');
+    $status = 4;
+    $userDesa = auth()->user()->desa;
     
     // Konversi format tanggal
     $tanggalDari = date('Y-m-d', strtotime($tanggalDari));
     $tanggalSampai = date('Y-m-d', strtotime($tanggalSampai));
 
     // Lakukan query berdasarkan filter tanggal dan paginasi
-    $requests = DataRequest::whereBetween('acc', [$tanggalDari, $tanggalSampai])->paginate(5);
+    $requests = DataRequest::where('id_desa', $userDesa)
+                    ->whereBetween('acc', [$tanggalDari, $tanggalSampai])
+                    ->where('status', $status)
+                    ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
+                    ->join('berkas', 'data_requests.id_berkas', '=', 'berkas.id_berkas')
+                    ->select('data_requests.*', 'biodata.nama as nama', 'berkas.judul_berkas as judul_berkas')
+                    ->paginate(2); // Ubah nilai 2 sesuai kebutuhan Anda
 
     // Kirim data ke view dengan objek LengthAwarePaginator
-    return view('admin.laporan', compact('requests'));
+    return view('admin.laporan', compact('requests', 'npage'));
 }
+
 }

@@ -3,10 +3,7 @@
 @section('title', 'Dashboard')
 @php
 $card_array = [
-    'bg-aqua', 'bg-green', 'bg-yellow', 'bg-red', 'bg-blue',
-    'bg-navy', 'bg-teal', 'bg-olive', 'bg-lime', 'bg-orange',
-    'bg-fuchsia', 'bg-purple', 'bg-maroon', 'bg-black', 'bg-gray',
-    'bg-light-blue', 'bg-dark-green', 'bg-dark-yellow', 'bg-dark-red', 'bg-dark-blue'
+     'bg-green', 'bg-red', 'bg-blue','bg-fuchsia'
 ];
 $total_colors = count($card_array);
 @endphp
