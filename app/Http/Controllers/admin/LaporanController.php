@@ -17,12 +17,18 @@ class LaporanController extends Controller
         $npage = 3;
         $userDesa = auth()->user()->desa;
         $status = 3;
+        $jumlah_requ = DataRequest::where('status', 0)
+        ->whereHas('biodata', function ($query) {
+            $query->where('id_kec', auth()->user()->kecamatan)
+                  ->where('id_desa', auth()->user()->desa);
+        })
+        ->count();
         $requests = DataRequest::where('id_desa', $userDesa)
                         ->where('data_requests.status', $status)
                         ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                         ->join('berkas', 'data_requests.id_berkas', '=', 'berkas.id_berkas')
                         ->select('data_requests.*', 'biodata.nama as nama', 'berkas.judul_berkas as judul_berkas')
-                        ->paginate(5); // Tampilkan 3 data per halaman
+                        ->paginate(5);
 
         
         return view('admin.laporan', ['requests' => $requests], compact('npage','jumlah_requ'));
@@ -52,27 +58,17 @@ class LaporanController extends Controller
 public function filter(Request $request)
 {
     // Ambil data dari form filter
-    $npage = 3;
     $tanggalDari = $request->input('tanggal_dari');
     $tanggalSampai = $request->input('tanggal_sampai');
-    $status = 4;
-    $userDesa = auth()->user()->desa;
     
     // Konversi format tanggal
     $tanggalDari = date('Y-m-d', strtotime($tanggalDari));
     $tanggalSampai = date('Y-m-d', strtotime($tanggalSampai));
 
     // Lakukan query berdasarkan filter tanggal dan paginasi
-    $requests = DataRequest::where('id_desa', $userDesa)
-                    ->whereBetween('acc', [$tanggalDari, $tanggalSampai])
-                    ->where('status', $status)
-                    ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
-                    ->join('berkas', 'data_requests.id_berkas', '=', 'berkas.id_berkas')
-                    ->select('data_requests.*', 'biodata.nama as nama', 'berkas.judul_berkas as judul_berkas')
-                    ->paginate(2); // Ubah nilai 2 sesuai kebutuhan Anda
+    $requests = DataRequest::whereBetween('acc', [$tanggalDari, $tanggalSampai])->paginate(5);
 
     // Kirim data ke view dengan objek LengthAwarePaginator
-    return view('admin.laporan', compact('requests', 'npage'));
+    return view('admin.laporan', compact('requests'));
 }
-
 }
