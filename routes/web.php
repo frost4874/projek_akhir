@@ -39,7 +39,7 @@ Route::middleware(['auth:biodata', 'check.role'])->group(function () {
     Route::post('/data_admindesa', [DataDesaController::class, 'tambah'])->name('register.desa');
     Route::put('/data_admindesa/{nik}', [DataDesaController::class, 'update'])->name('master.update.desa');
     Route::delete('/data_admindesa/{nik}', [DataDesaController::class, 'destroy'])->name('master.delete.desa');
-
+    Route::post('/laporan/masterprint', [LaporanMasterController::class, 'masterprint'])->name('laporan.masterprint');
     Route::get('/templatesurat', [TemplateSuratController::class, 'index'])->name('admin.templatesurat');
     Route::get('/templatesurat/tambah', [TemplateSuratController::class, 'tambahSurat'])->name('admin.tambahsurat');
     Route::get('/templatesurat/edit/{id_berkas}', [TemplateSuratController::class, 'editSurat'])->name('admin.editsurat');

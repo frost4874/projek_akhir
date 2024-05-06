@@ -101,7 +101,7 @@
             </div>
             <div class="modal-body">
                 <!-- Formulir pendaftaran admin desa -->
-                <form id="registrationForm" action="{{ route('register.masyarakat') }}" method="POST">
+                <form id="registrationForm" action="{{ route('register.masyarakat') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
@@ -158,6 +158,15 @@
                                         </button>
                                     </div>
                                 </div>
+                                <div class="form-group">
+    <label for="foto_ktp">Foto KTP</label>
+    <input type="file" class="form-control-file" id="foto_ktp" name="foto_ktp" accept="image/*" required>
+</div>
+<div class="form-group">
+    <label for="foto_kk">Foto KK</label>
+    <input type="file" class="form-control-file" id="foto_kk" name="foto_kk" accept="image/*" required>
+</div>
+
                             </div>
                         </div>
                     </div>

@@ -125,6 +125,14 @@
                                             <label>Alamat</label>
                                             <input type="text" name="rw" value="{{ $biodata->alamat ?? '' }}" class="form-control" placeholder="Alamat Anda.." readonly="">
                                         </div>
+                                        <div class="form-group">
+                <label for="foto_ktp">Foto KTP</label>
+                <img src="{{ asset($biodata->foto_ktp) }}" alt="Foto KTP" class="img-thumbnail">
+              </div>
+              <div class="form-group">
+                <label for="foto_kk">Foto KK</label>
+                <img src="{{ asset($biodata->foto_kk) }}" alt="Foto KK" class="img-thumbnail">
+              </div>
                                     </div>
                                 </div>
                             </div>

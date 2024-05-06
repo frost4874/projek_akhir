@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
 use App\Models\KecamatanDesa;
 use App\Models\Desa;
 use App\Models\Biodata;
@@ -83,13 +84,22 @@ public function index()
         'kota' => 'required|string|max:6',
         'tgl_lahir' => 'required|date',
         'password' => 'required|string|min:8',
+        'foto_ktp' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'foto_kk' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
-    // Since you're already passing kecamatan and desa names from the form, 
-    // you don't need to fetch them from the database
-    $user = auth()->user();
+    // Simpan gambar KTP
+    $fotoKtp = $request->file('foto_ktp');
+    $fotoKtpFileName = $validatedData['nik'] . '_ktp.' . $fotoKtp->getClientOriginalExtension();
+    $fotoKtpPath = $fotoKtp->storeAs('public/foto_ktp', $fotoKtpFileName);
 
-    // You can directly use the validated kecamatan and desa from the form
+    // Simpan gambar KK
+    $fotoKk = $request->file('foto_kk');
+    $fotoKkFileName = $validatedData['nik'] . '_kk.' . $fotoKk->getClientOriginalExtension();
+    $fotoKkPath = $fotoKk->storeAs('public/foto_kk', $fotoKkFileName);
+
+    // Simpan data biodata
+    $user = auth()->user();
     $biodata = Biodata::create([
         'nik' => $validatedData['nik'],
         'nama' => $validatedData['nama'],
@@ -100,6 +110,8 @@ public function index()
         'kota' => $validatedData['kota'],
         'tgl_lahir' => $validatedData['tgl_lahir'],
         'password' => Hash::make($validatedData['password']),
+        'foto_ktp' => $fotoKtpFileName,
+        'foto_kk' => $fotoKkFileName,
         'role' => 'Pemohon',
         'status' => 'Aktif',
     ]);
@@ -108,6 +120,9 @@ public function index()
 
     return back()->with('success', 'Registrasi berhasil');
 }
+
+
+
 
 public function verifRegist($nik)
 {

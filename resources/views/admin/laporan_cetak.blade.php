@@ -33,7 +33,7 @@
                     @foreach($requests as $index => $request)
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
-                                            <td>{{ $request->tanggal_request }}</td>
+                                            <td>{{ $request->acc }}</td>
                                             <td>{{ $request->nik }}</td>
                                             <td>{{ $request->nama }}</td>
                                             <td>

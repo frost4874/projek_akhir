@@ -85,7 +85,6 @@
                           <option value="Nama_Usaha" {{ $formTambahanValues[$i-1] == 'Nama_Usaha' ? 'selected' : '' }}>Nama Usaha</option>
                           <option value="Tahun_Usaha" {{ $formTambahanValues[$i-1] == 'Tahun_Usaha' ? 'selected' : '' }}>Tahun Usaha</option>
                           <option value="Alamat_Usaha" {{ $formTambahanValues[$i-1] == 'Alamat_Usaha' ? 'selected' : '' }}>Alamat Usaha</option>
-                          <option value="Alamat_Domisili" {{ $formTambahanValues[$i-1] == 'Alamat_Domisili' ? 'selected' : '' }}>Alamat Domisili</option>
                           <option value="No_Pengantar" {{ $formTambahanValues[$i-1] == 'No_Pengantar' ? 'selected' : '' }}>No Pengantar</option>
                           <option value="Tanggal_Permohonan" {{ $formTambahanValues[$i-1] == 'Tanggal_Permohonan' ? 'selected' : '' }}>Tanggal Permohonan</option>
                           <option value="Luas_Tanah" {{ $formTambahanValues[$i-1] == 'Luas_Tanah' ? 'selected' : '' }}>Luas Tanah</option>
@@ -155,6 +154,7 @@ document.getElementById('tambahForm').addEventListener('click', function() {
     <option value="Jenis_Surat_Tanah">Jenis Kelamin Anak</option>
     <option value="Agama_Anak">Tempat Lahir Anak</option>
     <option value="Alamat_Anak">Sekolah</option>
+    <option value="Tanggal_Lahir_Anak">Domisili Sejak</option>
     <option value="Bin/Binti">Jurusan</option>
     <option value="Tanggal_Kematian">Semester</option>
     <option value="Jam_Kematian">Nama Organisasi</option>
