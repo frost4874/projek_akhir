@@ -32,7 +32,8 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('laporan.filter') }}" method="GET" class="d-inline-block">
+                        <form action="{{ route('laporan.rangeprint') }}" method="POST" class="d-inline-block">
+                            @csrf <!-- Tambahkan CSRF token untuk keamanan -->
                             <div class="form-row align-items-center">
                                 <div class="col-auto">
                                     <label for="tanggalDari">Dari</label>
@@ -45,11 +46,12 @@
                                     <label for="tanggalSampai">Sampai</label>
                                     <input type="date" class="form-control form-control-sm mb-2" id="tanggalSampai" name="tanggal_sampai" placeholder="Sampai">
                                 </div>
-                                <!-- <div class="col-auto">
+                                <div class="col-auto">
                                     <button type="submit" class="btn btn-sm btn-primary mb-2">Filter</button>
-                                </div> -->
+                                </div>
                             </div>
                         </form>
+                    </div>
                         <div class="table-responsive">
                             <table class="table table-striped table-hover" id="table-list">
                                 <thead>

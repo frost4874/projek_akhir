@@ -40,7 +40,9 @@ $total_colors = count($card_array);
                             })
                             ->count();
                         @endphp
+                        @if($jumlah_req > 0)
                         <span class="badge badge-primary">{{ $jumlah_req }}</span>
+                        @endif
                     </div>
                     @if($total_colors > 0)
                     <span class="info-box-icon {{ $card_array[$loop->index % $total_colors] }}">
