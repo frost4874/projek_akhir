@@ -26,12 +26,13 @@ class BerkasPermohonanController extends Controller
                   ->where('id_desa', auth()->user()->desa);
         })
         ->count();
+        $pejabats = DataPejabat::where('id_desa', $id_desa)->get();
         $requests = DataRequest::where('id_desa', $id_desa)
                            ->whereIn('data_requests.status', [2])
                            ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                            ->select('data_requests.*', 'biodata.nama as nama')
                            ->get();
-        return view('admin.berkas', compact('npage', 'requests','jumlah_requ'));
+        return view('admin.berkas', compact('npage', 'requests','jumlah_requ','pejabats'));
     }
 
     public function telahDiambil($id_berkas)
@@ -46,4 +47,21 @@ class BerkasPermohonanController extends Controller
         // Setelah operasi selesai, Anda dapat mengembalikan respons yang sesuai
         return redirect()->back()->with('success', 'Status telah diperbarui.');
     }
+
+    public function viewCetak(Request $request, $id_request)
+{
+    $dataRequest = DataRequest::where('id_request', $request->id_request)->first();
+    $request->validate([
+        'nip' => 'required',
+    ]);
+    if ($dataRequest) {
+        $dataRequest->nip = $request->nip;
+        $dataRequest->save();
+
+        // Redirect back with success message
+        return redirect()->route('cetak.review', ['id_request' => $id_request])->with('success', 'Surat akan dicetak.');
+    }
+
+    return back()->with('failed', 'Gagal');
+}
 }

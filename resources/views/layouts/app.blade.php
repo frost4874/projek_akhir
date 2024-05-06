@@ -201,6 +201,13 @@ $(document).ready(function () {
 
 </script>
 
+<script>
+function showFullImage(img) {
+    var fullImageUrl = img.src;
+    window.open(fullImageUrl, '_blank');
+}
+</script>
+
 
 </body>
 </html>
