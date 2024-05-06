@@ -30,7 +30,7 @@ class DashboardMasterController extends Controller
     $npage = 0;
     $status = 4;
     $requests = DataRequest::where('id_berkas', $id_berkas)
-                       ->where('status', $status)
+                       ->where('data_requests.status', $status)
                        ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                        ->select('data_requests.*', 'biodata.nama as nama')
                        ->get();

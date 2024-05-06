@@ -39,7 +39,7 @@
                         <th>NIK</th>
                         <th>Nama Lengkap</th>
                         <th>Status</th>
-                        <th style="width: 10%">Action</th>
+                        <th style="width: 20%">Action</th>
                       </thead>
                       <tbody>
                                     @foreach($requests as $index => $request)
@@ -52,16 +52,22 @@
                                                         Telah di Cetak
                                                 </td>
                                                 <td>
-                                                <form action="{{ route('telah.diambil', ['id_request' => $request->id_request]) }}" method="POST">
-                                                  @csrf
-                                                  @method('PUT')
-                                                  <button type="submit" class="btn btn-sm btn-success">
-                                                      <i class="fas fa-check"> Telah di ambil</i>
-                                                  </button>
-                                                </form>
-                                                        <a href="{{ route('cetak.print', ['id_request' => $request->id_request]) }}" class="btn btn-sm btn-warning" target="_BLANK">
-                                                          <i class="fas fa-print"></i> Print
-                                                        </a>
+                                                <div class="d-inline-block">
+                                                    <a href="{{ route('cetak.print', ['id_request' => $request->id_request]) }}" class="btn btn-sm btn-warning" target="_BLANK">
+                                                        <i class="fas fa-print"></i> Print
+                                                    </a>
+                                                </div>
+                                                <div class="d-inline-block ml-2">
+                                                    <form action="{{ route('telah.diambil', ['id_request' => $request->id_request]) }}" method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <button type="submit" class="btn btn-sm btn-success">
+                                                            <i class="fas fa-check"></i> Selesai
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                
+                                                        
                                                 </td>
                                             </tr>
                                     @endforeach

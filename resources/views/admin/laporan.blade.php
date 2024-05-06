@@ -35,16 +35,19 @@
                         <form action="{{ route('laporan.filter') }}" method="GET" class="d-inline-block">
                             <div class="form-row align-items-center">
                                 <div class="col-auto">
-                                    <label class="sr-only" for="tanggalDari">Dari</label>
+                                    <label for="tanggalDari">Dari</label>
                                     <input type="date" class="form-control form-control-sm mb-2" id="tanggalDari" name="tanggal_dari" placeholder="Dari">
                                 </div>
                                 <div class="col-auto">
-                                    <label class="sr-only" for="tanggalSampai">Sampai</label>
-                                    <input type="date" class="form-control form-control-sm mb-2" id="tanggalSampai" name="tanggal_sampai" placeholder="Sampai">
+                                    <span class="my-2">-</span>
                                 </div>
                                 <div class="col-auto">
-                                    <button type="submit" class="btn btn-sm btn-primary mb-2">Filter</button>
+                                    <label for="tanggalSampai">Sampai</label>
+                                    <input type="date" class="form-control form-control-sm mb-2" id="tanggalSampai" name="tanggal_sampai" placeholder="Sampai">
                                 </div>
+                                <!-- <div class="col-auto">
+                                    <button type="submit" class="btn btn-sm btn-primary mb-2">Filter</button>
+                                </div> -->
                             </div>
                         </form>
                         <div class="table-responsive">
@@ -55,7 +58,6 @@
                                     <th scope="col">Nik</th>
                                     <th scope="col">Nama</th>
                                     <th scope="col">Permohonan</th>
-                                    <th style="width: 10%">Action</th>
                                 </thead>
                                 <tbody>
                                     @php
@@ -69,17 +71,7 @@
                                         <td>{{ $request->nik}}</td>
                                         <td>{{ $request->nama}}</td>
                                         <td>{{ $request->judul_berkas }}</td>
-                                        <td>
-                                            @if($request->status == 1)
-                                            <a href="#" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#myModal{{ $request->id_request }}" title="Edit Pejabat">
-                                                <i class="fas fa-print"></i> Print
-                                            </a>
-                                            @else
-                                            <a href="#" class="btn btn-sm btn-warning">
-                                                <i class="fas fa-pencil-alt"></i> Edit
-                                            </a>
-                                            @endif
-                                        </td>
+                                        
                                     </tr>
                                     @endforeach
                                 </tbody>
