@@ -47,7 +47,7 @@
                                     <input type="date" class="form-control form-control-sm mb-2" id="tanggalSampai" name="tanggal_sampai" placeholder="Sampai">
                                 </div>
                                 <div class="col-auto">
-                                    <button type="submit" class="btn btn-sm btn-primary mb-2">Filter</button>
+                                    <button type="submit" class="btn btn-sm btn-primary mb-2">Print PDF</button>
                                 </div>
                             </div>
                         </form>
