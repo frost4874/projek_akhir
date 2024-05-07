@@ -99,9 +99,16 @@
                                             <label>Agama</label>
                                             <input type="text" name="tgl_lahir" value="{{ $biodata->agama ?? '' }}" class="form-control" readonly="">
                                         </div>
-                                        <div class="form-group">
-                                            <label for="foto_kk">Foto KK</label>
-                                            <img src="{{ asset('storage/foto_kk/' . $biodata->nik_kk . '.' . pathinfo($biodata->foto_kk, PATHINFO_EXTENSION)) }}" alt="Foto KK" class="img-thumbnail">
+                                        <div class="form-group text-center">
+                                            <label for="foto_Kk" style="display: block; margin-bottom: 5px;">Foto KK</label>
+                                            <div>
+                                                <img src="{{ asset('storage/foto_kk/' . $biodata->nik . '_kk' . '.' . pathinfo($biodata->foto_kk, PATHINFO_EXTENSION)) }}" alt="Foto Kk" id="fotoKk" width="150">
+                                            </div>
+                                            <div style="margin-top: 5px;">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFotoKK">
+                                                    Lihat Foto KK
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-6">
@@ -129,11 +136,17 @@
                                             <label>Alamat</label>
                                             <input type="text" name="rw" value="{{ $biodata->alamat ?? '' }}" class="form-control" placeholder="Alamat Anda.." readonly="">
                                         </div>
-                                        <div class="form-group">
-                                            <label for="foto_ktp">Foto KTP</label>
-                                            <img src="{{ asset('storage/foto_ktp/' . $biodata->nik_ktp . '.' . pathinfo($biodata->foto_ktp, PATHINFO_EXTENSION)) }}" alt="Foto KTP" class="img-thumbnail">
+                                        <div class="form-group text-center">
+                                            <label for="foto_ktp" style="display: block; margin-bottom: 5px;">Foto KTP</label>
+                                            <div>
+                                                <img src="{{ asset('storage/foto_ktp/' . $biodata->nik . '_ktp' . '.' . pathinfo($biodata->foto_ktp, PATHINFO_EXTENSION)) }}" alt="Foto KTP" id="fotoKTP" width="150">
+                                            </div>
+                                            <div style="margin-top: 5px;">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFotoKTP">
+                                                    Lihat Foto KTP
+                                                </button>
+                                            </div>
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -158,6 +171,41 @@
             </div>
         </div>
     </div>
+    <!-- Modal untuk Foto KK -->
+<div class="modal fade" id="modalFotoKK" tabindex="-1" role="dialog" aria-labelledby="modalFotoKKLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalFotoKKLabel">Foto KK</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img src="{{ asset('storage/foto_kk/' . $biodata->nik . '_kk' . '.' . pathinfo($biodata->foto_kk, PATHINFO_EXTENSION)) }}" class="img-fluid" alt="Foto KK">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal untuk Foto KTP -->
+<div class="modal fade" id="modalFotoKTP" tabindex="-1" role="dialog" aria-labelledby="modalFotoKTPLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalFotoKTPLabel">Foto KTP</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img src="{{ asset('storage/foto_ktp/' . $biodata->nik . '_ktp' . '.' . pathinfo($biodata->foto_ktp, PATHINFO_EXTENSION)) }}" class="img-fluid" alt="Foto KTP">
+      </div>
+    </div>
+  </div>
+</div>
+
 </section>
+
 
 @endsection
