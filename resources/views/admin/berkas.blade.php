@@ -35,7 +35,7 @@
                   <table class="table table-striped table-hover" id="table-list">
                       <thead>
                         <th>No.</th>
-                        <th>Tanggal Request</th>
+                        <th>Tanggal Acc</th>
                         <th>NIK</th>
                         <th>Nama Lengkap</th>
                         <th>Status</th>
@@ -45,7 +45,7 @@
                                     @foreach($requests as $index => $request)
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ $request->tanggal_request }}</td>
+                                                <td>{{ $request->acc }}</td>
                                                 <td>{{ $request->nik }}</td>
                                                 <td>{{ $request->nama }}</td>
                                                 <td>

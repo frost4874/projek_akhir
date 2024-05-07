@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 @php
 $card_array = [
-     'bg-green', 'bg-red', 'bg-blue','bg-fuchsia'
+     'bg-green', 'bg-red', 'bg-navy'
 ];
 $total_colors = count($card_array);
 @endphp
@@ -27,7 +27,7 @@ $total_colors = count($card_array);
 <section class="content">
     <div class="row">
         @foreach($master_berkas as $berkas)
-        <div class="col-md-3 col-sm-6 col-12">
+        <div class="col-md-12 col-lg-6 col-xl-4">
             <a href="{{ route('admin.request', ['id_berkas' => $berkas->id_berkas, 'judul_berkas' => $berkas->judul_berkas]) }}">
                 <div class="info-box">
                     <div class="position-absolute top-0 end-0 p-2">
@@ -53,7 +53,8 @@ $total_colors = count($card_array);
                     <span class="info-box-icon"><i class="far fa-envelope"></i></span>
                     @endif
                     <div class="info-box-content">
-                        <span class="info-box-text" style="color: black;">{{ $berkas->judul_berkas }}</span>
+                        <p class="info-box-text" style="color: black;">{{ $berkas->judul_berkas }}</p>
+                        
                         @php
                         $jumlah_reqs = App\Models\DataRequest::where('id_berkas', $berkas->id_berkas)
                             ->whereIn('status', [0,1])
