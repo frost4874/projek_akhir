@@ -16,12 +16,13 @@ class LaporanMasterController extends Controller
     public function index()
     {
         $status = 3;
+        $npage= 4;
         $requests = DataRequest::where('data_requests.status', $status)
                         ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                         ->join('berkas', 'data_requests.id_berkas', '=', 'berkas.id_berkas')
                         ->select('data_requests.*', 'biodata.nama as nama', 'berkas.judul_berkas as judul_berkas')
                         ->paginate(5);
-        return view('master_admin.laporan',compact('requests'));
+        return view('master_admin.laporan',compact('requests','npage'));
     }
     public function masterprint(Request $request)
 {

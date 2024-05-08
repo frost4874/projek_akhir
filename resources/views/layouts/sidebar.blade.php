@@ -8,7 +8,7 @@
                with font-awesome or any other icon font library -->
           @if($role === 'Admin Master')
           <li class="nav-item">
-            <a href="{{route('admin.dashboard_master')}}" class="nav-link {{ ('http://127.0.0.1:8000/dashboard_master') ? 'active' : '' }}">
+            <a href="{{route('admin.dashboard_master')}}" class="nav-link {{ ($npage == 1) ? ' active' : '' }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                     Dashboard
@@ -17,7 +17,7 @@
           </li>
           <li class="nav-header">MENU</li>
           <li class="nav-item">
-              <a href="{{route('admin.data_admindesa')}}" class="nav-link {{ Request::is('http://127.0.0.1:8000/data_admindesa') ? 'active' : '' }}">
+              <a href="{{route('admin.data_admindesa')}}" class="nav-link {{ ($npage == 2) ? ' active' : '' }}">
                   <i class="nav-icon fas fa-users"></i>
                   <p>
                       Data Admin Desa
@@ -25,7 +25,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a href="{{route('admin.templatesurat')}}" class="nav-link {{ Request::is('admin/templatesurat') ? 'active' : '' }}">
+              <a href="{{route('admin.templatesurat')}}" class="nav-link {{ ($npage == 3) ? ' active' : '' }}">
                   <i class="nav-icon fas fa-chart-bar"></i>
                   <p>
                       Template Surat
@@ -33,7 +33,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a href="{{route('admin.laporan_master')}}" class="nav-link {{ Request::is('admin/laporan_master') ? 'active' : '' }}">
+              <a href="{{route('admin.laporan_master')}}" class="nav-link {{ ($npage == 4) ? ' active' : '' }}">
                   <i class="nav-icon fas fa-file-alt"></i>
                   <p>
                       Laporan
@@ -41,7 +41,7 @@
               </a>
           </li>
               <li class="nav-item">
-                <a href="{{route('admin.biodata_master')}}" class="nav-link">
+                <a href="{{route('admin.biodata_master')}}" class="nav-link {{ ($npage == 5) ? ' active' : '' }}">
                   <i class="nav-icon fas fa-user"></i>
                   <p>Biodata Master Admin</p>
                 </a>

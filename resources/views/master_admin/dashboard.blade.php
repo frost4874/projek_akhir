@@ -2,10 +2,7 @@
 @section('title', 'Dashboard')
 @php
 $card_array = [
-    'bg-aqua', 'bg-green', 'bg-yellow', 'bg-red', 'bg-blue',
-    'bg-navy', 'bg-teal', 'bg-olive', 'bg-lime', 'bg-orange',
-    'bg-fuchsia', 'bg-purple', 'bg-maroon', 'bg-black', 'bg-gray',
-    'bg-light-blue', 'bg-dark-green', 'bg-dark-yellow', 'bg-dark-red', 'bg-dark-blue'
+  'bg-green', 'bg-red', 'bg-navy'
 ];
 $total_colors = count($card_array);
 @endphp
@@ -28,7 +25,7 @@ $total_colors = count($card_array);
     <section class="content">
     <div class="row">
     @foreach($master_berkas as $berkas)
-<div class="col-md-3 col-sm-6 col-12">
+<div class="col-md-12 col-lg-6 col-xl-4">
     <a href="{{ route('master.request', ['id_berkas' => $berkas->id_berkas, 'judul_berkas' => $berkas->judul_berkas]) }}">
         <div class="info-box">
             @if($total_colors > 0)

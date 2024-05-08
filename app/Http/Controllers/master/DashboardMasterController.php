@@ -17,17 +17,18 @@ class DashboardMasterController extends Controller
 {
     public function index()
     {
+        $npage = 1;
         $user = auth()->user();
 
         $master_berkas = Berkas::all();
         $card_array = ['bg-info','bg-success','bg-warning','bg-danger'];
 
 
-        return view('master_admin.dashboard', compact('master_berkas', 'card_array'));
+        return view('master_admin.dashboard', compact('master_berkas', 'card_array', 'npage'));
     }
     public function masterRequest(Request $request, $id_berkas, $judul_berkas)
 {
-    $npage = 0;
+    $npage = 1;
     $status = 4;
     $requests = DataRequest::where('id_berkas', $id_berkas)
                        ->where('data_requests.status', $status)
@@ -38,8 +39,8 @@ class DashboardMasterController extends Controller
         'id_berkas' => $id_berkas,
         'judul_berkas' => $judul_berkas,
         'requests' => $requests, // Memasukkan $requests ke dalam array
-        'npage' => $npage, // Juga, pastikan untuk menyertakan npage dalam array
-    ]);
+         // Juga, pastikan untuk menyertakan npage dalam array
+    ], compact('npage'));
 }
 
 
@@ -48,7 +49,7 @@ public function reviewSurat($id_request)
 
     // Mengambil data request berdasarkan ID
     $request = DataRequest::where('id_request', $id_request)->first();
-    $npage= 0;
+    $npage= 1;
     // Mengambil data kecamatan dan desa dari tabel Biodata
     $berkas = Berkas::where('id_berkas', $request->id_berkas)->first();
     $bio = Biodata::where('nik', $request->nik)->first();
@@ -143,15 +144,17 @@ private function replaceVariables($template, $data)
 
     public function master()
     {
+        $npage= 5;
         $user = auth()->user()->nik;
         
         $biodatas = Biodata::where('nik', $user)->get();
-        return view('master_admin.biodatamaster', compact('biodatas'));
+        return view('master_admin.biodatamaster', compact('biodatas', 'npage'));
     }
     public function ubah($nik)
     {
+        $npage= 5;
         $data = Biodata::where('nik', $nik)->first();
-        return view('master_admin.editmaster', compact('data'));
+        return view('master_admin.editmaster', compact('data', 'npage'));
     }
 
     public function update(Request $request, $nik)

@@ -14,8 +14,9 @@ class DataDesaController extends Controller
 {
     public function index()
     {
+        $npage= 2;
         $biodatas = Biodata::where('role', 'Admin Desa')->get();
-        return view('master_admin.admindesa', compact('biodatas'));
+        return view('master_admin.admindesa', compact('biodatas', 'npage'));
     }
     public function tambah(Request $request)
 {

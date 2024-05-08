@@ -11,20 +11,23 @@ class TemplateSuratController extends Controller
 {
     public function index()
     {
+        $npage= 3;
         $master_berkas = Berkas::all();
-        return view('master_admin.templatesurat', compact('master_berkas'));
+        return view('master_admin.templatesurat', compact('master_berkas','npage'));
     }
     public function tambahSurat()
     {
-        return view('master_admin.tambah_surat');
+        $npage= 3;
+        return view('master_admin.tambah_surat',compact('npage'));
     }
     public function editSurat($id_berkas)
     {
+        $npage= 3;
         // Ambil data master berkas berdasarkan ID
         $berkas = Berkas::findOrFail($id_berkas);
 
         // Kembalikan view 'edit_template_surat' dengan data master_berkas
-        return view('master_admin.edit_surat', compact('berkas'));
+        return view('master_admin.edit_surat', compact('berkas','npage'));
     }
     public function showCKEditor()
     {

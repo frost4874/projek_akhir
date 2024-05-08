@@ -107,8 +107,9 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="nik">NIK</label>
-                                <input type="text" class="form-control" id="nik" name="nik" required autofocus maxlength="16">
+                                <input type="text" class="form-control" id="nik" name="nik" required autofocus maxlength="16" >
                                 <small id="nikWarning" class="form-text text-muted"></small>
+                                
                             </div>
                             <div class="form-group">
                                 <label for="name">Nama Lengkap</label>
@@ -414,6 +415,61 @@
   </div>
 </div>
 @endforeach
+<script>
+    // Validasi tanggal lahir
+    document.getElementById("tgl_lahir").addEventListener("change", function() {
+        var selectedDate = new Date(this.value);
+        var currentDate = new Date();
+        var minDate = new Date("2007-05-01"); // Tanggal minimal yang diizinkan
+
+        if (selectedDate > currentDate) {
+            alert("Tanggal lahir tidak boleh melebihi tanggal hari ini.");
+            this.value = ''; // Mengosongkan tanggal lahir
+        } else if (selectedDate > minDate) {
+            alert("Umur harus minimal 17 tahun.");
+            this.value = ''; // Mengosongkan tanggal lahir
+        }
+    });
+
+    document.getElementById("nik").addEventListener("blur", function() {
+        var nik = this.value;
+        if (nik.trim() !== '') {
+            // Lakukan permintaan AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.exists) {
+                        alert("NIK sudah terdaftar.");
+                        document.getElementById("nik").value = ''; // Mengosongkan NIK
+                    }
+                }
+            };
+            xhr.open("GET", "/check-nik?nik=" + nik, true); // Ganti "/check-nik" dengan rute yang sesuai di Laravel
+            xhr.send();
+        }
+    });
+
+    // Validasi email saat input kehilangan fokus
+    document.getElementById("email").addEventListener("blur", function() {
+        var email = this.value;
+        if (email.trim() !== '') {
+            // Lakukan permintaan AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.exists) {
+                        alert("Email sudah terdaftar.");
+                        document.getElementById("email").value = ''; // Mengosongkan email
+                    }
+                }
+            };
+            xhr.open("GET", "/check-email?email=" + email, true); // Ganti "/check-email" dengan rute yang sesuai di Laravel
+            xhr.send();
+        }
+    });
+</script>
 
 
     

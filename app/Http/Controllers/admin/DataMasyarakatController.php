@@ -12,6 +12,7 @@ use App\Models\KecamatanDesa;
 use App\Models\Desa;
 use App\Models\Biodata;
 use App\Models\DataRequest;
+use Carbon\Carbon;
 
 class DataMasyarakatController extends Controller
 {
@@ -77,12 +78,12 @@ public function index()
     $validatedData = $request->validate([
         'nik' => 'required|numeric|unique:biodata',
         'nama' => 'required|string|max:100',
-        'email' => 'required|string|max:50',
+        'email' => 'required|string|unique:biodata,email|regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i|max:50',
         'jekel' => 'required|in:Laki-Laki,Perempuan',
         'kecamatan' => 'required|string|max:100',
         'desa' => 'required|string|max:100',
         'kota' => 'required|string|max:6',
-        'tgl_lahir' => 'required|date',
+        'tgl_lahir' => 'required|date|before_or_equal:' . Carbon::now()->subYears(17)->format('Y-m-d'),
         'password' => 'required|string|min:8',
         'foto_ktp' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         'foto_kk' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',

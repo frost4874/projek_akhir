@@ -69,6 +69,7 @@
                           <option value="">Pilih Form Tambahan...</option>
                           <option value="Alamat_Domisili" {{ $formTambahanValues[$i-1] == 'Alamat_Domisili' ? 'selected' : '' }}>Alamat Domisili</option>
                           <option value="Domisili_Sejak" {{ $formTambahanValues[$i-1] == 'Domisili_Sejak' ? 'selected' : '' }}>Domisili Sejak</option>
+                          <option value="Domisili_Sekarang" {{ $formTambahanValues[$i-1] == 'Domisili_Sekarang' ? 'selected' : '' }}>Domisili Sekarang</option>
                           <option value="Tujuan_Permohonan" {{ $formTambahanValues[$i-1] == 'Tujuan_Permohonan' ? 'selected' : '' }}>Tujuan Permohonan</option>
                           <option value="Keterangan_Tambahan" {{ $formTambahanValues[$i-1] == 'Keterangan_Tambahan' ? 'selected' : '' }}>Keterangan Tambahan</option>
                           <option value="Nama_Anak" {{ $formTambahanValues[$i-1] == 'Nama_Anak' ? 'selected' : '' }}>Nama Anak</option>
@@ -90,6 +91,7 @@
                           <option value="Luas_Tanah" {{ $formTambahanValues[$i-1] == 'Luas_Tanah' ? 'selected' : '' }}>Luas Tanah</option>
                           <option value="Lokasi_Tanah" {{ $formTambahanValues[$i-1] == 'Lokasi_Tanah' ? 'selected' : '' }}>Lokasi Tanah</option>
                           <option value="Jenis_Surat_Tanah" {{ $formTambahanValues[$i-1] == 'Jenis_Surat_Tanah' ? 'selected' : '' }}>Jenis Surat Tanah</option>
+                          <option value="Nomor_Surat_Tanah" {{ $formTambahanValues[$i-1] == 'Nomor_Surat_Tanah' ? 'selected' : '' }}>Nomor Surat Tanah</option>
                           <option value="Agama_Anak" {{ $formTambahanValues[$i-1] == 'Agama_Anak' ? 'selected' : '' }}>Agama Anak</option>
                           <option value="Alamat_Anak" {{ $formTambahanValues[$i-1] == 'Alamat_Anak' ? 'selected' : '' }}>Alamat Anak</option>
                           <option value="Tanggal_Lahir_Anak" {{ $formTambahanValues[$i-1] == 'Tanggal_Lahir_Anak' ? 'selected' : '' }}>Tanggal Lahir Anak</option>
@@ -102,6 +104,10 @@
                           <option value="Tujuan_Usaha" {{ $formTambahanValues[$i-1] == 'Tujuan_Usaha' ? 'selected' : '' }}>Tujuan Usaha</option>
                           <option value="Tempat_Meninggal" {{ $formTambahanValues[$i-1] == 'Tempat_Meninggal' ? 'selected' : '' }}>Tempat Meninggal</option>
                           <option value="Sebab_Kematian" {{ $formTambahanValues[$i-1] == 'Sebab_Kematian' ? 'selected' : '' }}>Sebab Kematian</option>
+                          <option value="Jumlah_Penghasilan" {{ $formTambahanValues[$i-1] == 'Jumlah_Penghasilan' ? 'selected' : '' }}>Jumlah Penghasilan</option>
+                          <option value="Nama_Pelapor" {{ $formTambahanValues[$i-1] == 'Nama_Pelapor' ? 'selected' : '' }}>Nama Pelapor</option>
+                          <option value="Nik_Pelapor" {{ $formTambahanValues[$i-1] == 'Nik_Pelapor' ? 'selected' : '' }}>NIK Pelapor</option>
+                          <option value="Alamat_Pelapor" {{ $formTambahanValues[$i-1] == 'Alamat_Pelapor' ? 'selected' : '' }}>Alamat Pelapor</option>
                         </select>
                         @endfor
                     </div>
@@ -131,6 +137,7 @@ document.getElementById('tambahForm').addEventListener('click', function() {
     <option value="">Pilih Form Tambahan...</option>
     <option value="Alamat_Domisili">Alamat Domisili</option>
     <option value="Domisili_Sejak">Domisili Sejak</option>
+    <option value="Domisili_Sekarang">Domisili Sekarang</option>
     <option value="Tujuan_Permohonan">Tujuan Permohonan</option>
     <option value="Keterangan_Tambahan">Keterangan Tambahan</option>
     <option value="Nama_Anak">Nama Anak</option>
@@ -147,23 +154,28 @@ document.getElementById('tambahForm').addEventListener('click', function() {
     <option value="Nama_Usaha">Nama Usaha</option>
     <option value="Tahun_Usaha">Tahun Usaha</option>
     <option value="Alamat_Usaha">Alamat Usaha</option>
-    <option value="No_Pengantar">Alamat Domisili</option>
-    <option value="Tanggal_Permohonan">Domisili Sejak</option>
-    <option value="Luas_Tanah">Tujuan Permohonan</option>
-    <option value="Lokasi_Tanah">Nama Anak</option>
-    <option value="Jenis_Surat_Tanah">Jenis Kelamin Anak</option>
-    <option value="Agama_Anak">Tempat Lahir Anak</option>
-    <option value="Alamat_Anak">Sekolah</option>
-    <option value="Tanggal_Lahir_Anak">Domisili Sejak</option>
-    <option value="Bin/Binti">Jurusan</option>
-    <option value="Tanggal_Kematian">Semester</option>
-    <option value="Jam_Kematian">Nama Organisasi</option>
-    <option value="Nama_Lembaga">Alamat Organisasi</option>
-    <option value="Alamat_Lembaga">Nama Ketua Organisasi</option>
-    <option value="Nama_Pengasuh">NIK Ayah</option>
-    <option value="Tujuan_Usaha">NIK Ibu</option>
-    <option value="Tempat_Meninggal">Nama Usaha</option>
-    <option value="Sebab_Kematian">Tahun Usaha</option>
+    <option value="No_Pengantar">No Pengantar</option>
+    <option value="Tanggal_Permohonan">Tanggal Permohonan</option>
+    <option value="Luas_Tanah">Luas Tanah</option>
+    <option value="Lokasi_Tanah">Lokasi Tanah</option>
+    <option value="Jenis_Surat_Tanah">Jenis Surat Tanah</option>
+    <option value="Nomor_Surat_Tanah">Nomor Surat Tanah</option>
+    <option value="Agama_Anak">Agama Anak</option>
+    <option value="Alamat_Anak">Alamat Anak</option>
+    <option value="Tanggal_Lahir_Anak">Tanggal Lahir Anak</option>
+    <option value="Bin/Binti">Bin/Binti</option>
+    <option value="Tanggal_Kematian">Tanggal Kematian</option>
+    <option value="Jam_Kematian">Jam Kematian</option>
+    <option value="Nama_Lembaga">Nama Lembaga</option>
+    <option value="Alamat_Lembaga">Alamat Lembaga</option>
+    <option value="Nama_Pengasuh">Nama Pengasuh</option>
+    <option value="Tujuan_Usaha">Tujuan Usaha</option>
+    <option value="Tempat_Meninggal">Tempat Meninggal</option>
+    <option value="Sebab_Kematian">Sebab Kematian</option>
+    <option value="Jumlah_Penghasilan">Jumlah Penghasilan</option>
+    <option value="Nama_Pelapor">Nama Pelapor</option>
+    <option value="Nik_Pelapor">NIK Pelapor</option>
+    <option value="Alamat_Pelapor">Alamat Pelapor</option>
     `;
     container.appendChild(newSelect);
 });
