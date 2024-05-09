@@ -45,6 +45,7 @@ class DashboardController extends Controller
         ->count();
     // Ambil tanggal hari ini
     $today = Carbon::today();
+    $today->setTimezone('Asia/Jakarta');
 
     // Periksa nomor urut terakhir pada hari ini dan desa ini, tanpa memperhatikan jenis berkas
     $no_agenda = DataRequest::where('id_desa', $id_desa)

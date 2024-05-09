@@ -17,7 +17,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'nik' => 'required|numeric',
+            'email' => 'required|email|regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i',
             'password' => 'required',
         ]);
 

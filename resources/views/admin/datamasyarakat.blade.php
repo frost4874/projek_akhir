@@ -48,38 +48,60 @@
                           <th>Action</th>
                       </thead>
                       <tbody>
-                      @foreach($biodatas as $index => $biodata)
-<tr>
-    <td>{{ $index + 1 }}</td>
-    <td>{{ $biodata->nik }}</td>
-    <td>{{ $biodata->nama }}</td>
-    <td>{{ $biodata->jekel }}</td>
-    <td>{{ $biodata->kecamatan }}</td>
-    <td>{{ $biodata->desa }}</td>
-    <td>
-        <!-- Tambahkan tombol untuk opsi, misalnya: edit, hapus, dll -->
-        <!-- Tombol Edit -->
-        @if($biodata->status == 'Aktif')
-      <button class="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#ubahBiodataModal{{ $biodata->nik }}">
-          <i class="fas fa-edit"></i> Edit
-      </button>
+                      @php
+    $number = 1; // Inisialisasi nomor urut
+@endphp
 
-      <!-- Tombol Hapus -->
-      <form action="{{ route('masyarakat.delete', $biodata->nik) }}" method="POST" class="d-inline">
-          @csrf
-          @method('DELETE')
-          <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus Pejabat">
-              <i class="fa fa-trash"></i> Hapus
-          </button>
-      </form>
-      @elseif($biodata->status == 'Tidak Aktif')
-      <button class="btn btn-sm btn-success" type="button" data-toggle="modal" data-target="#verifBiodataModal{{ $biodata->nik }}">
-          <i class="fas fa-check"></i> Verifikasi
-      </button>
-    </td>
+@foreach($biodatas as $index => $biodata)
+    @if($biodata->status == 'Tidak Aktif')
+        <tr>
+            <td>{{ $number++ }}</td>
+            <td>{{ $biodata->nik }}</td>
+            <td>{{ $biodata->nama }}</td>
+            <td>{{ $biodata->jekel }}</td>
+            <td>{{ $biodata->kecamatan }}</td>
+            <td>{{ $biodata->desa }}</td>
+            <td>
+                <!-- Tambahkan tombol untuk opsi, misalnya: edit, hapus, dll -->
+                <!-- Tombol Verifikasi -->
+                <button class="btn btn-sm btn-success" type="button" data-toggle="modal" data-target="#verifBiodataModal{{ $biodata->nik }}">
+                    <i class="fas fa-check"></i> Verifikasi
+                </button>
+            </td>
+        </tr>
     @endif
-</tr>
 @endforeach
+
+@foreach($biodatas as $index => $biodata)
+    @if($biodata->status == 'Aktif')
+        <tr>
+            <td>{{ $number++ }}</td>
+            <td>{{ $biodata->nik }}</td>
+            <td>{{ $biodata->nama }}</td>
+            <td>{{ $biodata->jekel }}</td>
+            <td>{{ $biodata->kecamatan }}</td>
+            <td>{{ $biodata->desa }}</td>
+            <td>
+                <!-- Tambahkan tombol untuk opsi, misalnya: edit, hapus, dll -->
+                <!-- Tombol Edit -->
+                <button class="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#ubahBiodataModal{{ $biodata->nik }}">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+
+                <!-- Tombol Hapus -->
+                <form action="{{ route('masyarakat.delete', $biodata->nik) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus Pejabat">
+                        <i class="fa fa-trash"></i> Hapus
+                    </button>
+                </form>
+            </td>
+        </tr>
+    @endif
+@endforeach
+
+
                       </tbody>
                   </table>
               </div>
@@ -358,7 +380,12 @@
                 <label>Agama</label>
                 <input type="text" name="agama" value="{{ $biodata->agama ?? '' }}" class="form-control" placeholder="agama Anda.." readonly>
               </div>
+              <div class="form-group">
+                <label for="foto_kk">Foto KK</label>
+                <img src="{{ asset('storage/foto_ktp/' . $biodata->nik . '_ktp' . '.' . pathinfo($biodata->foto_ktp, PATHINFO_EXTENSION)) }}" alt="Foto KTP" id="fotoKTP" width="150">
+              </div>
             </div>
+            
             <div class="col-md-6 col-lg-6">
             <div class="form-group">
                 <label>Warganegara</label>
@@ -394,11 +421,7 @@
               </div>
               <div class="form-group">
                 <label for="foto_ktp">Foto KTP</label>
-                <img src="{{ asset($biodata->foto_ktp) }}" alt="Foto KTP" class="img-thumbnail">
-              </div>
-              <div class="form-group">
-                <label for="foto_kk">Foto KK</label>
-                <img src="{{ asset($biodata->foto_kk) }}" alt="Foto KK" class="img-thumbnail">
+                <img src="{{ asset('storage/foto_kk/' . $biodata->nik . '_kk' . '.' . pathinfo($biodata->foto_kk, PATHINFO_EXTENSION)) }}" alt="Foto Kk" id="fotoKk" width="150">
               </div>
             </div>
           </div>
@@ -431,44 +454,51 @@
         }
     });
 
-    document.getElementById("nik").addEventListener("blur", function() {
-        var nik = this.value;
-        if (nik.trim() !== '') {
-            // Lakukan permintaan AJAX
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.exists) {
-                        alert("NIK sudah terdaftar.");
-                        document.getElementById("nik").value = ''; // Mengosongkan NIK
-                    }
-                }
-            };
-            xhr.open("GET", "/check-nik?nik=" + nik, true); // Ganti "/check-nik" dengan rute yang sesuai di Laravel
-            xhr.send();
-        }
-    });
+   // Validate NIK uniqueness
+document.getElementById("nik").addEventListener("blur", function() {
+    var nik = this.value;
+    if (nik.trim() !== '') {
+        fetch(`/check-nik?nik=${nik}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                alert("NIK sudah terdaftar. Silakan gunakan NIK yang lain.");
+                // Optionally, you could add a visual indicator like changing the border color
+                document.getElementById("nik").style.borderColor = 'red';
+            } else {
+                // Reset to default style if the user changes to a valid NIK
+                document.getElementById("nik").style.borderColor = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+});
 
-    // Validasi email saat input kehilangan fokus
-    document.getElementById("email").addEventListener("blur", function() {
-        var email = this.value;
-        if (email.trim() !== '') {
-            // Lakukan permintaan AJAX
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.exists) {
-                        alert("Email sudah terdaftar.");
-                        document.getElementById("email").value = ''; // Mengosongkan email
-                    }
-                }
-            };
-            xhr.open("GET", "/check-email?email=" + email, true); // Ganti "/check-email" dengan rute yang sesuai di Laravel
-            xhr.send();
-        }
-    });
+// Validate Email uniqueness
+document.getElementById("email").addEventListener("blur", function() {
+    var email = this.value;
+    if (email.trim() !== '') {
+        fetch(`/check-email?email=${email}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                alert("Email sudah terdaftar. Silakan gunakan email yang lain.");
+                // Optionally, you could add a visual indicator like changing the border color
+                document.getElementById("email").style.borderColor = 'red';
+            } else {
+                // Reset to default style if the user changes to a valid email
+                document.getElementById("email").style.borderColor = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+});
+
+
 </script>
 
 

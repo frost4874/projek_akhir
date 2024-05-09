@@ -122,7 +122,17 @@ public function index()
     return back()->with('success', 'Registrasi berhasil');
 }
 
+public function checkNIK(Request $request)
+    {
+        $exists = Biodata::where('nik', $request->nik)->exists();
+        return response()->json(['exists' => $exists]);
+    }
 
+    public function checkEmail(Request $request)
+    {
+        $exists = Biodata::where('email', $request->email)->exists();
+        return response()->json(['exists' => $exists]);
+    }
 
 
 public function verifRegist($nik)

@@ -11,19 +11,24 @@ use App\Models\DataRequest;
 class PejabatDesaController extends Controller
 {
     public function index()
-    {
-        $npage = 4;
-        $jumlah_requ = DataRequest::where('status', 0)
-        ->whereHas('biodata', function ($query) {
-            $query->where('id_kec', auth()->user()->kecamatan)
-                  ->where('id_desa', auth()->user()->desa);
-        })
-        ->count();
-        $pejabats = DataPejabat::where('id_kec', auth()->user()->kecamatan)
-                            ->where('id_desa', auth()->user()->desa)
-                            ->get();
-        return view('admin.pejabatdesa', compact('pejabats', 'npage','jumlah_requ'));
-    }
+{
+    $npage = 4;
+    $jumlah_requ = DataRequest::where('status', 0)
+                              ->whereHas('biodata', function ($query) {
+                                    $query->where('id_kec', auth()->user()->kecamatan)
+                                          ->where('id_desa', auth()->user()->desa);
+                                })
+                              ->count();
+    $pejabats = DataPejabat::where('id_kec', auth()->user()->kecamatan)
+                           ->where('id_desa', auth()->user()->desa)
+                           ->get();
+    $existing_positions = DataPejabat::where('id_kec', auth()->user()->kecamatan)
+                                     ->where('id_desa', auth()->user()->desa)
+                                     ->pluck('jabatan')
+                                     ->toArray();
+    return view('admin.pejabatdesa', compact('pejabats', 'npage','jumlah_requ', 'existing_positions'));
+}
+
     public function store(Request $request)
     {
         // Validasi input

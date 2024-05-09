@@ -197,7 +197,30 @@ $(document).ready(function () {
     });
 });
 
+    $(document).ready(function () {
+        $('#jblain').hide();
+        $('#jabatan').change(function () {
+            var jab = $('#jabatan').val();
+            if (jab == 'Lainnya') {
+                $('#jblain').show();
+            } else {
+                $('#jblain').hide();
+            }
+        });
+    });
 
+    $(document).ready(function () {
+        $('#jabatan').change(function () {
+            var selectedOption = $(this).val();
+            // Jika opsi "Lainnya" dipilih, tampilkan input teks tambahan
+            if (selectedOption === 'Lainnya') {
+                $('#jblain-container').show();
+            } else {
+                // Jika tidak, sembunyikan input teks tambahan
+                $('#jblain-container').hide();
+            }
+        });
+    });
 
 </script>
 

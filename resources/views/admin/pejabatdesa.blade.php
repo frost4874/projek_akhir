@@ -60,9 +60,13 @@
                                             <i class="fa fa-edit"></i>
                                         </button>
 
-                                            <a href="{{ route('pejabat.destroy', $pejabat->nip) }}" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus Pejabat">
-                                                <i class="fa fa-times"></i>
-                                            </a>
+                                        <form action="{{ route('pejabat.destroy', $pejabat->nip) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus Pejabat">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
                                         
                                     </td>
                                 </tr>
@@ -102,15 +106,15 @@
                         <label>Jabatan</label>
                         <select name="jabatan" class="form-control" id="jabatan">
                             <option disabled="" selected="">Pilih Jabatan</option>
-                            <option value="Kepala Desa">Kepala Desa</option>
-                            <option value="Sekretaris Desa">Sekretaris Desa</option>
+                            <option value="Kepala Desa" {{ in_array('Kepala Desa', $existing_positions) ? 'disabled' : '' }}>Kepala Desa</option>
+                            <option value="Sekretaris Desa" {{ in_array('Sekretaris Desa', $existing_positions) ? 'disabled' : '' }}>Sekretaris Desa</option>
                             <option value="Lainnya">Lainnya</option>
                         </select>
                     </div>
-                    <div class="form-group" id="jblain" style="display: none;">
-                        <label>Isikan Jabatan Lainnya</label>
-                        <input name="jblain" class="form-control" placeholder="Jabatan..">
-                    </div>
+                    <div class="form-group" id="jblain-container" style="display: none;">
+    <label>Isikan Jabatan Lainnya</label>
+    <input name="jblain" class="form-control" placeholder="Jabatan..">
+</div>
                     <div class="form-group">
                         <label>Pangkat</label>
                         <input name="pangkat" class="form-control" placeholder="Pangkat..">
@@ -124,6 +128,7 @@
         </div>
     </div>
 </div>
+
 @foreach($pejabats as $pejabat)
 <div class="modal fade" id="editPejabatModal{{ $pejabat->nip }}" tabindex="-1" role="dialog" aria-labelledby="editPejabatModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -169,18 +174,3 @@
 </div>
 @endforeach
 @endsection
-@push('scripts')
-<script>
-    $(document).ready(function () {
-        $('#jblain').hide();
-        $('#jabatan').change(function () {
-            var jab = $('#jabatan').val();
-            if (jab == 'Lainnya') {
-                $('#jblain').show();
-            } else {
-                $('#jblain').hide();
-            }
-        });
-    });
-</script>
-@endpush

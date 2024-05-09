@@ -26,6 +26,8 @@ Route::get('/login', [LoginController::class, 'index'])->name('login');
 
 Route::post('/register', [RegisterController::class, 'register'])->name('register'); //route post untuk register
 Route::get('/register', [RegisterController::class, 'index']);
+Route::get('/check-nik', [DataMasyarakatController::class, 'checkNIK']);
+Route::get('/check-email', [DataMasyarakatController::class, 'checkEmail']);
 
 Route::get('/kecamatan', [KecamatanDesaController::class, 'getKecamatan']);
 Route::get('/desa/{id_kec}', [KecamatanDesaController::class, 'getDesaByKecamatan']);
@@ -86,7 +88,7 @@ Route::middleware(['auth:biodata', 'adminDesa'])->group(function(){
     Route::post('/pejabat', [PejabatDesaController::class, 'store'])->name('pejabat.store');
     Route::get('/pejabat/{nip}/edit', [PejabatDesaController::class, 'edit'])->name('pejabat.edit');
     Route::put('/pejabat/{nip}', [PejabatDesaController::class, 'update'])->name('pejabat.update');
-    Route::delete('/pejabat/{nip}', [PejabatDesaController::class, 'destroy'])->name('pejabat.destroy');
+    Route::delete('/pejabat/{nip}/delete', [PejabatDesaController::class, 'destroy'])->name('pejabat.destroy');
 
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 });
