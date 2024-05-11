@@ -52,6 +52,7 @@
                             </div>
                         </form>
                     </div>
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-hover" id="table-list">
                                 <thead>
@@ -81,45 +82,46 @@
                         </div>
                         
                     </div>
+                    <div class="card-footer">
+                        <!-- Tampilkan tombol navigasi paginate -->
+                        @if ($requests->hasPages())
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                {{-- Tombol Previous --}}
+                                @if ($requests->onFirstPage())
+                                    <li class="page-item disabled">
+                                        <span class="page-link">&laquo;</span>
+                                    </li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $requests->previousPageUrl() }}" rel="prev">&laquo;</a>
+                                    </li>
+                                @endif
+
+                                {{-- Tautan Nomor Halaman --}}
+                                @foreach ($requests->links()->elements[0] as $page => $url)
+                                    <li class="page-item {{ $requests->currentPage() == $page ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                @endforeach
+
+                                {{-- Tombol Next --}}
+                                @if ($requests->hasMorePages())
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $requests->nextPageUrl() }}" rel="next">&raquo;</a>
+                                    </li>
+                                @else
+                                    <li class="page-item disabled">
+                                        <span class="page-link">&raquo;</span>
+                                    </li>
+                                @endif
+                            </ul>
+                        </nav>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- Tampilkan tombol navigasi paginate -->
-@if ($requests->hasPages())
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            {{-- Tombol Previous --}}
-            @if ($requests->onFirstPage())
-                <li class="page-item disabled">
-                    <span class="page-link">&laquo;</span>
-                </li>
-            @else
-                <li class="page-item">
-                    <a class="page-link" href="{{ $requests->previousPageUrl() }}" rel="prev">&laquo;</a>
-                </li>
-            @endif
-
-            {{-- Tautan Nomor Halaman --}}
-            @foreach ($requests->links()->elements[0] as $page => $url)
-                <li class="page-item {{ $requests->currentPage() == $page ? 'active' : '' }}">
-                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                </li>
-            @endforeach
-
-            {{-- Tombol Next --}}
-            @if ($requests->hasMorePages())
-                <li class="page-item">
-                    <a class="page-link" href="{{ $requests->nextPageUrl() }}" rel="next">&raquo;</a>
-                </li>
-            @else
-                <li class="page-item disabled">
-                    <span class="page-link">&raquo;</span>
-                </li>
-            @endif
-        </ul>
-    </nav>
-@endif
-
 @endsection

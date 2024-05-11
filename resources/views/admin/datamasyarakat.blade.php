@@ -49,13 +49,12 @@
                       </thead>
                       <tbody>
                       @php
-    $number = 1; // Inisialisasi nomor urut
-@endphp
-
+                       // Hitung nomor urutan untuk halaman saat ini
+                       $startNumber = ($biodatas->currentPage() - 1) * $biodatas->perPage() + 1;
+                       @endphp
 @foreach($biodatas as $index => $biodata)
-    @if($biodata->status == 'Tidak Aktif')
         <tr>
-            <td>{{ $number++ }}</td>
+            <td>{{ $startNumber + $index }}</td>
             <td>{{ $biodata->nik }}</td>
             <td>{{ $biodata->nama }}</td>
             <td>{{ $biodata->jekel }}</td>
@@ -64,44 +63,25 @@
             <td>
                 <!-- Tambahkan tombol untuk opsi, misalnya: edit, hapus, dll -->
                 <!-- Tombol Verifikasi -->
+                @if($biodata->status == 'Tidak Aktif')
                 <button class="btn btn-sm btn-success" type="button" data-toggle="modal" data-target="#verifBiodataModal{{ $biodata->nik }}">
                     <i class="fas fa-check"></i> Verifikasi
                 </button>
-            </td>
-        </tr>
-    @endif
-@endforeach
-
-@foreach($biodatas as $index => $biodata)
-    @if($biodata->status == 'Aktif')
-        <tr>
-            <td>{{ $number++ }}</td>
-            <td>{{ $biodata->nik }}</td>
-            <td>{{ $biodata->nama }}</td>
-            <td>{{ $biodata->jekel }}</td>
-            <td>{{ $biodata->kecamatan }}</td>
-            <td>{{ $biodata->desa }}</td>
-            <td>
-                <!-- Tambahkan tombol untuk opsi, misalnya: edit, hapus, dll -->
-                <!-- Tombol Edit -->
+                @elseif($biodata->status == 'Aktif')
                 <button class="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#ubahBiodataModal{{ $biodata->nik }}">
                     <i class="fas fa-edit"></i> Edit
                 </button>
-
-                <!-- Tombol Hapus -->
-                <form action="{{ route('masyarakat.delete', $biodata->nik) }}" method="POST" class="d-inline">
+            <form action="{{ route('masyarakat.delete', $biodata->nik) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus Pejabat">
                         <i class="fa fa-trash"></i> Hapus
                     </button>
                 </form>
-            </td>
+                @endif
+                </td>
         </tr>
-    @endif
-@endforeach
-
-
+        @endforeach
                       </tbody>
                   </table>
               </div>
@@ -111,6 +91,42 @@
     </div>
     </div>
   </section>
+
+   <!-- Tampilkan tombol navigasi paginate -->
+@if ($biodatas->hasPages())
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {{-- Tombol Previous --}}
+            @if ($biodatas->onFirstPage())
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            @else
+                <li class="page-item">
+                    <a class="page-link" href="{{ $biodatas->previousPageUrl() }}" rel="prev">&laquo;</a>
+                </li>
+            @endif
+
+            {{-- Tautan Nomor Halaman --}}
+            @foreach ($biodatas->links()->elements[0] as $page => $url)
+                <li class="page-item {{ $biodatas->currentPage() == $page ? 'active' : '' }}">
+                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                </li>
+            @endforeach
+
+            {{-- Tombol Next --}}
+            @if ($biodatas->hasMorePages())
+                <li class="page-item">
+                    <a class="page-link" href="{{ $biodatas->nextPageUrl() }}" rel="next">&raquo;</a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+            @endif
+        </ul>
+    </nav>
+@endif
 <!-- Modal -->
 <div class="modal fade" id="modalTambahMasyarakat" tabindex="-1" role="dialog" aria-labelledby="modalTambahMasyarakatLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

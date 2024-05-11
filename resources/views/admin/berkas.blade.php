@@ -42,9 +42,13 @@
                         <th style="width: 20%">Action</th>
                       </thead>
                       <tbody>
+                                    @php
+                                        // Hitung nomor urutan untuk halaman saat ini
+                                        $startNumber = ($requests->currentPage() - 1) * $requests->perPage() + 1;
+                                    @endphp
                                     @foreach($requests as $index => $request)
                                             <tr>
-                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $startNumber + $index }}</td>
                                                 <td>{{ $request->acc }}</td>
                                                 <td>{{ $request->nik }}</td>
                                                 <td>{{ $request->nama }}</td>
@@ -80,7 +84,42 @@
     </div>
     </div>
   </section>
-  @foreach($requests as $request)
+  <!-- Tampilkan tombol navigasi paginate -->
+@if ($requests->hasPages())
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {{-- Tombol Previous --}}
+            @if ($requests->onFirstPage())
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            @else
+                <li class="page-item">
+                    <a class="page-link" href="{{ $requests->previousPageUrl() }}" rel="prev">&laquo;</a>
+                </li>
+            @endif
+
+            {{-- Tautan Nomor Halaman --}}
+            @foreach ($requests->links()->elements[0] as $page => $url)
+                <li class="page-item {{ $requests->currentPage() == $page ? 'active' : '' }}">
+                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                </li>
+            @endforeach
+
+            {{-- Tombol Next --}}
+            @if ($requests->hasMorePages())
+                <li class="page-item">
+                    <a class="page-link" href="{{ $requests->nextPageUrl() }}" rel="next">&raquo;</a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+            @endif
+        </ul>
+    </nav>
+@endif
+@foreach($requests as $request)
 <div class="modal fade" id="myModal{{ $request->id_request }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

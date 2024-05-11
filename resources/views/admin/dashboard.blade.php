@@ -53,7 +53,14 @@ $total_colors = count($card_array);
                     <span class="info-box-icon"><i class="far fa-envelope"></i></span>
                     @endif
                     <div class="info-box-content">
-                        <p class="info-box-text" style="color: black;">{{ $berkas->judul_berkas }}</p>
+                        <!-- Modifikasi judul berkas -->
+                        <p class="info-box-text" style="color: black;">
+                            @php
+                            // Memecah judul berkas jika terlalu panjang
+                            $judul_berkas = wordwrap($berkas->judul_berkas, 55, "<br>");
+                            echo $judul_berkas;
+                            @endphp
+                        </p>
                         
                         @php
                         $jumlah_reqs = App\Models\DataRequest::where('id_berkas', $berkas->id_berkas)

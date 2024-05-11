@@ -66,7 +66,8 @@ class DashboardController extends Controller
                            ->whereIn('data_requests.status', [0, 1])
                            ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                            ->select('data_requests.*', 'biodata.nama as nama')
-                           ->get();
+                           ->orderBy('data_requests.status', 'desc')
+                           ->paginate(3);
 
     return view('admin.request', [
         'id_berkas' => $id_berkas,

@@ -17,22 +17,28 @@ use Carbon\Carbon;
 class DataMasyarakatController extends Controller
 {
 
-public function index()
-{
-    // Ambil desa pengguna
-    $npage = 1;
-    $userDesa = auth()->user()->desa;
-
-    // Ambil data masyarakat berdasarkan desa pengguna
-    $biodatas = Biodata::where('desa', $userDesa)->where('role', 'Pemohon')->get();
-    $jumlah_requ = DataRequest::where('status', 0)
-        ->whereHas('biodata', function ($query) {
-            $query->where('id_kec', auth()->user()->kecamatan)
-                  ->where('id_desa', auth()->user()->desa);
-        })
-        ->count();
-    return view('admin.datamasyarakat', compact('biodatas','npage','jumlah_requ'));
-}
+    public function index()
+    {
+        // Ambil desa pengguna
+        $npage = 1;
+        $userDesa = auth()->user()->desa;
+    
+        // Ambil data masyarakat berdasarkan desa pengguna, urutkan berdasarkan status
+        $biodatas = Biodata::where('desa', $userDesa)
+                            ->where('role', 'Pemohon')
+                            ->orderBy('status', 'desc') // Status 'Tidak Aktif' akan ditampilkan terlebih dahulu
+                            ->paginate(3);
+    
+        $jumlah_requ = DataRequest::where('status', 0)
+                                    ->whereHas('biodata', function ($query) {
+                                        $query->where('id_kec', auth()->user()->kecamatan)
+                                              ->where('id_desa', auth()->user()->desa);
+                                    })
+                                    ->count();
+                                    
+        return view('admin.datamasyarakat', compact('biodatas','npage','jumlah_requ'));
+    }
+    
 
     public function update(Request $request, $nik)
     {

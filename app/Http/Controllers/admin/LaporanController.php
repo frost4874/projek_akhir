@@ -28,6 +28,7 @@ class LaporanController extends Controller
                         ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                         ->join('berkas', 'data_requests.id_berkas', '=', 'berkas.id_berkas')
                         ->select('data_requests.*', 'biodata.nama as nama', 'berkas.judul_berkas as judul_berkas')
+                        ->orderBy('acc', 'desc')
                         ->paginate(5);
 
         

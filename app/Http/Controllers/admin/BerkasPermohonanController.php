@@ -31,7 +31,7 @@ class BerkasPermohonanController extends Controller
                            ->whereIn('data_requests.status', [2])
                            ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                            ->select('data_requests.*', 'biodata.nama as nama')
-                           ->get();
+                           ->paginate(2);
         return view('admin.berkas', compact('npage', 'requests','jumlah_requ','pejabats'));
     }
 
