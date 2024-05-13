@@ -24,10 +24,10 @@
                                 @method('PUT')
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>NIPD</label>
-                                            <input type="text" class="form-control" value="{{ $data->nik }}" readonly>
-                                        </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" name="email" id="email" class="form-control" value="{{ $data->email }}" placeholder="Email Desa..">
+                                    </div>
                                         <div class="form-group">
                                             <label>Nama Lengkap</label>
                                             <input type="text" class="form-control" name="nama" value="{{ $data->nama }}">
@@ -46,12 +46,9 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Tanggal Lahir</label>
-                                            <input type="date" class="form-control" name="tgl_lahir" value="{{ $data->tgl_lahir }}">
+                                            <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir" value="{{ $data->tgl_lahir }}">
                                         </div>
-                                        <div class="form-group">
-                                        <label>Email</label>
-                                        <input type="text" name="email" class="form-control" value="{{ $data->email }}" placeholder="Email Desa..">
-                                    </div>
+                                        
                                     <div class="form-group">
                                         <label>Website</label>
                                         <input type="text" name="website" class="form-control" value="{{ $data->website }}" placeholder="Website Desa..">
@@ -62,11 +59,12 @@
                                     <div class="col-md-6">
                                     <div class="form-group">
                                             <label>Password</label>
-                                            <input type="password" name="password" value="{{ isset($data) ? '' : $data->password }}" class="form-control" placeholder="Isi jika ganti password" >
+                                            <input type="password" name="password" id="password" value="{{ isset($data) ? '' : $data->password }}" class="form-control" placeholder="Isi jika ganti password" >
                                         </div>
                                     <div class="form-group">
                                         <label>Telepon</label>
-                                        <input type="number" name="telepon" class="form-control" value="{{ $data->telepon }}" placeholder="Telepon Anda..">
+                                        <input type="number" name="telepon" id="telepon" class="form-control" value="{{ $data->telepon }}" placeholder="Telepon Anda.." pattern="08\d{9,11}" title="No Handphone harus 08, minimal 11 dan maksimal 13">
+                                        <small id="teleponHelp" class="form-text text-danger" style="display:none;">Format telepon tidak valid</small>
                                     </div>
                                     
                                     <div class="form-group">
@@ -79,7 +77,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Kode Pos</label>
-                                            <input type="text" name="kodepos" class="form-control" value="{{ $data->kodepos }}" placeholder="Kode Pos..">
+                                            <input type="text" name="kodepos" id="kodepos" class="form-control" value="{{ $data->kodepos }}" placeholder="Kode Pos..">
                                         </div>
                                     
                                     
@@ -100,6 +98,7 @@
                 </div>
             </div>
             </div>
+            </section>
             <script>
         $(document).ready(function(){
             $.get("/kecamatan", function(data){
@@ -118,6 +117,81 @@
                 });
             });
         });
+        // Validasi tanggal lahir
+    document.getElementById("tgl_lahir").addEventListener("change", function() {
+        var selectedDate = new Date(this.value);
+        var currentDate = new Date();
+        var minDate = new Date("2007-05-01"); // Tanggal minimal yang diizinkan
+
+        if (selectedDate > currentDate) {
+            alert("Tanggal lahir tidak boleh melebihi tanggal hari ini.");
+            this.value = ''; // Mengosongkan tanggal lahir
+        } else if (selectedDate > minDate) {
+            alert("Umur harus minimal 17 tahun.");
+            this.value = ''; // Mengosongkan tanggal lahir
+        }
+    });
+// Validate Email uniqueness
+document.getElementById("email").addEventListener("blur", function() {
+    var email = this.value;
+    if (email.trim() !== '') {
+        fetch(`/check-email?email=${email}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                alert("Email sudah terdaftar. Silakan gunakan email yang lain.");
+                // Optionally, you could add a visual indicator like changing the border color
+                document.getElementById("email").style.borderColor = 'red';
+            } else {
+                // Reset to default style if the user changes to a valid email
+                document.getElementById("email").style.borderColor = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+});
+document.getElementById('telepon').addEventListener('input', function() {
+        var teleponInput = this.value.trim();
+        var teleponHelp = document.getElementById('teleponHelp');
+        var regex = /^08\d{9,11}$/;
+
+        if (teleponInput.length > 0 && !regex.test(teleponInput)) {
+            teleponHelp.style.display = 'block';
+        } else {
+            teleponHelp.style.display = 'none';
+        }
+    });
+    document.getElementById('password').addEventListener('blur', function() {
+        var password = this.value.trim();
+        var passwordHelp = document.getElementById('passwordHelp');
+        var passwordRegex = /(?=.*\d)(?=.*[A-Z]).{8,}/;
+
+        if (password !== '') {
+            if (!passwordRegex.test(password)) {
+                passwordHelp.innerHTML = 'Password harus mengandung setidaknya satu angka, satu huruf besar, dan setidaknya 8 karakter';
+                passwordHelp.style.display = 'block';
+                // Optionally, you could add a visual indicator like changing the border color
+                document.getElementById("password").style.borderColor = 'red';
+            } else {
+                passwordHelp.style.display = 'none';
+                // Reset to default style if the user changes to a valid password
+                document.getElementById("password").style.borderColor = '';
+            }
+        }
+    });
+    document.getElementById('kodepos').addEventListener('input', function() {
+        var kodeposInput = this.value.trim();
+        var kodeposHelp = document.getElementById('kodeposHelp');
+        var regex = /^[0-9]{5}$/;
+
+        if (kodeposInput.length > 0 && !regex.test(kodeposInput)) {
+            kodeposHelp.style.display = 'block';
+        } else {
+            kodeposHelp.style.display = 'none';
+        }
+    });
     </script>
-        </section>
+        
 @endsection

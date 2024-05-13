@@ -12,7 +12,7 @@ class TemplateSuratController extends Controller
     public function index()
     {
         $npage= 3;
-        $master_berkas = Berkas::all();
+        $master_berkas = Berkas::paginate(10);
         return view('master_admin.templatesurat', compact('master_berkas','npage'));
     }
     public function tambahSurat()

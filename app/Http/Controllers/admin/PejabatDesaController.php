@@ -21,7 +21,7 @@ class PejabatDesaController extends Controller
                               ->count();
     $pejabats = DataPejabat::where('id_kec', auth()->user()->kecamatan)
                            ->where('id_desa', auth()->user()->desa)
-                           ->get();
+                           ->paginate(1);
     $existing_positions = DataPejabat::where('id_kec', auth()->user()->kecamatan)
                                      ->where('id_desa', auth()->user()->desa)
                                      ->pluck('jabatan')

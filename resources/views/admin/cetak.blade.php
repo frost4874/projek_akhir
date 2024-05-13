@@ -70,7 +70,7 @@
                                     </tr>
                                     <tr>
                                         <th style="padding-right: 10px; vertical-align: top; height: 120px;">
-                                            &emsp;&emsp;&emsp;&emsp;<img src="/asset/images/jember.png" width="100" height="100" alt="">
+                                            &emsp;&emsp;&emsp;&emsp;<img src="/asset/images/jember.png" width="90" height="100" alt="">
                                         </th>
                                         <th style="padding-left: 10px; font-family: 'Times New Roman', Times, serif; vertical-align: top; height: 120px; line-height: 1.15;padding-right: 80px;">
                                             <center>

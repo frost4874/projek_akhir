@@ -22,17 +22,17 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-              Laporan
+              
 
               <div class="float-right">
                 <button class="btn btn-sm btn-danger" id="btn-save-pdf">
                       <i class="fas fa-save"></i>
-                      Simpan ke PDF
+                      SIMPAN PDF
                   </button>
                   <!-- Tombol untuk mencetak -->
                   <button class="btn btn-sm btn-warning" id="btn-print">
                       <i class="fas fa-print"></i>
-                      Cetak
+                      CETAK
                   </button>
               </div>
           </div>
@@ -61,8 +61,9 @@
                                     <label for="tanggalSampai">Sampai</label>
                                     <input type="date" class="form-control form-control-sm mb-2" id="tanggalSampai" name="tanggal_sampai" placeholder="Sampai">
                                 </div>
-                                <div class="col-auto">
-                                    <button type="submit" class="btn btn-sm btn-primary mb-2">Print PDF</button>
+                                <div class="col-auto align-self-end">
+                                    <button type="submit" class="btn btn-sm btn-danger mb-2">
+                                    <i class="fas fa-save"></i> PDF </button>
                                 </div>
                             </div>
                         </form>
@@ -102,6 +103,40 @@
     </div>
     </div>
   </section>
+  @if ($requests->hasPages())
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {{-- Tombol Previous --}}
+            @if ($requests->onFirstPage())
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            @else
+                <li class="page-item">
+                    <a class="page-link" href="{{ $requests->previousPageUrl() }}" rel="prev">&laquo;</a>
+                </li>
+            @endif
+
+            {{-- Tautan Nomor Halaman --}}
+            @foreach ($requests->links()->elements[0] as $page => $url)
+                <li class="page-item {{ $requests->currentPage() == $page ? 'active' : '' }}">
+                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                </li>
+            @endforeach
+
+            {{-- Tombol Next --}}
+            @if ($requests->hasMorePages())
+                <li class="page-item">
+                    <a class="page-link" href="{{ $requests->nextPageUrl() }}" rel="next">&raquo;</a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+            @endif
+        </ul>
+    </nav>
+@endif
 
   <script>
         $(document).ready(function(){

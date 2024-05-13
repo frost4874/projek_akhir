@@ -3,31 +3,34 @@
 @section('title', 'Dashboard')
 @php
 $card_array = [
-     'bg-green', 'bg-red', 'bg-navy'
+    'bg-info', 'bg-green', 'bg-red', 'bg-navy'
 ];
 $total_colors = count($card_array);
 @endphp
 
 @section('content')
-<section class="content-header">
+<div class="content-header bg-gray-dark">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Dashboard Admin Desa</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Dashboard</li>
-                </ol>
-            </div>
-        </div>
+            <div class="col-sm-12"><br>
+                <h1 class="m-0 text-white">Halo Admin Desa {{ucwords($id_desa)}}!</h1>
+                <p class="text-white">Selamat datang di Pelayanan Surat Keterangan Desa. Semoga harimu menyenangkan!</p>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
     </div><!-- /.container-fluid -->
-</section>
+</div><br>
+
 <section class="content">
+<style>
+    .info-box {
+        width: 260px; /* Atur lebar kotak */
+        height: 145px; /* Atur tinggi kotak */
+    }
+</style>
     <div class="row">
+        <br>
         @foreach($master_berkas as $berkas)
-        <div class="col-md-12 col-lg-6 col-xl-4">
+        <div class="col-md-3 col-sm-6 col-12">
             <a href="{{ route('admin.request', ['id_berkas' => $berkas->id_berkas, 'judul_berkas' => $berkas->judul_berkas]) }}">
                 <div class="info-box">
                     <div class="position-absolute top-0 end-0 p-2">
@@ -57,7 +60,7 @@ $total_colors = count($card_array);
                         <p class="info-box-text" style="color: black;">
                             @php
                             // Memecah judul berkas jika terlalu panjang
-                            $judul_berkas = wordwrap($berkas->judul_berkas, 55, "<br>");
+                            $judul_berkas = wordwrap($berkas->judul_berkas, 20, "<br>");
                             echo $judul_berkas;
                             @endphp
                         </p>
