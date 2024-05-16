@@ -162,7 +162,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary">Tambah Request</button>
+                <button type="submit" id="submitBtn" class="btn btn-primary">Tambah Request</button>
             </div>
             </form>
         </div>
@@ -211,6 +211,40 @@
     </div>
 </div>
 @endforeach
+<script>
+    document.getElementById('submitBtn').addEventListener('click', function(event) {
+    // Mencegah formulir untuk dikirim secara default
+    event.preventDefault();
 
+    // Mendapatkan semua elemen input dalam formulir
+    var inputs = document.querySelectorAll('input, textarea, select');
+
+    // Variabel untuk menentukan apakah ada input yang tidak diisi
+    var isValid = true;
+
+    // Loop melalui setiap elemen input untuk memeriksa nilainya
+    inputs.forEach(function(input) {
+        // Jika input tidak memiliki nilai atau nilai kosong
+        if (!input.value.trim()) {
+            // Tandai bahwa validasi gagal
+            isValid = false;
+
+            // Tambahkan kelas is-invalid ke elemen input yang tidak diisi
+            input.classList.add('is-invalid');
+        } else {
+            // Hapus kelas is-invalid jika ada
+            input.classList.remove('is-invalid');
+        }
+    });
+
+    // Jika semua input diisi, kirim formulir
+    if (isValid) {
+        this.form.submit();
+    } else {
+        // Jika ada input yang tidak diisi, tampilkan pesan kesalahan
+        alert('Harap lengkapi semua kolom sebelum mengirimkan formulir.');
+    }
+});
+</script>
 
 @endsection

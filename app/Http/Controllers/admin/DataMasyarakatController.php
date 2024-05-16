@@ -54,12 +54,12 @@ class DataMasyarakatController extends Controller
             'status_nikah' => 'nullable|string|max:20',
             'status_warga' => 'nullable|string|max:20',
             'alamat' => 'nullable|string',
-            'telepon' => 'required|string|digits_between:10,13|regex:/^08\d{9,11}$/',
-            'email' => 'required|string|email|unique:biodata,email|regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i|max:50',
+            'telepon' => 'nullable|numeric|min:11|max:13',
+            'email' => 'nullable|string|email|max:50',
             'kecamatan' => 'required|string',
             'desa' => 'required|string',
-            'rt' => 'nullable|string|max:10',
-            'rw' => 'nullable|string|max:10',
+            'rt' => 'nullable|numeric|max:3',
+            'rw' => 'nullable|numeric|max:3',
         ]);
 
         // Ambil data biodata berdasarkan NIK
@@ -84,7 +84,7 @@ class DataMasyarakatController extends Controller
     $validatedData = $request->validate([
         'nik' => 'required|numeric|unique:biodata',
         'nama' => 'required|string|max:100',
-        'email' => 'required|string|unique:biodata,email|regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i|max:50',
+        'email' => 'required|string|email|max:50',
         'jekel' => 'required|in:Laki-Laki,Perempuan',
         'kecamatan' => 'required|string|max:100',
         'desa' => 'required|string|max:100',

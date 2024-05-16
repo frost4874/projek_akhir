@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Biodata;
 use App\Models\KecamatanDesa;
 use App\Models\Desa;
+use Carbon\Carbon;
 
 class DataDesaController extends Controller
 {
@@ -29,8 +30,8 @@ class DataDesaController extends Controller
         'kota' => 'required|string|max:100',
         'tgl_lahir' => 'required|date|before_or_equal:' . Carbon::now()->subYears(17)->format('Y-m-d'),
         'password' => 'required|string|min:8',
-        'telepon' => 'required|digits_between:10,13|regex:/^08\d{9,11}$/',
-        'kodepos' => 'nullable|digits:5',
+        'telepon' => 'required|string|min:11|max:13',
+        'kodepos' => 'nullable|string|max:5',
         'alamat' => 'nullable|string',
         'email' => 'required|email|unique:biodata,email|regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i|max:50',
     ]);
@@ -41,9 +42,9 @@ class DataDesaController extends Controller
     if (!$kecamatan || !$desa) {
         return back()->with('error', 'Kecamatan atau Desa tidak ditemukan');
     }
-
+    $randomNumber = random_int(1000000000000000, 9999999999999999);
     Biodata::create([
-        // 'nik' => $validatedData['nik'],
+        'nik' => $randomNumber,
         'nama' => $validatedData['nama'],
         'jekel' => $validatedData['jekel'],
         'kecamatan' => $kecamatan->nama,
@@ -70,8 +71,8 @@ class DataDesaController extends Controller
             'jekel' => 'required|in:Laki-Laki,Perempuan',
             'tgl_lahir' => 'required|date|before_or_equal:' . Carbon::now()->subYears(17)->format('Y-m-d'),
             'alamat' => 'nullable|string',
-            'telepon' => 'required|string|digits_between:10,13|regex:/^08\d{9,11}$/',
-            'email' => 'required|string|email|unique:biodata,email|regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i|max:50',
+            'telepon' => 'nullable|string|min:11|max:13',
+            'email' => 'nullable|string|email|unique:biodata,email|regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i|max:50',
             'kecamatan' => 'required|string',
             'desa' => 'required|string',
             'website' => 'nullable|string|max:10',

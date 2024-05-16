@@ -63,7 +63,7 @@
                                         </div>
                                     <div class="form-group">
                                         <label>Telepon</label>
-                                        <input type="number" name="telepon" id="telepon" class="form-control" value="{{ $data->telepon }}" placeholder="Telepon Anda.." pattern="08\d{9,11}" title="No Handphone harus 08, minimal 11 dan maksimal 13">
+                                        <input type="text" name="telepon" id="telepon2" class="form-control" value="{{ $data->telepon }}" oninput="validatePhoneNumber()" placeholder="Telepon Anda.." pattern="08\d{9,11}" title="No Handphone harus 08, minimal 11 dan maksimal 13">
                                         <small id="teleponHelp" class="form-text text-danger" style="display:none;">Format telepon tidak valid</small>
                                     </div>
                                     
@@ -78,6 +78,7 @@
                                         <div class="form-group">
                                             <label>Kode Pos</label>
                                             <input type="text" name="kodepos" id="kodepos" class="form-control" value="{{ $data->kodepos }}" placeholder="Kode Pos..">
+                                            <small id="kodeposHelp" class="form-text text-danger" style="display:none;">Kode pos tidak valid</small>
                                         </div>
                                     
                                     
@@ -131,20 +132,37 @@
             this.value = ''; // Mengosongkan tanggal lahir
         }
     });
-// Validate Email uniqueness
+    function isValidEmailFormat(email) {
+    // Regular expression to check if email2 has @gmail.com domain
+    var regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/i;
+    return regex.test(email);
+}
+
+// Simpan email awal sebelum pengguna mengubahnya
+var originalEmail = document.getElementById("email").value;
+
 document.getElementById("email").addEventListener("blur", function() {
-    var email = this.value;
-    if (email.trim() !== '') {
-        fetch(`/check-email?email=${email}`)
+    var newEmail = this.value.trim();
+    
+    // Periksa apakah email diubah
+    if (newEmail !== originalEmail) {
+        // Validate email format
+        if (!isValidEmailFormat(newEmail)) {
+            alert("Format email salah. Email harus memiliki domain @gmail.com.");
+            this.style.borderColor = 'red';
+            return;
+        }
+
+        // Check if email is already registered
+        fetch(`/check-email?email=${newEmail}`)
         .then(response => response.json())
         .then(data => {
             if (data.exists) {
                 alert("Email sudah terdaftar. Silakan gunakan email yang lain.");
-                // Optionally, you could add a visual indicator like changing the border color
-                document.getElementById("email").style.borderColor = 'red';
+                this.style.borderColor = 'red';
             } else {
                 // Reset to default style if the user changes to a valid email
-                document.getElementById("email").style.borderColor = '';
+                this.style.borderColor = '';
             }
         })
         .catch(error => {
@@ -154,6 +172,8 @@ document.getElementById("email").addEventListener("blur", function() {
 });
 document.getElementById('telepon').addEventListener('input', function() {
         var teleponInput = this.value.trim();
+        var teleponNumbers = teleponInput.replace(/\D/g, '');
+        this.value = teleponNumbers;
         var teleponHelp = document.getElementById('teleponHelp');
         var regex = /^08\d{9,11}$/;
 
@@ -163,6 +183,21 @@ document.getElementById('telepon').addEventListener('input', function() {
             teleponHelp.style.display = 'none';
         }
     });
+    function validatePhoneNumber() {
+            const phoneInput = document.getElementById('telepon');
+            const phoneHelp = document.getElementById('teleponHelp');
+            const phoneNumber = phoneInput.value;
+            
+            const isValid = phoneNumber.startsWith('62') && phoneNumber.length >= 11;
+
+            if (!isValid) {
+                phoneHelp.style.display = 'block';
+                phoneInput.setCustomValidity('Invalid phone number');
+            } else {
+                phoneHelp.style.display = 'none';
+                phoneInput.setCustomValidity('');
+            }
+        }
     document.getElementById('password').addEventListener('blur', function() {
         var password = this.value.trim();
         var passwordHelp = document.getElementById('passwordHelp');
@@ -183,6 +218,8 @@ document.getElementById('telepon').addEventListener('input', function() {
     });
     document.getElementById('kodepos').addEventListener('input', function() {
         var kodeposInput = this.value.trim();
+        var kodeposNumbers = kodeposInput.replace(/\D/g, '');
+        this.value = kodeposNumbers;
         var kodeposHelp = document.getElementById('kodeposHelp');
         var regex = /^[0-9]{5}$/;
 

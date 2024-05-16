@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login Admin Desa</title>
+  <title>Login Admin</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -27,11 +27,21 @@
     </div>
     <div class="card-body">
       <p class="login-box-msg">Sign in to start your session</p>
+      <!-- Menampilkan pesan kesalahan -->
+      @if($errors->any())
+      <div class="alert alert-danger">
+          <p>
+              @foreach ($errors->all() as $error)
+              {{ $error }}
+              @endforeach
+            </p>
+      </div>
+      @endif
 
       <form action="{{ route('login') }}" method="POST">
         @csrf
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="masukkan email anda" name="email" required>
+          <input type="text" class="form-control" placeholder="Email anda" name="email" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -39,7 +49,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password" required>
+          <input type="password" class="form-control" placeholder="Password anda" name="password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -73,12 +83,12 @@
       </div> -->
       <!-- /.social-auth-links -->
 
-      <p class="mb-1">
+      <!-- <p class="mb-1">
         <a href="forgot-password.html">I forgot my password</a>
       </p>
       <p class="mb-0">
         <a href="/register" class="text-center">Register a new membership</a>
-      </p>
+      </p> -->
     </div>
     <!-- /.card-body -->
   </div>

@@ -51,32 +51,32 @@
                        // Hitung nomor urutan untuk halaman saat ini
                        $startNumber = ($biodatas->currentPage() - 1) * $biodatas->perPage() + 1;
                     @endphp
-@foreach($biodatas as $index => $biodata)
-<tr>
-    <td>{{ $startNumber + $index }}</td>
-    <td>{{ $biodata->email }}</td>
-    <td>{{ $biodata->nama }}</td>
-    <td>{{ $biodata->jekel }}</td>
-    <td>{{ $biodata->kecamatan }}</td>
-    <td>{{ $biodata->desa }}</td>
-    <td>
-        <!-- Tombol edit -->
-        <button class="btn btn-sm btn-primary" type="button"  data-toggle="modal" data-target="#ubahBiodataModal{{ $biodata->nik }}">
-            <i class="fas fa-edit"></i>
-            Edit
-        </button>
-        <!-- Tombol hapus -->
-        <form action="{{ route('master.delete.desa', $biodata->nik) }}" method="POST" style="display: inline-block;">
-    @csrf
-    @method('DELETE')
-    <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus Admin Desa" onclick="return confirm('Apakah Kamu Yakin?');">
-        <span class="fa fa-trash"></span> Hapus
-    </button>
-</form>
+                    @foreach($biodatas as $index => $biodata)
+                    <tr>
+                        <td>{{ $startNumber + $index }}</td>
+                        <td>{{ $biodata->email }}</td>
+                        <td>{{ $biodata->nama }}</td>
+                        <td>{{ $biodata->jekel }}</td>
+                        <td>{{ $biodata->kecamatan }}</td>
+                        <td>{{ $biodata->desa }}</td>
+                        <td>
+                            <!-- Tombol edit -->
+                            <button class="btn btn-sm btn-primary" type="button"  data-toggle="modal" data-target="#ubahBiodataModal{{ $biodata->nik }}">
+                                <i class="fas fa-edit"></i>
+                                Edit
+                            </button>
+                            <!-- Tombol hapus -->
+                            <form action="{{ route('master.delete.desa', $biodata->nik) }}" method="POST" style="display: inline-block;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus Admin Desa" onclick="return confirm('Apakah Kamu Yakin?');">
+                            <span class="fa fa-trash"></span> Hapus
+                        </button>
+                    </form>
 
-    </td>
-</tr>
-@endforeach
+                        </td>
+                    </tr>
+                    @endforeach
 
                       </tbody>
                   </table>
@@ -158,10 +158,10 @@
                                 <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir" required>
                             </div>
                             <div class="form-group">
-								<label for="telepon">No Hp</label>
-								<input type="number" class="form-control" id="telepon" name="telepon" required>
-                                <small id="teleponHelp" class="form-text text-danger" style="display:none;">Format telepon tidak valid</small>
-							</div>
+                <label for="telepon">No Hp</label>
+                <input type="text" class="form-control" id="telepon" name="telepon" oninput="validatePhoneNumber()" required>
+                <small id="teleponHelp" class="form-text text-danger" style="display:none;">Format telepon tidak valid, harus dimulai dengan 62 dan minimal 11 angka.</small>
+            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -239,7 +239,7 @@
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ $biodata->email }}">
+            <input type="email" class="form-control" id="email2" name="email" value="{{ $biodata->email }}">
         </div>
           <div class="form-group">
             <label for="jekel">Jenis Kelamin</label>
@@ -250,12 +250,12 @@
           </div>
           <div class="form-group">
                                 <label for="tgl_lahir">Tanggal Lahir</label>
-                                <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir" value="{{ $biodata->tgl_lahir }}">
+                                <input type="date" class="form-control" id="tgl_lahir2" name="tgl_lahir" value="{{ $biodata->tgl_lahir }}">
                             </div>
                             <div class="form-group">
                                 <label for="telepon">Telepon</label>
-                                <input type="text" class="form-control" id="telepon{{ $biodata->nik }}" name="telepon" value="{{ $biodata->telepon }}">
-                                <small id="teleponHelp{{ $biodata->nik }}" class="form-text text-danger" style="display:none;">Format telepon tidak valid</small>
+                                <input type="text" name="telepon2" id="telepon2" class="form-control" value="{{ $biodata->telepon }}" oninput="validatePhoneNumber2()" placeholder="Telepon Anda.." pattern="08\d{9,11}" title="No Handphone harus 08, minimal 11 dan maksimal 13">
+                                <small id="teleponHelp2" class="form-text text-danger" style="display:none;">Format telepon tidak valid</small>
                             </div>
                             
                             </div>
@@ -271,8 +271,8 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Kode Pos</label>
-                                            <input type="text" class="form-control" id="kodepos{{ $biodata->nik }}" name="kodepos" value="{{ $biodata->kodepos ?? '' }}" pattern="[0-9]{5}">
-                                            <small id="kodeposHelp{{ $biodata->nik }}" class="form-text text-danger" style="display:none;">Kode pos harus terdiri dari 5 digit angka</small>
+                                            <input type="text" class="form-control" id="kodepos2" name="kodepos" value="{{ $biodata->kodepos ?? '' }}" pattern="[0-9]{5}">
+                                            <small id="kodeposHelp2" class="form-text text-danger" style="display:none;">Kode pos harus terdiri dari 5 digit angka</small>
                                         </div>
                                         <div class="form-group">
                                             <label>Password</label>
@@ -316,22 +316,78 @@
             this.value = ''; // Mengosongkan tanggal lahir
         }
     });
+    document.getElementById("tgl_lahir2").addEventListener("change", function() {
+        var selectedDate = new Date(this.value);
+        var currentDate = new Date();
+        var minDate = new Date("2007-05-01"); // Tanggal minimal yang diizinkan
 
+        if (selectedDate > currentDate) {
+            alert("Tanggal lahir tidak boleh melebihi tanggal hari ini.");
+            this.value = ''; // Mengosongkan tanggal lahir
+        } else if (selectedDate > minDate) {
+            alert("Umur harus minimal 17 tahun.");
+            this.value = ''; // Mengosongkan tanggal lahir
+        }
+    });
 
-// Validate Email uniqueness
-document.getElementById("email").addEventListener("blur", function() {
-    var email = this.value;
-    if (email.trim() !== '') {
+    document.getElementById("email").addEventListener("blur", function() {
+    var email = this.value.trim();
+    if (email !== '') {
+        // Validate email format
+        if (!isValidEmailFormat(email)) {
+            alert("Format email salah. Email harus memiliki domain @gmail.com.");
+            this.style.borderColor = 'red';
+            return;
+        }
+
+        // Check if email is already registered
         fetch(`/check-email?email=${email}`)
         .then(response => response.json())
         .then(data => {
             if (data.exists) {
                 alert("Email sudah terdaftar. Silakan gunakan email yang lain.");
-                // Optionally, you could add a visual indicator like changing the border color
-                document.getElementById("email").style.borderColor = 'red';
+                this.style.borderColor = 'red';
             } else {
                 // Reset to default style if the user changes to a valid email
-                document.getElementById("email").style.borderColor = '';
+                this.style.borderColor = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+});
+
+function isValidEmailFormat(email) {
+    // Regular expression to check if email2 has @gmail.com domain
+    var regex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/i;
+    return regex.test(email);
+}
+// Simpan email awal sebelum pengguna mengubahnya
+var originalEmail = document.getElementById("email2").value;
+
+document.getElementById("email2").addEventListener("blur", function() {
+    var newEmail = this.value.trim();
+    
+    // Periksa apakah email diubah
+    if (newEmail !== originalEmail) {
+        // Validate email format
+        if (!isValidEmailFormat(newEmail)) {
+            alert("Format email salah. Email harus memiliki domain @gmail.com.");
+            this.style.borderColor = 'red';
+            return;
+        }
+
+        // Check if email is already registered
+        fetch(`/check-email?email=${newEmail}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                alert("Email sudah terdaftar. Silakan gunakan email yang lain.");
+                this.style.borderColor = 'red';
+            } else {
+                // Reset to default style if the user changes to a valid email
+                this.style.borderColor = '';
             }
         })
         .catch(error => {
@@ -341,6 +397,8 @@ document.getElementById("email").addEventListener("blur", function() {
 });
 document.getElementById('telepon').addEventListener('input', function() {
         var teleponInput = this.value.trim();
+        var teleponNumbers = teleponInput.replace(/\D/g, '');
+        this.value = teleponNumbers;
         var teleponHelp = document.getElementById('teleponHelp');
         var regex = /^08\d{9,11}$/;
 
@@ -350,8 +408,54 @@ document.getElementById('telepon').addEventListener('input', function() {
             teleponHelp.style.display = 'none';
         }
     });
+
+    document.getElementById('telepon2').addEventListener('input', function() {
+        var teleponInput = this.value.trim();
+        var teleponNumbers = teleponInput.replace(/\D/g, '');
+        this.value = teleponNumbers;
+        var teleponHelp = document.getElementById('teleponHelp2');
+        var regex = /^08\d{9,11}$/;
+
+        if (teleponInput.length > 0 && !regex.test(teleponInput)) {
+            teleponHelp.style.display = 'block';
+        } else {
+            teleponHelp.style.display = 'none';
+        }
+    });
+    function validatePhoneNumber() {
+            const phoneInput = document.getElementById('telepon');
+            const phoneHelp = document.getElementById('teleponHelp');
+            const phoneNumber = phoneInput.value;
+            
+            const isValid = phoneNumber.startsWith('08') && phoneNumber.length >= 11;
+
+            if (!isValid) {
+                phoneHelp.style.display = 'block';
+                phoneInput.setCustomValidity('Invalid phone number');
+            } else {
+                phoneHelp.style.display = 'none';
+                phoneInput.setCustomValidity('');
+            }
+        }
+        function validatePhoneNumber2() {
+            const phoneInput = document.getElementById('telepon2');
+            const phoneHelp = document.getElementById('teleponHelp2');
+            const phoneNumber = phoneInput.value;
+            
+            const isValid = phoneNumber.startsWith('08') && phoneNumber.length >= 11;
+
+            if (!isValid) {
+                phoneHelp.style.display = 'block';
+                phoneInput.setCustomValidity('Invalid phone number');
+            } else {
+                phoneHelp.style.display = 'none';
+                phoneInput.setCustomValidity('');
+            }
+        }
     document.getElementById('kodepos').addEventListener('input', function() {
         var kodeposInput = this.value.trim();
+        var kodeposNumbers = kodeposInput.replace(/\D/g, '');
+        this.value = kodeposNumbers;
         var kodeposHelp = document.getElementById('kodeposHelp');
         var regex = /^[0-9]{5}$/;
 
@@ -361,30 +465,19 @@ document.getElementById('telepon').addEventListener('input', function() {
             kodeposHelp.style.display = 'none';
         }
     });
-    document.getElementById('telepon{{ $biodata->nik }}').addEventListener('input', function() {
-    var teleponInput = this.value.trim();
-    var teleponHelp = document.getElementById('teleponHelp{{ $biodata->nik }}');
-    var regex = /^08\d{9,11}$/;
+    document.getElementById('kodepos2').addEventListener('input', function() {
+        var kodeposInput = this.value.trim();
+        var kodeposNumbers = kodeposInput.replace(/\D/g, '');
+        this.value = kodeposNumbers;
+        var kodeposHelp = document.getElementById('kodeposHelp2');
+        var regex = /^[0-9]{5}$/;
 
-    if (teleponInput.length > 0 && !regex.test(teleponInput)) {
-        teleponHelp.style.display = 'block';
-    } else {
-        teleponHelp.style.display = 'none';
-    }
-});
-document.getElementById('kodepos{{ $biodata->nik }}').addEventListener('input', function() {
-    var kodeposInput = this.value.trim();
-    var kodeposHelp = document.getElementById('kodeposHelp{{ $biodata->nik }}');
-    var regex = /^[0-9]{5}$/;
-
-    if (kodeposInput.length > 0 && !regex.test(kodeposInput)) {
-        kodeposHelp.style.display = 'block';
-    } else {
-        kodeposHelp.style.display = 'none';
-    }
-});
-
-
+        if (kodeposInput.length > 0 && !regex.test(kodeposInput)) {
+            kodeposHelp.style.display = 'block';
+        } else {
+            kodeposHelp.style.display = 'none';
+        }
+    });
 
 </script>
     

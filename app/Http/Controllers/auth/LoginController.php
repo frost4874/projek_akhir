@@ -20,7 +20,22 @@ class LoginController extends Controller
             'email' => 'required|email|regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i',
             'password' => 'required',
         ]);
+        // Periksa apakah pengguna ada berdasarkan email
+    $user = Biodata::where('email', $request->email)->first();
 
+    // Jika tidak ada pengguna dengan email yang diberikan
+    if (!$user) {
+        return back()->withErrors([
+            'email' => 'Email tidak terdaftar.',
+        ])->withInput($request->only('email'));
+    }
+
+    // Periksa apakah password benar
+    if (!\Hash::check($request->password, $user->password)) {
+        return back()->withErrors([
+            'password' => 'Password salah.',
+        ])->withInput($request->only('email'));
+    }
         if (Auth::guard('biodata')->attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
 
@@ -46,7 +61,7 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'Email dan Password Salah.',
         ]);
     }
 }

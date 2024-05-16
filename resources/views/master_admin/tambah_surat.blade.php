@@ -96,8 +96,8 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
-                            <button type="submit" name="simpan" class="btn btn-success">Simpan</button>
+                            <button type="button" class="btn btn-danger" onclick="history.back()">Batal</button>
+                            <button type="submit" id="submitBtn" name="simpan" class="btn btn-success">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -176,6 +176,68 @@ document.getElementById('hapusForm').addEventListener('click', function() {
         alert('Tidak dapat menghapus dropdown terakhir.');
     }
 });
+document.getElementById('submitBtn').addEventListener('click', function(event) {
+    // Mencegah formulir untuk dikirim secara default
+    event.preventDefault();
+
+    // Mendapatkan nilai dari input Judul, Kode Berkas, Kode Belakang, dan Template Surat
+    var judul = document.querySelector('input[name="judul_berkas"]');
+    var kodeBerkas = document.querySelector('input[name="kode_berkas"]');
+    var kodeBelakang = document.querySelector('input[name="kode_belakang"]');
+    var template = document.querySelector('textarea[name="template"]');
+
+    // Variabel untuk menentukan apakah semua input yang harus diisi telah terisi
+    var isValid = true;
+
+    // Memeriksa apakah input Judul kosong
+    if (judul.value.trim() === '') {
+        isValid = false;
+        // Tambahkan kelas is-invalid untuk menyoroti input yang kosong
+        judul.classList.add('is-invalid');
+    } else {
+        // Hapus kelas is-invalid jika input sudah diisi
+        judul.classList.remove('is-invalid');
+    }
+
+    // Memeriksa apakah input Kode Berkas kosong
+    if (kodeBerkas.value.trim() === '') {
+        isValid = false;
+        // Tambahkan kelas is-invalid untuk menyoroti input yang kosong
+        kodeBerkas.classList.add('is-invalid');
+    } else {
+        // Hapus kelas is-invalid jika input sudah diisi
+        kodeBerkas.classList.remove('is-invalid');
+    }
+
+    // Memeriksa apakah input Kode Belakang kosong
+    if (kodeBelakang.value.trim() === '') {
+        isValid = false;
+        // Tambahkan kelas is-invalid untuk menyoroti input yang kosong
+        kodeBelakang.classList.add('is-invalid');
+    } else {
+        // Hapus kelas is-invalid jika input sudah diisi
+        kodeBelakang.classList.remove('is-invalid');
+    }
+
+    // Memeriksa apakah input Template Surat kosong
+    if (template.value.trim() === '') {
+        isValid = false;
+        // Tambahkan kelas is-invalid untuk menyoroti input yang kosong
+        template.classList.add('is-invalid');
+    } else {
+        // Hapus kelas is-invalid jika input sudah diisi
+        template.classList.remove('is-invalid');
+    }
+
+    // Jika semua input yang harus diisi telah terisi, kirim formulir
+    if (isValid) {
+        this.form.submit();
+    } else {
+        // Jika ada input yang tidak diisi, tampilkan pesan kesalahan
+        alert('Harap lengkapi semua kolom yang diperlukan sebelum mengirimkan formulir.');
+    }
+});
+
 
 </script>
     
