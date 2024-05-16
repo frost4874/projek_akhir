@@ -47,10 +47,14 @@
                           <th>Opsi</th>
                       </thead>
                       <tbody>
+                      @php
+                       // Hitung nomor urutan untuk halaman saat ini
+                       $startNumber = ($biodatas->currentPage() - 1) * $biodatas->perPage() + 1;
+                    @endphp
 @foreach($biodatas as $index => $biodata)
 <tr>
-    <td>{{ $index + 1 }}</td>
-    <td>{{ $biodata->nik }}</td>
+    <td>{{ $startNumber + $index }}</td>
+    <td>{{ $biodata->email }}</td>
     <td>{{ $biodata->nama }}</td>
     <td>{{ $biodata->jekel }}</td>
     <td>{{ $biodata->kecamatan }}</td>
@@ -83,6 +87,41 @@
     </div>
     </div>
   </section>
+  <!-- Tampilkan tombol navigasi paginate -->
+  @if ($biodatas->hasPages())
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {{-- Tombol Previous --}}
+            @if ($biodatas->onFirstPage())
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            @else
+                <li class="page-item">
+                    <a class="page-link" href="{{ $biodatas->previousPageUrl() }}" rel="prev">&laquo;</a>
+                </li>
+            @endif
+
+            {{-- Tautan Nomor Halaman --}}
+            @foreach ($biodatas->links()->elements[0] as $page => $url)
+                <li class="page-item {{ $biodatas->currentPage() == $page ? 'active' : '' }}">
+                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                </li>
+            @endforeach
+
+            {{-- Tombol Next --}}
+            @if ($biodatas->hasMorePages())
+                <li class="page-item">
+                    <a class="page-link" href="{{ $biodatas->nextPageUrl() }}" rel="next">&raquo;</a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+            @endif
+        </ul>
+    </nav>
+@endif
 <!-- Modal -->
 <div class="modal fade" id="modalTambahAdminDesa" tabindex="-1" role="dialog" aria-labelledby="modalTambahAdminDesaLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -99,11 +138,6 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="nik">NIPD</label>
-                                <input type="text" class="form-control" id="nik" name="nik" required autofocus maxlength="16">
-                                <small id="nikWarning" class="form-text text-muted"></small>
-                            </div>
                             <div class="form-group">
                                 <label for="name">Nama Lengkap</label>
                                 <input type="text" class="form-control" id="nama" name="nama" required>
@@ -126,6 +160,7 @@
                             <div class="form-group">
 								<label for="telepon">No Hp</label>
 								<input type="number" class="form-control" id="telepon" name="telepon" required>
+                                <small id="teleponHelp" class="form-text text-danger" style="display:none;">Format telepon tidak valid</small>
 							</div>
                         </div>
                         <div class="col-md-6">
@@ -147,7 +182,8 @@
                             </div>
                             <div class="form-group">
 								<label for="kodepos">Kode Pos</label>
-								<input type="number" class="form-control" id="kodepos" name="kodepos" required>
+								<input type="text" class="form-control" id="kodepos" name="kodepos" pattern="[0-9]{5}">
+                                <small id="kodeposHelp" class="form-text text-danger" style="display:none;">Kode pos harus terdiri dari 5 digit angka</small>
         					</div>
 							<div class="alamat">
 								<label for="tgl_lahir">Alamat</label>
@@ -195,10 +231,7 @@
           
           <div class="row">
             <div class="col-md-6 col-lg-6">
-            <div class="form-group">
-                <label>NIPD</label>
-                <input type="number" name="nik" value="{{ $biodata->nik }}" class="form-control" placeholder="NIK Anda.." autofocus readonly>
-            </div>
+            
 
           <div class="form-group">
             <label for="nama">Nama Lengkap</label>
@@ -219,15 +252,16 @@
                                 <label for="tgl_lahir">Tanggal Lahir</label>
                                 <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir" value="{{ $biodata->tgl_lahir }}">
                             </div>
-          <div class="form-group">
-            <label for="telepon">Telepon</label>
-            <input type="text" class="form-control" id="telepon" name="telepon" value="{{ $biodata->telepon }}">
-        </div>
-          
-          </div>
-          <div class="col-md-6 col-lg-6">
-          
-        <div class="form-group">
+                            <div class="form-group">
+                                <label for="telepon">Telepon</label>
+                                <input type="text" class="form-control" id="telepon{{ $biodata->nik }}" name="telepon" value="{{ $biodata->telepon }}">
+                                <small id="teleponHelp{{ $biodata->nik }}" class="form-text text-danger" style="display:none;">Format telepon tidak valid</small>
+                            </div>
+                            
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                            
+                            <div class="form-group">
                                             <label>Kecamatan</label>
                                             <input type="text" name="kecamatan" value="{{ $biodata->kecamatan ?? '' }}" class="form-control" placeholder="Kecamatan Anda.." readonly>
                                         </div>
@@ -237,13 +271,13 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Kode Pos</label>
-                                            <input type="text" name="kodepos" value="{{ $biodata->kodepos ?? '' }}" class="form-control" placeholder="Kode Pos Anda.." >
+                                            <input type="text" class="form-control" id="kodepos{{ $biodata->nik }}" name="kodepos" value="{{ $biodata->kodepos ?? '' }}" pattern="[0-9]{5}">
+                                            <small id="kodeposHelp{{ $biodata->nik }}" class="form-text text-danger" style="display:none;">Kode pos harus terdiri dari 5 digit angka</small>
                                         </div>
                                         <div class="form-group">
                                             <label>Password</label>
                                             <input type="password" name="password" value="{{ isset($biodata) ? '' : $biodata->password }}" class="form-control" placeholder="Isi jika ganti password" >
                                         </div>
-                                        <div class="form-group">
                                         <div class="form-group">
                                             <label>Website</label>
                                             <input type="text" name="website" value="{{ $biodata->website ?? '' }}" class="form-control" placeholder="Website Desa.." >
@@ -267,5 +301,91 @@
 </div>
 </div>
 @endforeach
+<script>
+    // Validasi tanggal lahir
+    document.getElementById("tgl_lahir").addEventListener("change", function() {
+        var selectedDate = new Date(this.value);
+        var currentDate = new Date();
+        var minDate = new Date("2007-05-01"); // Tanggal minimal yang diizinkan
+
+        if (selectedDate > currentDate) {
+            alert("Tanggal lahir tidak boleh melebihi tanggal hari ini.");
+            this.value = ''; // Mengosongkan tanggal lahir
+        } else if (selectedDate > minDate) {
+            alert("Umur harus minimal 17 tahun.");
+            this.value = ''; // Mengosongkan tanggal lahir
+        }
+    });
+
+
+// Validate Email uniqueness
+document.getElementById("email").addEventListener("blur", function() {
+    var email = this.value;
+    if (email.trim() !== '') {
+        fetch(`/check-email?email=${email}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                alert("Email sudah terdaftar. Silakan gunakan email yang lain.");
+                // Optionally, you could add a visual indicator like changing the border color
+                document.getElementById("email").style.borderColor = 'red';
+            } else {
+                // Reset to default style if the user changes to a valid email
+                document.getElementById("email").style.borderColor = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+});
+document.getElementById('telepon').addEventListener('input', function() {
+        var teleponInput = this.value.trim();
+        var teleponHelp = document.getElementById('teleponHelp');
+        var regex = /^08\d{9,11}$/;
+
+        if (teleponInput.length > 0 && !regex.test(teleponInput)) {
+            teleponHelp.style.display = 'block';
+        } else {
+            teleponHelp.style.display = 'none';
+        }
+    });
+    document.getElementById('kodepos').addEventListener('input', function() {
+        var kodeposInput = this.value.trim();
+        var kodeposHelp = document.getElementById('kodeposHelp');
+        var regex = /^[0-9]{5}$/;
+
+        if (kodeposInput.length > 0 && !regex.test(kodeposInput)) {
+            kodeposHelp.style.display = 'block';
+        } else {
+            kodeposHelp.style.display = 'none';
+        }
+    });
+    document.getElementById('telepon{{ $biodata->nik }}').addEventListener('input', function() {
+    var teleponInput = this.value.trim();
+    var teleponHelp = document.getElementById('teleponHelp{{ $biodata->nik }}');
+    var regex = /^08\d{9,11}$/;
+
+    if (teleponInput.length > 0 && !regex.test(teleponInput)) {
+        teleponHelp.style.display = 'block';
+    } else {
+        teleponHelp.style.display = 'none';
+    }
+});
+document.getElementById('kodepos{{ $biodata->nik }}').addEventListener('input', function() {
+    var kodeposInput = this.value.trim();
+    var kodeposHelp = document.getElementById('kodeposHelp{{ $biodata->nik }}');
+    var regex = /^[0-9]{5}$/;
+
+    if (kodeposInput.length > 0 && !regex.test(kodeposInput)) {
+        kodeposHelp.style.display = 'block';
+    } else {
+        kodeposHelp.style.display = 'none';
+    }
+});
+
+
+
+</script>
     
 @endsection

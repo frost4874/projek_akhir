@@ -29,7 +29,7 @@ class LaporanController extends Controller
                         ->join('berkas', 'data_requests.id_berkas', '=', 'berkas.id_berkas')
                         ->select('data_requests.*', 'biodata.nama as nama', 'berkas.judul_berkas as judul_berkas')
                         ->orderBy('acc', 'desc')
-                        ->paginate(5);
+                        ->paginate(3);
 
         
         return view('admin.laporan', ['requests' => $requests], compact('npage','jumlah_requ'));

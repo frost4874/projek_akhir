@@ -2,30 +2,33 @@
 @section('title', 'Dashboard')
 @php
 $card_array = [
-  'bg-green', 'bg-red', 'bg-navy'
+  'bg-info','bg-green', 'bg-red', 'bg-navy'
 ];
 $total_colors = count($card_array);
 @endphp
 @section('content')
-    <div class="content-header">
-      <div class="container-fluid">
+<div class="content-header bg-gray-dark">
+    <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Dashboard Master Admin</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <!-- <li class="breadcrumb-item"><a href="#">Home</a></li> -->
-              <li class="breadcrumb-item active">Dashboard</li>
-            </ol>
-          </div><!-- /.col -->
+            <div class="col-sm-12"><br>
+                <h1 class="m-0 text-white">Halo Master Admin!</h1>
+                <p class="text-white">Selamat datang di halaman Dashboard Master Admin. Semoga harimu menyenangkan!</p>
+            </div><!-- /.col -->
         </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
+    </div><!-- /.container-fluid -->
+</div><br>
+
+<section class="content">
+<style>
+    .info-box {
+        width: 260px; /* Atur lebar kotak */
+        height: 145px; /* Atur tinggi kotak */
+    }
+</style>
     <section class="content">
     <div class="row">
     @foreach($master_berkas as $berkas)
-<div class="col-md-12 col-lg-6 col-xl-4">
+<div class="col-md-3 col-sm-6 col-12">
     <a href="{{ route('master.request', ['id_berkas' => $berkas->id_berkas, 'judul_berkas' => $berkas->judul_berkas]) }}">
         <div class="info-box">
             @if($total_colors > 0)
@@ -35,11 +38,15 @@ $total_colors = count($card_array);
             <span class="info-box-icon"><i class="far fa-envelope"></i></span>
             @endif
             <div class="info-box-content">
-                <span class="info-box-text" style="color: black;">{{ $berkas->judul_berkas }}</span>
+                <span class="info-box-text" style="color: black;">@php
+                            // Memecah judul berkas jika terlalu panjang
+                            $judul_berkas = wordwrap($berkas->judul_berkas, 20, "<br>");
+                            echo $judul_berkas;
+                            @endphp</span>
                 @php
                 $jumlah_req = App\Models\DataRequest::where('id_berkas', $berkas->id_berkas)
                     ->where(function ($query) {
-                        $query->whereIn('status', [4]);
+                        $query->whereIn('status', [3]);
                     })
                     ->count();
                 @endphp

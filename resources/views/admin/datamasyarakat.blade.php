@@ -268,7 +268,8 @@
           </div>
           <div class="form-group">
             <label for="telepon">Telepon</label>
-            <input type="text" class="form-control" id="telepon" name="telepon" value="{{ $biodata->telepon }}">
+            <input type="number" name="telepon" id="telepon" class="form-control" value="{{ $biodata->telepon }}" placeholder="Telepon Anda.." pattern="08\d{9,11}" title="No Handphone harus 08, minimal 11 dan maksimal 13">
+             <small id="teleponHelp" class="form-text text-danger" style="display:none;">Format telepon tidak valid</small>
         </div>
           <div class="form-group">
             <label for="pekerjaan">Pekerjaan</label>
@@ -513,6 +514,17 @@ document.getElementById("email").addEventListener("blur", function() {
         });
     }
 });
+document.getElementById('telepon').addEventListener('input', function() {
+        var teleponInput = this.value.trim();
+        var teleponHelp = document.getElementById('teleponHelp');
+        var regex = /^08\d{9,11}$/;
+
+        if (teleponInput.length > 0 && !regex.test(teleponInput)) {
+            teleponHelp.style.display = 'block';
+        } else {
+            teleponHelp.style.display = 'none';
+        }
+    });
 
 
 </script>

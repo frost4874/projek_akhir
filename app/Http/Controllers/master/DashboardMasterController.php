@@ -29,12 +29,12 @@ class DashboardMasterController extends Controller
     public function masterRequest(Request $request, $id_berkas, $judul_berkas)
 {
     $npage = 1;
-    $status = 4;
+    $status = 3;
     $requests = DataRequest::where('id_berkas', $id_berkas)
                        ->where('data_requests.status', $status)
                        ->join('biodata', 'data_requests.nik', '=', 'biodata.nik')
                        ->select('data_requests.*', 'biodata.nama as nama')
-                       ->get();
+                       ->paginate(2);
     return view('master_admin.request', [
         'id_berkas' => $id_berkas,
         'judul_berkas' => $judul_berkas,
@@ -162,9 +162,9 @@ private function replaceVariables($template, $data)
         $validatedData = $request->validate([
             'nama' => 'required|string|max:50',
             'jekel' => 'required|in:Laki-Laki,Perempuan',
-            'tgl_lahir' => 'required|date',
-            'telepon' => 'nullable|string|max:13',
-            'email' => 'nullable|string|email|max:50',
+            'tgl_lahir' => 'required|date|before_or_equal:' . Carbon::now()->subYears(17)->format('Y-m-d'),
+            'telepon' => 'nullable|string|max:13|regex:/^08\d{9,11}$/',
+            'email' => 'required|string|unique:biodata,email|regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i|max:50',
         ]);
 
         // Ambil data biodata berdasarkan NIK

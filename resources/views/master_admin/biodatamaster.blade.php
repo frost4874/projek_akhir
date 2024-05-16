@@ -37,11 +37,6 @@
                         <thead>
                         
                             <tr>
-                                <th>NIK</th>
-                                
-                                <td>{{ $biodata->nik }}</td>
-                            </tr>
-                            <tr>
                                 <th>NAMA</th>
                                 
                                 <td>{{ $biodata->nama }}</td>

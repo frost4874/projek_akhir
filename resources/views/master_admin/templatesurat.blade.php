@@ -44,9 +44,13 @@
                           <th style="width: 15%">Action</th>
                       </thead>
                       <tbody>
+                      @php
+                        // Hitung nomor urutan untuk halaman saat ini
+                        $startNumber = ($master_berkas->currentPage() - 1) * $master_berkas->perPage() + 1;
+                        @endphp
                       @foreach($master_berkas as $index => $berkas)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $startNumber + $index }}</td>
                             <td>{{ $berkas->judul_berkas }}</td>
                             <td>{{ $berkas->kode_berkas }}</td>
                             <td>{{ $berkas->kode_belakang }}</td>
@@ -73,6 +77,40 @@
     </div>
     </div>
   </section>
+  @if ($master_berkas->hasPages())
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {{-- Tombol Previous --}}
+            @if ($master_berkas->onFirstPage())
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            @else
+                <li class="page-item">
+                    <a class="page-link" href="{{ $master_berkas->previousPageUrl() }}" rel="prev">&laquo;</a>
+                </li>
+            @endif
+
+            {{-- Tautan Nomor Halaman --}}
+            @foreach ($master_berkas->links()->elements[0] as $page => $url)
+                <li class="page-item {{ $master_berkas->currentPage() == $page ? 'active' : '' }}">
+                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                </li>
+            @endforeach
+
+            {{-- Tombol Next --}}
+            @if ($master_berkas->hasMorePages())
+                <li class="page-item">
+                    <a class="page-link" href="{{ $master_berkas->nextPageUrl() }}" rel="next">&raquo;</a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+            @endif
+        </ul>
+    </nav>
+@endif
   <!-- modal  -->
   <div class="modal fade" id="modalTambahTemplate" tabindex="-1" role="dialog" aria-labelledby="modalTambahTemplateLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">

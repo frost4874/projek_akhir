@@ -27,7 +27,7 @@ class DataMasyarakatController extends Controller
         $biodatas = Biodata::where('desa', $userDesa)
                             ->where('role', 'Pemohon')
                             ->orderBy('status', 'desc') // Status 'Tidak Aktif' akan ditampilkan terlebih dahulu
-                            ->paginate(3);
+                            ->paginate(2);
     
         $jumlah_requ = DataRequest::where('status', 0)
                                     ->whereHas('biodata', function ($query) {
@@ -47,15 +47,15 @@ class DataMasyarakatController extends Controller
             'nama' => 'required|string|max:50',
             'jekel' => 'required|in:Laki-Laki,Perempuan',
             'tempat_lahir' => 'nullable|string|max:30',
-            'tgl_lahir' => 'required|date',
+            'tgl_lahir' => 'required|date|before_or_equal:' . Carbon::now()->subYears(17)->format('Y-m-d'),
             'pekerjaan' => 'nullable|string|max:20',
             'agama' => 'nullable|string|max:20',
             'warganegara' => 'nullable|string|max:10',
             'status_nikah' => 'nullable|string|max:20',
             'status_warga' => 'nullable|string|max:20',
             'alamat' => 'nullable|string',
-            'telepon' => 'nullable|string|max:13',
-            'email' => 'nullable|string|email|max:50',
+            'telepon' => 'required|string|digits_between:10,13|regex:/^08\d{9,11}$/',
+            'email' => 'required|string|email|unique:biodata,email|regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i|max:50',
             'kecamatan' => 'required|string',
             'desa' => 'required|string',
             'rt' => 'nullable|string|max:10',

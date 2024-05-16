@@ -21,10 +21,9 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        Laporan
                         <div class="float-right">
                             <a href="/laporan/cetakpdf" class="btn btn-sm btn-danger" target="_blank">
-                                <i class="fas fa-save"></i> SIMPAN PDF
+                                <i class="fas fa-save"></i>SIMPAN PDF
                             </a>
                             <a href="/laporan/print" class="btn btn-sm btn-warning" target="_BLANK">
                                 <i class="fas fa-print"></i> CETAK
@@ -46,8 +45,9 @@
                                     <label for="tanggalSampai">Sampai</label>
                                     <input type="date" class="form-control form-control-sm mb-2" id="tanggalSampai" name="tanggal_sampai" placeholder="Sampai">
                                 </div>
-                                <div class="col-auto">
-                                    <button type="submit" class="btn btn-sm btn-primary mb-2">Print PDF</button>
+                                <div class="col-auto align-self-end">
+                                    <button type="submit" class="btn btn-sm btn-danger mb-2">
+                                    <i class="fas fa-save"></i> PDF </button>
                                 </div>
                             </div>
                         </form>
@@ -83,7 +83,7 @@
                         
                     </div>
                     <div class="card-footer">
-                        <!-- Tampilkan tombol navigasi paginate -->
+                    <!-- Tampilkan tombol navigasi paginate -->
                         @if ($requests->hasPages())
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center">
